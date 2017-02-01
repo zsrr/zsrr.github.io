@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Java," />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -84,28 +84,25 @@
 
 
 
-<meta name="description" content="浅谈ReferenceQueue先看官方文档对这个类的介绍：  
+<meta name="description" content="UIViewController简介官方文档：  
 
-Reference queues, to which registered reference objects are appended by thegarbage collector after the appropriate reachability changes are detected.  
-
-这个的大体意思是这样的，当">
+The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java ReferenceQueue实战">
-<meta property="og:url" content="http://yoursite.com/2017/01/22/Java-ReferenceQueue实战/index.html">
+<meta property="og:title" content="iOS ViewController">
+<meta property="og:url" content="http://yoursite.com/2017/02/01/iOS-ViewController/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="浅谈ReferenceQueue先看官方文档对这个类的介绍：  
+<meta property="og:description" content="UIViewController简介官方文档：  
 
-Reference queues, to which registered reference objects are appended by thegarbage collector after the appropriate reachability changes are detected.  
-
-这个的大体意思是这样的，当">
-<meta property="og:updated_time" content="2017-01-22T15:46:31.000Z">
+The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/ViewController1.png">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/ViewController2.png">
+<meta property="og:updated_time" content="2017-02-01T12:28:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java ReferenceQueue实战">
-<meta name="twitter:description" content="浅谈ReferenceQueue先看官方文档对这个类的介绍：  
+<meta name="twitter:title" content="iOS ViewController">
+<meta name="twitter:description" content="UIViewController简介官方文档：  
 
-Reference queues, to which registered reference objects are appended by thegarbage collector after the appropriate reachability changes are detected.  
-
-这个的大体意思是这样的，当">
+The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s">
+<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/ViewController1.png">
 
 
 
@@ -133,13 +130,13 @@ Reference queues, to which registered reference objects are appended by thegarba
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/01/22/Java-ReferenceQueue实战/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/02/01/iOS-ViewController/"/>
 
 
 
 
 
-  <title> Java ReferenceQueue实战 | Stephen's blog </title>
+  <title> iOS ViewController | Stephen's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -262,7 +259,7 @@ Reference queues, to which registered reference objects are appended by thegarba
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/22/Java-ReferenceQueue实战/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/01/iOS-ViewController/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -286,7 +283,7 @@ Reference queues, to which registered reference objects are appended by thegarba
             
             
               
-                Java ReferenceQueue实战
+                iOS ViewController
               
             
           </h1>
@@ -301,8 +298,8 @@ Reference queues, to which registered reference objects are appended by thegarba
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-22T22:28:09+08:00">
-                2017-01-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-01T18:56:10+08:00">
+                2017-02-01
               </time>
             
 
@@ -324,8 +321,8 @@ Reference queues, to which registered reference objects are appended by thegarba
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发</span>
                   </a>
                 </span>
 
@@ -342,8 +339,8 @@ Reference queues, to which registered reference objects are appended by thegarba
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/22/Java-ReferenceQueue实战/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/22/Java-ReferenceQueue实战/" itemprop="commentCount"></span>
+                <a href="/2017/02/01/iOS-ViewController/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/01/iOS-ViewController/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -369,76 +366,41 @@ Reference queues, to which registered reference objects are appended by thegarba
       
 
       
-        <h2 id="浅谈ReferenceQueue"><a href="#浅谈ReferenceQueue" class="headerlink" title="浅谈ReferenceQueue"></a>浅谈ReferenceQueue</h2><p>先看官方文档对这个类的介绍：  </p>
+        <h2 id="UIViewController简介"><a href="#UIViewController简介" class="headerlink" title="UIViewController简介"></a>UIViewController简介</h2><p>官方文档：  </p>
 <blockquote>
-<p>Reference queues, to which registered reference objects are appended by the<br>garbage collector after the appropriate reachability changes are detected.  </p>
+<p>The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s user interface. It is responsible for loading and disposing of those views, for managing interactions with those views, and for coordinating responses with any appropriate data objects. View controllers also coordinate their efforts with other controller objects—including other view controllers—and help manage your app’s overall interface.</p>
 </blockquote>
-<p>这个的大体意思是这样的，当一个Reference类所指向的实际对象被回收的时候，这个Referece便会加入到这个队列里面，这个队列提供了三个操作：</p>
-<pre><code>public Reference&lt;? extends T&gt; poll();
+<p>用通俗的话来讲，他就是mvc层的c(Controller)，用于View层和Model层的通信，跟Android里面的Activity十分类似，但是比其要灵活不少，貌似还不是很臃肿……</p>
+<h2 id="UIViewController生命周期"><a href="#UIViewController生命周期" class="headerlink" title="UIViewController生命周期"></a>UIViewController生命周期</h2><p>主要是这几个部分：  </p>
+<ol>
+<li>初始化  </li>
+<li>如果是通过其他ViewController通过segue导航而来的话，那就根据segue的要求进行初始化  </li>
+<li>Outlet设置  </li>
+<li>viewDidLoad()</li>
+<li>viewWillAppear()  </li>
+<li>viewWillLayoutSubviews()  </li>
+<li>viewDidLayoutSubviews()  </li>
+<li>(6,7步多次调用之后) viewDidAppear()  </li>
+<li>(界面离开屏幕)viewWillDisappear()  </li>
+<li>(6,7步多次调用)viewDidDisappear()<br>这几个函数的顺序我就不验证了，懒，值得注意的地方在于第二步和第三步的顺序不能颠倒，也就是说，如果在prepare()阶段通过segue的destination来修改目标Controller的Outlet标签成员的话，会崩溃的。  <h2 id="UIViewController的主要职责"><a href="#UIViewController的主要职责" class="headerlink" title="UIViewController的主要职责"></a>UIViewController的主要职责</h2><strong>管理views</strong><br><img src="http://ok34fi9ya.bkt.clouddn.com/ViewController1.png" alt=""><br>UIViewController有一个view属性，便是上图中的RootView，RootView的子视图也可以交给Controller来进行管理，例如Outlet标签标记的视图。  </li>
+</ol>
+<p><strong>管理子Controller</strong><br><img src="http://ok34fi9ya.bkt.clouddn.com/ViewController2.png" alt=""><br>上图中，SplitViewController管理着两个子Controller，分别是master controller和detail controller，这两个Controller的内容是包裹在父Controller的Container里面的（只能在iPad上面看到全部的内容）。  </p>
+<p><strong>处理与用户交互有关的事件</strong><br>Controller可以处理与其管理的views有关的交互事件（触摸，点击，滑动……）实现的方式有两种。一种就是直接从Storyboard按住ctrl拖(既不优雅也没效率)，实现一个标记IAction属性的方法，这种方法通常是用来处理单一的例如Touch up inside的单一事件。另一种实现方式是在管理的view上面添加GestureRecogniser，iOS sdk自己给出的几个recogniser真是太好用了，这里给出一段示例代码：</p>
+<pre><code>- (void)viewDidLoad {
+     [super viewDidLoad];
 
-public Reference&lt;? extends T&gt; remove(long timeout);
+     // 创建TabGestureRecogniser
+     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+      initWithTarget:self action:@selector(respondToTapGesture:)];
 
-public Reference&lt;? extends T&gt; remove();
-</code></pre><p>三个都是出队操作，后两个remove是阻塞方法，具体请看官方文档，懒得解释。</p>
-<h2 id="ReferenceQueue实战"><a href="#ReferenceQueue实战" class="headerlink" title="ReferenceQueue实战"></a>ReferenceQueue实战</h2><p>笔者将用一个简单粗暴的例子来解释这个类的实际用途。假设在一个公司的内部，有员工(Staff)，有事务(Work)，每一个事务都必须对应一个员工去做。假如这个员工突然有急事请假了，或者工作太累不小心嗝屁了（相应的Staff类实例被回收了），那这个Work类实例可以做一些清理工作，或者通知其他相关类它所对应的Staff已经被回收。那么这个模型就可以完美地应用ReferenceQueue，下面是代码实现：</p>
-<p>Work类：</p>
-<pre><code>public class Work {
-    static class StaffWeakReference extends WeakReference&lt;Staff&gt; {
-        Work work;
+     // 配置TabGestureRecogniser
+     tapRecognizer.numberOfTapsRequired = 1;
 
-        public StaffWeakReference(Work work, Staff referent, ReferenceQueue&lt;? super Staff&gt; q) {
-            super(referent, q);
-            this.work = work;
-        }
-    }
-
-    StaffWeakReference swReference;
-
-    Work(Staff staff, ReferenceQueue&lt;? super Staff&gt; referenceQueue) {
-        swReference = new StaffWeakReference(this, staff, referenceQueue);
-    }
-
-    public void cancel() {
-        // 可以做一些清理工作，或者通知其他相关类它所对应的Staff已经被回收
-    }
+     // 为view添加GestureRecogniser
+     [self.view addGestureRecognizer:tapRecognizer];
 }
-</code></pre><p>Company类：</p>
-<pre><code>public class Company {
-
-    static class CleanUpThread extends Thread {
-        ReferenceQueue&lt;?&gt; referenceQueue;
-        static final long TIME_OUT = 1000;
-
-        CleanUpThread(ReferenceQueue&lt;?&gt; referenceQueue) {
-            this.referenceQueue = referenceQueue;
-        }
-
-        @Override
-        public void run() {
-            while (true) {
-                try {
-                    Work.StaffWeakReference reference = (Work.StaffWeakReference) referenceQueue.remove(TIME_OUT);
-                    if (reference != null) {
-                        reference.work.cancel();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        ReferenceQueue&lt;Staff&gt; referenceQueue = new ReferenceQueue&lt;&gt;();
-        CleanUpThread cleanUpThread = new CleanUpThread(referenceQueue);
-        cleanUpThread.start();
-        Staff staff = new Staff();
-        Work work = new Work(staff, referenceQueue);
-        ...
-        ...
-    }
-}
-</code></pre><p>当main开始运行的时候，先开启一个CleanUpThread，这个类的run方法内部则是不断的从传入的ReferenceQueue当中读取所指向Staff对象已经被回收的引用，如果某个Staff已经被回收，那它在对应的Work里面对应的弱引用便会读取出来，这时候就可以调用读出的弱引用对应的Staff已经被回收的Work的cancel方法了。</p>
+</code></pre><p>接下来Controller只需要实现selector里面的方法就可以了，个人感觉这真是太优雅了，比安卓提供的丰富多彩很多（安卓好像就几个ClickListener）  </p>
+<p><strong>作为管理的view的委托类</strong><br>一个典型示例便是UITableViewController，它的内部持有一个tableView，在这个view加载的时候，便调用其delegate属性的一系列方法，例如获取sections的个数，获取每一个section有多少行，每行的高度是多少等等。而管理它的Controller便实现了UITableView的委托协议，这样我们就可以在Controller内部实现相应的方法，进而管理tableView。</p>
 
       
     </div>
@@ -462,7 +424,7 @@ public Reference&lt;? extends T&gt; remove();
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag"># Java</a>
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
           
         </div>
       
@@ -471,8 +433,8 @@ public Reference&lt;? extends T&gt; remove();
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/01/20/Picasso源码分析/" rel="next" title="Picasso源码分析">
-                <i class="fa fa-chevron-left"></i> Picasso源码分析
+              <a href="/2017/01/22/Java-ReferenceQueue实战/" rel="next" title="Java ReferenceQueue实战">
+                <i class="fa fa-chevron-left"></i> Java ReferenceQueue实战
               </a>
             
           </div>
@@ -480,10 +442,6 @@ public Reference&lt;? extends T&gt; remove();
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/02/01/iOS-ViewController/" rel="prev" title="iOS ViewController">
-                iOS ViewController <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -532,8 +490,8 @@ public Reference&lt;? extends T&gt; remove();
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/01/22/Java-ReferenceQueue实战/"
-           data-title="Java ReferenceQueue实战" data-url="http://yoursite.com/2017/01/22/Java-ReferenceQueue实战/">
+      <div class="ds-thread" data-thread-key="2017/02/01/iOS-ViewController/"
+           data-title="iOS ViewController" data-url="http://yoursite.com/2017/02/01/iOS-ViewController/">
       </div>
     
   </div>
@@ -633,7 +591,7 @@ public Reference&lt;? extends T&gt; remove();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#浅谈ReferenceQueue"><span class="nav-number">1.</span> <span class="nav-text">浅谈ReferenceQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReferenceQueue实战"><span class="nav-number">2.</span> <span class="nav-text">ReferenceQueue实战</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UIViewController简介"><span class="nav-number">1.</span> <span class="nav-text">UIViewController简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UIViewController生命周期"><span class="nav-number">2.</span> <span class="nav-text">UIViewController生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UIViewController的主要职责"><span class="nav-number">3.</span> <span class="nav-text">UIViewController的主要职责</span></a></li></ol></div>
             
 
           </div>
