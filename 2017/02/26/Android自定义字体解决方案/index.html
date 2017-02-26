@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="iOS," />
+  <meta name="keywords" content="Android," />
 
 
 
@@ -84,25 +84,34 @@
 
 
 
-<meta name="description" content="UIViewController简介官方文档：  
+<meta name="description" content="在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。
+利用反射这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改Typeface类的静态DEFAULT成员，如下所示：
+public class MyApplication extends Application {
 
-The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s">
+    @Override
+    public void onCreate() {">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS ViewController">
-<meta property="og:url" content="http://yoursite.com/2017/02/01/iOS-ViewController/index.html">
+<meta property="og:title" content="Android自定义字体解决方案">
+<meta property="og:url" content="http://yoursite.com/2017/02/26/Android自定义字体解决方案/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="UIViewController简介官方文档：  
+<meta property="og:description" content="在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。
+利用反射这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改Typeface类的静态DEFAULT成员，如下所示：
+public class MyApplication extends Application {
 
-The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s">
-<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/ViewController1.png">
-<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/ViewController2.png">
-<meta property="og:updated_time" content="2017-02-01T12:28:21.000Z">
+    @Override
+    public void onCreate() {">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488100937.png">
+<meta property="og:updated_time" content="2017-02-26T09:27:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS ViewController">
-<meta name="twitter:description" content="UIViewController简介官方文档：  
+<meta name="twitter:title" content="Android自定义字体解决方案">
+<meta name="twitter:description" content="在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。
+利用反射这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改Typeface类的静态DEFAULT成员，如下所示：
+public class MyApplication extends Application {
 
-The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s">
-<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/ViewController1.png">
+    @Override
+    public void onCreate() {">
+<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png">
 
 
 
@@ -130,13 +139,13 @@ The UIViewController class provides the infrastructure for managing the views of
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/02/01/iOS-ViewController/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/02/26/Android自定义字体解决方案/"/>
 
 
 
 
 
-  <title> iOS ViewController | Stephen's blog </title>
+  <title> Android自定义字体解决方案 | Stephen's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -259,7 +268,7 @@ The UIViewController class provides the infrastructure for managing the views of
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/01/iOS-ViewController/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/26/Android自定义字体解决方案/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -283,7 +292,7 @@ The UIViewController class provides the infrastructure for managing the views of
             
             
               
-                iOS ViewController
+                Android自定义字体解决方案
               
             
           </h1>
@@ -298,8 +307,8 @@ The UIViewController class provides the infrastructure for managing the views of
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-01T18:56:10+08:00">
-                2017-02-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T16:04:26+08:00">
+                2017-02-26
               </time>
             
 
@@ -321,8 +330,8 @@ The UIViewController class provides the infrastructure for managing the views of
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS开发</span>
+                  <a href="/categories/安卓开发/" itemprop="url" rel="index">
+                    <span itemprop="name">安卓开发</span>
                   </a>
                 </span>
 
@@ -339,8 +348,8 @@ The UIViewController class provides the infrastructure for managing the views of
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/01/iOS-ViewController/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/01/iOS-ViewController/" itemprop="commentCount"></span>
+                <a href="/2017/02/26/Android自定义字体解决方案/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/26/Android自定义字体解决方案/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,41 +375,96 @@ The UIViewController class provides the infrastructure for managing the views of
       
 
       
-        <h2 id="UIViewController简介"><a href="#UIViewController简介" class="headerlink" title="UIViewController简介"></a>UIViewController简介</h2><p>官方文档：  </p>
-<blockquote>
-<p>The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s user interface. It is responsible for loading and disposing of those views, for managing interactions with those views, and for coordinating responses with any appropriate data objects. View controllers also coordinate their efforts with other controller objects—including other view controllers—and help manage your app’s overall interface.</p>
-</blockquote>
-<p>用通俗的话来讲，他就是mvc层的c(Controller)，用于View层和Model层的通信，跟Android里面的Activity十分类似，但是比其要灵活不少，貌似还不是很臃肿……</p>
-<h2 id="UIViewController生命周期"><a href="#UIViewController生命周期" class="headerlink" title="UIViewController生命周期"></a>UIViewController生命周期</h2><p>主要是这几个部分：  </p>
-<ol>
-<li>初始化  </li>
-<li>如果是通过其他ViewController通过segue导航而来的话，那就根据segue的要求进行初始化  </li>
-<li>Outlet设置  </li>
-<li>viewDidLoad()</li>
-<li>viewWillAppear()  </li>
-<li>viewWillLayoutSubviews()  </li>
-<li>viewDidLayoutSubviews()  </li>
-<li>(6,7步多次调用之后) viewDidAppear()  </li>
-<li>(界面离开屏幕)viewWillDisappear()  </li>
-<li>(6,7步多次调用)viewDidDisappear()<br>这几个函数的顺序我就不验证了，懒，值得注意的地方在于第二步和第三步的顺序不能颠倒，也就是说，如果在prepare()阶段通过segue的destination来修改目标Controller的Outlet标签成员的话，会崩溃的。  <h2 id="UIViewController的主要职责"><a href="#UIViewController的主要职责" class="headerlink" title="UIViewController的主要职责"></a>UIViewController的主要职责</h2><strong>管理views</strong><br><img src="http://ok34fi9ya.bkt.clouddn.com/ViewController1.png" alt=""><br>UIViewController有一个view属性，便是上图中的RootView，RootView的子视图也可以交给Controller来进行管理，例如Outlet标签标记的视图。  </li>
-</ol>
-<p><strong>管理子Controller</strong><br><img src="http://ok34fi9ya.bkt.clouddn.com/ViewController2.png" alt=""><br>上图中，SplitViewController管理着两个子Controller，分别是master controller和detail controller，这两个Controller的内容是包裹在父Controller的Container里面的（只能在iPad上面看到全部的内容）。  </p>
-<p><strong>处理与用户交互有关的事件</strong><br>Controller可以处理与其管理的views有关的交互事件（触摸，点击，滑动……）实现的方式有两种。一种就是直接从Storyboard按住ctrl拖(既不优雅也没效率)，实现一个标记IAction属性的方法，这种方法通常是用来处理单一的例如Touch up inside的单一事件。另一种实现方式是在管理的view上面添加GestureRecogniser，iOS sdk自己给出的几个recogniser真是太好用了，这里给出一段示例代码：</p>
-<pre><code>- (void)viewDidLoad {
-     [super viewDidLoad];
+        <p>在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。</p>
+<h1 id="利用反射"><a href="#利用反射" class="headerlink" title="利用反射"></a>利用反射</h1><p>这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改<strong>Typeface</strong>类的静态<strong>DEFAULT</strong>成员，如下所示：</p>
+<pre><code>public class MyApplication extends Application {
 
-     // 创建TabGestureRecogniser
-     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
-      initWithTarget:self action:@selector(respondToTapGesture:)];
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
-     // 配置TabGestureRecogniser
-     tapRecognizer.numberOfTapsRequired = 1;
-
-     // 为view添加GestureRecogniser
-     [self.view addGestureRecognizer:tapRecognizer];
+        Typeface typeface = Typeface.createFromAsset(getAssets(), &quot;fonts/CourierNewBold.ttf&quot;);
+        try {
+            Field field = Typeface.class.getDeclaredField(&quot;MONOSPACE&quot;);
+            field.setAccessible(true);
+            field.set(null, typeface);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            Log.e(&quot;Application&quot;, &quot;Error happened!&quot;);
+        }
+    }
 }
-</code></pre><p>接下来Controller只需要实现selector里面的方法就可以了，个人感觉这真是太优雅了，比安卓提供的丰富多彩很多（安卓好像就几个ClickListener）  </p>
-<p><strong>作为管理的view的委托类</strong><br>一个典型示例便是UITableViewController，它的内部持有一个tableView，在这个view加载的时候，便调用其delegate属性的一系列方法，例如获取sections的个数，获取每一个section有多少行，每行的高度是多少等等。而管理它的Controller便实现了UITableView的委托协议，这样我们就可以在Controller内部实现相应的方法，进而管理tableView。</p>
+</code></pre><p>style文件：</p>
+<pre><code>&lt;style name=&quot;AppTheme&quot; parent=&quot;android:Theme.Holo.Light.DarkActionBar&quot;&gt;
+    &lt;!-- Customize your theme here. --&gt;
+    &lt;item name=&quot;colorPrimary&quot;&gt;@color/colorPrimary&lt;/item&gt;
+    &lt;item name=&quot;colorPrimaryDark&quot;&gt;@color/colorPrimaryDark&lt;/item&gt;
+    &lt;item name=&quot;colorAccent&quot;&gt;@color/colorAccent&lt;/item&gt;
+    &lt;item name=&quot;android:typeface&quot;&gt;monospace&lt;/item&gt;
+&lt;/style&gt;
+</code></pre><p>运行效果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png" alt=""><br>这种方法的局限也很明显，就是在Android 5.0默认主题之上并不能运行，需要更换一个旧的主题，如果主题不是很重要的话，这种方法就比较合适了。</p>
+<h1 id="利用DataBinding"><a href="#利用DataBinding" class="headerlink" title="利用DataBinding"></a>利用DataBinding</h1><p>这是笔者认为最快速，最便捷的方法了，用<strong>BindingAdapters</strong>注解标注方法即可在xml文件中指定<strong>Typeface</strong>，方法如下：</p>
+<p>MyApplication:</p>
+<pre><code>public class MyApplication extends Application {
+
+    public static final Map&lt;String, Typeface&gt; FONTS_MAP = new HashMap&lt;&gt;();
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        FONTS_MAP.put(getString(R.string.courier_new_bold),
+                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
+                        getString(R.string.courier_new_bold)));
+        FONTS_MAP.put(getString(R.string.lao_sangam_mn),
+                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
+                        getString(R.string.lao_sangam_mn)));
+        FONTS_MAP.put(getString(R.string.microsoft_sans_serif),
+                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
+                        getString(R.string.microsoft_sans_serif)));
+    }
+}
+</code></pre><p>FontsUtils:</p>
+<pre><code>public class FontsUtils {
+    @BindingAdapter({&quot;fonts&quot;})
+    public static void setTextViewFonts(TextView tv, String fontName) {
+        tv.setTypeface(MyApplication.FONTS_MAP.get(fontName));
+    }
+}
+</code></pre><p>xml:</p>
+<pre><code>&lt;layout xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
+    &lt;data&gt;
+        &lt;import type=&quot;com.stephen.customfontdemo.FontsUtils&quot;/&gt;
+    &lt;/data&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+        android:id=&quot;@+id/activity_main&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:padding=&quot;16dp&quot;
+        android:orientation=&quot;vertical&quot;
+        tools:context=&quot;com.stephen.customfontdemo.MainActivity&quot;&gt;
+
+        &lt;TextView
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;测试字体1&quot;
+            app:fonts=&quot;@{@string/courier_new_bold}&quot;/&gt;
+        &lt;TextView
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;测试字体2&quot;
+            app:fonts=&quot;@{@string/lao_sangam_mn}&quot;/&gt;
+        &lt;TextView
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;测试字体3&quot;
+            app:fonts=&quot;@{@string/microsoft_sans_serif}&quot;/&gt;
+    &lt;/LinearLayout&gt;
+&lt;/layout&gt;
+</code></pre><p>运行效果：<img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488100937.png" alt=""><br>额……可能2和3看不出效果，不过确实已经更改了。</p>
+<p>需要注意的是： <strong>Typeface</strong>的加载要放在Application类当中，或者放在另一个线程当中进行，因为它是一个比较耗时的操作，如果大量的<strong>TextView</strong>用到自定义字体会造成卡顿。</p>
+<p>这样在需要自定义字体时，只需要在<strong>FONTS_MAP</strong>和strings.xml当中注册，在xml中一行代码即可指定！</p>
 
       
     </div>
@@ -424,7 +488,7 @@ The UIViewController class provides the infrastructure for managing the views of
       
         <div class="post-tags">
           
-            <a href="/tags/iOS/" rel="tag"># iOS</a>
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
         </div>
       
@@ -433,8 +497,8 @@ The UIViewController class provides the infrastructure for managing the views of
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/01/22/Java-ReferenceQueue实战/" rel="next" title="Java ReferenceQueue实战">
-                <i class="fa fa-chevron-left"></i> Java ReferenceQueue实战
+              <a href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" rel="next" title="Mac OS Sierra下编译Android 7.1.1">
+                <i class="fa fa-chevron-left"></i> Mac OS Sierra下编译Android 7.1.1
               </a>
             
           </div>
@@ -442,10 +506,6 @@ The UIViewController class provides the infrastructure for managing the views of
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/02/01/iOS-UIView/" rel="prev" title="iOS UIView">
-                iOS UIView <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -494,8 +554,8 @@ The UIViewController class provides the infrastructure for managing the views of
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/02/01/iOS-ViewController/"
-           data-title="iOS ViewController" data-url="http://yoursite.com/2017/02/01/iOS-ViewController/">
+      <div class="ds-thread" data-thread-key="2017/02/26/Android自定义字体解决方案/"
+           data-title="Android自定义字体解决方案" data-url="http://yoursite.com/2017/02/26/Android自定义字体解决方案/">
       </div>
     
   </div>
@@ -595,7 +655,7 @@ The UIViewController class provides the infrastructure for managing the views of
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UIViewController简介"><span class="nav-number">1.</span> <span class="nav-text">UIViewController简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UIViewController生命周期"><span class="nav-number">2.</span> <span class="nav-text">UIViewController生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UIViewController的主要职责"><span class="nav-number">3.</span> <span class="nav-text">UIViewController的主要职责</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#利用反射"><span class="nav-number">1.</span> <span class="nav-text">利用反射</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#利用DataBinding"><span class="nav-number">2.</span> <span class="nav-text">利用DataBinding</span></a></li></ol></div>
             
 
           </div>
