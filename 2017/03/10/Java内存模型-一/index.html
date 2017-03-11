@@ -95,7 +95,7 @@
 抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Java资深软件工程师：程晓明）
 此时两个线程A,B的通">
 <meta property="og:image" content="http://cdn.infoqstatic.com/statics_s1_20170228-0434_4/resource/articles/java-memory-model-1/zh/resources/11.png">
-<meta property="og:updated_time" content="2017-03-10T15:07:29.000Z">
+<meta property="og:updated_time" content="2017-03-11T07:55:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java内存模型(一)">
 <meta name="twitter:description" content="概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
@@ -372,33 +372,6 @@
 <li>线程A更新本地内存中共享变量的副本，并将其写入主内存。</li>
 <li>线程B从主内存中读取更新过的共享变量。</li>
 </ul>
-<p>现有如下程序：</p>
-<pre><code>public class MemoryModelDemo {
-    static int a = 0;
-    static volatile boolean isInError = false;
-    static int count = 0;
-
-    public static void main(String[] args) {
-        while (!isInError) {
-            new Thread(() -&gt; {
-                a = 1;
-            }).start();
-
-            new Thread(() -&gt; {
-                if (a != 1)
-                    isInError = true;
-            }).start();
-
-            a = 0;
-            count++;
-        }
-
-        System.out.println(&quot;Error occurred in &quot; + count);
-    }
-}
-</code></pre><p>结果如下：</p>
-<pre><code>Error occurred in 6
-</code></pre><p>这段代码通过不断地开启两个线程来向同一个共享变量进行赋值和读取，当出现错误时退出循环，这里采用<strong>volatile</strong>关键字来保证<strong>isInError</strong>的可见性，由程序结果来看是第六次出现了错误，这里第几次出现错误不是一个固定的值。出现错误的原因很简单：在第一个线程中对<strong>a</strong>的更新还没来得及写入主内存当中去边切换到第二个线程，第二个线程从主内存中读取的是还没有更新的值。</p>
 <h1 id="重排序"><a href="#重排序" class="headerlink" title="重排序"></a>重排序</h1><p>重排序是指为了提高程序运行的性能，充分利用并行，来对指令进行重新排序，主要分为编译器优化重排序和指令级并行重排序。关于重排序的更多理解，参见：<a href="http://blog.hesey.net/2011/07/reordering.html" target="_blank" rel="external">理解重排序</a></p>
 <h2 id="数据依赖性"><a href="#数据依赖性" class="headerlink" title="数据依赖性"></a>数据依赖性</h2><p>数据依赖性分为三种情况：</p>
 <ul>
@@ -522,6 +495,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2017/03/11/Java内存模型-二/" rel="prev" title="Java内存模型(二)">
+                Java内存模型(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -617,7 +594,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
