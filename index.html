@@ -251,6 +251,444 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/13/Java并发编程-一/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/lion.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen's blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/13/Java并发编程-一/" itemprop="url">
+                  Java并发编程(一)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-13T18:46:34+08:00">
+                2017-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/13/Java并发编程-一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/13/Java并发编程-一/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="多线程简介"><a href="#多线程简介" class="headerlink" title="多线程简介"></a>多线程简介</h1><p>线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：</p>
+<pre><code>public class ThreadTest {
+    public static void main(String[] args) {
+        ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
+        ThreadInfo[] threadInfoArray = mxBean.dumpAllThreads(false, false);
+
+        for (ThreadInfo info : threadInfoArray) {
+            System.out.println(&quot;Thread id: &quot; + info.getThreadId() + &quot; Thread name: &quot; +
+                    info.getThreadName() + &quot; Thread state: &quot; + info.getThreadState());
+        }
+    }
+}
+</code></pre><p>运行结果如下：</p>
+<pre><code>Thread id: 9 Thread name: Monitor Ctrl-Break Thread state: RUNNABLE
+Thread id: 4 Thread name: Signal Dispatcher Thread state: RUNNABLE
+Thread id: 3 Thread name: Finalizer Thread state: WAITING
+Thread id: 2 Thread name: Reference Handler Thread state: WAITING
+Thread id: 1 Thread name: main Thread state: RUNNABLE
+</code></pre><p>也就是说，运行main函数时，不只是main线程在运行，Java天生就是多线程的。</p>
+<h1 id="线程的优先级"><a href="#线程的优先级" class="headerlink" title="线程的优先级"></a>线程的优先级</h1><p>在Java程序里面，线程的优先级通过<strong>setPriority(int priority)</strong>来设置，<strong>priority</strong>的取值范围为1-10，默认为5，线程的优先级越高，处理器对此线程所切的时间片越长，但是不同的操作系统的表现不同，有些会忽略掉线程的优先级，因此，设置优先级不会保证多线程程序的正确性，在实际编程过程中不应该使用。</p>
+<h1 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h1><p>线程的状态分为以下几种：</p>
+<ul>
+<li><strong>NEW</strong> 被创建成功，还没有调用<strong>start()</strong>方法。</li>
+<li><strong>RUNNABLE</strong> 正在运行中。</li>
+<li><strong>BLOCKED</strong> 正在处于阻塞状态。</li>
+<li><strong>WAITING</strong> 等待状态，此线程在等待其他线程做出特定的动作。</li>
+<li><strong>TIME_WAITING</strong> 超时等待状态。</li>
+<li><strong>TERMINATED</strong> 终止，线程结束。</li>
+</ul>
+<p>拿上面的运行结果的线程名为<strong>Finalizer</strong>的线程来说，运行时处于<strong>WAITING</strong>状态，它在等待有对象进入它内部持有的<strong>ReferenceQueue</strong>，并执行清理动作，有关Finalizer的更多信息，查看：<a href="http://blog.csdn.net/rsljdkt/article/details/12242007" target="_blank" rel="external">GC执行finalize的过程</a></p>
+<p>为了说明各大状态，我先用开几个线程，然后用<a href="http://blog.csdn.net/fenglibing/article/details/6411940" target="_blank" rel="external">jstack</a>指令查看各线程的状态。</p>
+<p>代码如下：</p>
+<pre><code>class SleepUtils {
+    public static void sleep(int millionSeconds) {
+        try {
+            Thread.sleep(millionSeconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public class ThreadStateTest {
+
+    static class TimeWaitingThread implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                SleepUtils.sleep(100);
+            }
+        }
+    }
+
+    static class PauseThread implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                long current = System.currentTimeMillis();
+                while (System.currentTimeMillis() - current &lt;= 3000);
+            }
+        }
+    }
+
+    static class Waiting implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                synchronized (Waiting.class) {
+                    try {
+                        Waiting.class.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    static class Block implements Runnable {
+        @Override
+        public void run() {
+            synchronized (Block.class) {
+                while (true) {
+                    SleepUtils.sleep(4000);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new Thread(new TimeWaitingThread(), &quot;TimedWaitingThread&quot;).start();
+        new Thread(new PauseThread(), &quot;PauseThread&quot;).start();
+        new Thread(new Waiting(), &quot;WaitingThread&quot;).start();
+        new Thread(new Block(), &quot;Block1&quot;).start();
+        new Thread(new Block(), &quot;Block2&quot;).start();
+    }
+}
+</code></pre><p>运行之后，先在终端运行<a href="http://blog.csdn.net/fenglibing/article/details/6411932" target="_blank" rel="external">jps</a>命令，结果如下：</p>
+<pre><code>37729 
+38982 Launcher
+38983 AppMain
+38986 Jps
+</code></pre><p>其中<strong>AppMain</strong>就是刚才开启的进程pid，现在运行<strong>jstack 38983</strong>，运行结果如下（部分）：</p>
+<pre><code>&quot;Block2&quot; #14 prio=5 os_prio=31 tid=0x00007fc65c835000 nid=0x5703 waiting for monitor entry [0x0000700002ba2000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+    at com.stephen.ThreadStateTest$Block.run(ThreadStateTest.java:58)
+    - waiting to lock &lt;0x00000007956f6ea8&gt; (a java.lang.Class for com.stephen.ThreadStateTest$Block)
+    at java.lang.Thread.run(Thread.java:745)
+
+&quot;Block1&quot; #13 prio=5 os_prio=31 tid=0x00007fc65d82a000 nid=0x5503 waiting on condition [0x0000700002a9f000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+    at java.lang.Thread.sleep(Native Method)
+    at com.stephen.SleepUtils.sleep(ThreadStateTest.java:10)
+    at com.stephen.ThreadStateTest$Block.run(ThreadStateTest.java:58)
+    - locked &lt;0x00000007956f6ea8&gt; (a java.lang.Class for com.stephen.ThreadStateTest$Block)
+    at java.lang.Thread.run(Thread.java:745)
+
+&quot;WaitingThread&quot; #12 prio=5 os_prio=31 tid=0x00007fc65d82f800 nid=0x5303 in Object.wait() [0x000070000299c000]
+   java.lang.Thread.State: WAITING (on object monitor)
+    at java.lang.Object.wait(Native Method)
+    - waiting on &lt;0x00000007956f37f0&gt; (a java.lang.Class for com.stephen.ThreadStateTest$Waiting)
+    at java.lang.Object.wait(Object.java:502)
+    at com.stephen.ThreadStateTest$Waiting.run(ThreadStateTest.java:44)
+    - locked &lt;0x00000007956f37f0&gt; (a java.lang.Class for com.stephen.ThreadStateTest$Waiting)
+    at java.lang.Thread.run(Thread.java:745)
+
+&quot;PauseThread&quot; #11 prio=5 os_prio=31 tid=0x00007fc65e01e000 nid=0x5103 runnable [0x0000700002899000]
+   java.lang.Thread.State: RUNNABLE
+    at com.stephen.ThreadStateTest$PauseThread.run(ThreadStateTest.java:33)
+    at java.lang.Thread.run(Thread.java:745)
+
+&quot;TimedWaitingThread&quot; #10 prio=5 os_prio=31 tid=0x00007fc65c80e000 nid=0x4f03 waiting on condition [0x0000700002796000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+    at java.lang.Thread.sleep(Native Method)
+    at com.stephen.SleepUtils.sleep(ThreadStateTest.java:10)
+    at com.stephen.ThreadStateTest$TimeWaitingThread.run(ThreadStateTest.java:23)
+    at java.lang.Thread.run(Thread.java:745)
+</code></pre><p>现在来逐一解释：</p>
+<ul>
+<li><strong>Block2</strong>：由于<strong>Block1</strong>已经获得<strong>Block.class</strong>锁，所以此线程处于阻塞状态。</li>
+<li><strong>Block1</strong>：此线程不断的进行睡眠，且睡眠操作具有时间限制，因此处在超时等待操作状态。</li>
+<li><strong>WaitingThread</strong>：此线程在<strong>Waiting.class</strong>上等待，且没有时间限制，所以处在waiting状态。</li>
+<li><strong>PauseThread</strong>：此线程和<strong>TimedWaitingThread</strong>线程达到的效果相同，但是实现的手段不同，没有调用<strong>Thread.sleep(int millionSeconds)</strong>方法，处在<strong>Runnable</strong>状态。</li>
+<li><strong>TimedWaitingThread</strong>：此线程不断调用<strong>Thread.sleep(int millionSeconds)</strong>方法，处于超时等待状态。</li>
+</ul>
+<h1 id="线程的中断"><a href="#线程的中断" class="headerlink" title="线程的中断"></a>线程的中断</h1><h2 id="interrupt"><a href="#interrupt" class="headerlink" title="interrupt()"></a>interrupt()</h2><p>其他线程可以调用另一个线程的<strong>interrupt()</strong>方法来中断线程，可以调用线程的<strong>isInterrupted()</strong>来判断一个线程是否被中断，但是这个方法不总是返回true:</p>
+<ul>
+<li>当线程终止时，此方法会返回false。</li>
+<li>抛出<strong>InterruptedException</strong>的方法，在抛出异常之前，会将标识位设置为false，因此方法也总是返回false。</li>
+</ul>
+<p>现在用如下程序做出证明：</p>
+<pre><code>public class InterruptTest {
+    static class SleepThread implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                SleepUtils.sleep(3000);
+            }
+        }
+    }
+
+    static class NormalThread implements Runnable {
+        @Override
+        public void run() {
+            while (true);
+        }
+    }
+
+    public static void main(String[] args) {
+        Thread sleepThread = new Thread(new SleepThread(), &quot;Sleep&quot;);
+        Thread normalThread = new Thread(new NormalThread(), &quot;Normal&quot;);
+
+        sleepThread.start();
+        normalThread.start();
+
+        SleepUtils.sleep(2000);
+
+        sleepThread.interrupt();
+        normalThread.interrupt();
+
+        System.out.println(&quot;Sleep thread interrupted is &quot; + sleepThread.isInterrupted());
+        System.out.println(&quot;Normal thread interrupted is &quot; + normalThread.isInterrupted());
+    }
+}
+</code></pre><p>结果如下：</p>
+<pre><code>Sleep thread interrupted is false    
+Normal thread interrupted is true
+</code></pre><h2 id="设置boolean变量"><a href="#设置boolean变量" class="headerlink" title="设置boolean变量"></a>设置boolean变量</h2><p>还可以设置boolean变量来通知线程的结束，这种方式比上面的<strong>interrupt</strong>方法更为优雅：</p>
+<pre><code>public class BooleanFlagThread {
+    static class CounterRunnable implements Runnable {
+        long i = 0L;
+        private volatile boolean isCancelled = false;
+
+        public void cancel() {
+            isCancelled = true;
+        }
+
+        @Override
+        public void run() {
+            while (!isCancelled &amp;&amp; !Thread.currentThread().isInterrupted()) {
+                i++;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        CounterRunnable cr = new CounterRunnable();
+        Thread countThread = new Thread(cr, &quot;Count&quot;);
+        countThread.start();
+
+        SleepUtils.sleep(2000);
+        cr.cancel();
+
+        System.out.println(&quot;&quot; + cr.i);
+    }
+}
+</code></pre><h1 id="线程之间的通信：notify-wait"><a href="#线程之间的通信：notify-wait" class="headerlink" title="线程之间的通信：notify(), wait()"></a>线程之间的通信：notify(), wait()</h1><p>线程除了用<strong>synchronized</strong>,<strong>volatile</strong>来进行通信之外，还可以用notify和wait方法，使用这两个方法的前提是某个线程获取了相应对象的锁，典型应用的示例代码如下：</p>
+<pre><code>public class NotifyWaitTest {
+    static Object lock = new Object();
+    static boolean flag = true;
+
+    static class Wait implements Runnable {
+        @Override
+        public void run() {
+            //获取对象的锁
+            synchronized (lock) {
+                while (flag) { // 2
+                    System.out.println(&quot;不满足相应的条件&quot;);
+                    try {
+                        //进入wait状态，同时释放对象的锁
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println(&quot;条件满足&quot;);
+            }
+        }
+    }
+
+    static class Notify implements Runnable {
+        @Override
+        public void run() {
+            //获取对象的锁
+            synchronized (lock) {
+                if (flag) {
+                    flag = false; // 1
+                    //通知改变
+                    lock.notify();
+                }
+
+                System.out.println(&quot;条件已改变&quot;);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Thread waitThread = new Thread(new Wait(), &quot;Wait&quot;);
+        Thread notifyThread = new Thread(new Notify(), &quot;Notify&quot;);
+        waitThread.start();
+        //保证wait先执行的方式
+        SleepUtils.sleep(2000);
+        notifyThread.start();
+    }
+}
+</code></pre><p>输出的结果如下：</p>
+<pre><code>不满足相应的条件
+条件已改变
+条件满足
+</code></pre><p>需要注意的是：</p>
+<ul>
+<li>在调用notify, wait方法之前，要先获得对象的锁。</li>
+<li>wait方法，会释放相应的锁。</li>
+<li>notify方法会将调用wait的线程从等待队列到同步队列，此时wait线程将从WAITING状态转到BLOCK状态。</li>
+<li>只有当notify的线程释放对象锁时，另一个wait线程才会返回继续工作。</li>
+<li>notify和wait具有happens-before关系。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/11/Java内存模型-二/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3031,226 +3469,6 @@ private func setUp() {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/22/Java-ReferenceQueue实战/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Stephen Zhang">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/lion.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/22/Java-ReferenceQueue实战/" itemprop="url">
-                  Java ReferenceQueue实战
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-22T22:28:09+08:00">
-                2017-01-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/22/Java-ReferenceQueue实战/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/22/Java-ReferenceQueue实战/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="浅谈ReferenceQueue"><a href="#浅谈ReferenceQueue" class="headerlink" title="浅谈ReferenceQueue"></a>浅谈ReferenceQueue</h2><p>先看官方文档对这个类的介绍：  </p>
-<blockquote>
-<p>Reference queues, to which registered reference objects are appended by the<br>garbage collector after the appropriate reachability changes are detected.  </p>
-</blockquote>
-<p>这个的大体意思是这样的，当一个Reference类所指向的实际对象被回收的时候，这个Referece便会加入到这个队列里面，这个队列提供了三个操作：</p>
-<pre><code>public Reference&lt;? extends T&gt; poll();
-
-public Reference&lt;? extends T&gt; remove(long timeout);
-
-public Reference&lt;? extends T&gt; remove();
-</code></pre><p>三个都是出队操作，后两个remove是阻塞方法，具体请看官方文档，懒得解释。</p>
-<h2 id="ReferenceQueue实战"><a href="#ReferenceQueue实战" class="headerlink" title="ReferenceQueue实战"></a>ReferenceQueue实战</h2><p>笔者将用一个简单粗暴的例子来解释这个类的实际用途。假设在一个公司的内部，有员工(Staff)，有事务(Work)，每一个事务都必须对应一个员工去做。假如这个员工突然有急事请假了，或者工作太累不小心嗝屁了（相应的Staff类实例被回收了），那这个Work类实例可以做一些清理工作，或者通知其他相关类它所对应的Staff已经被回收。那么这个模型就可以完美地应用ReferenceQueue，下面是代码实现：</p>
-<p>Work类：</p>
-<pre><code>public class Work {
-    static class StaffWeakReference extends WeakReference&lt;Staff&gt; {
-        Work work;
-
-        public StaffWeakReference(Work work, Staff referent, ReferenceQueue&lt;? super Staff&gt; q) {
-            super(referent, q);
-            this.work = work;
-        }
-    }
-
-    StaffWeakReference swReference;
-
-    Work(Staff staff, ReferenceQueue&lt;? super Staff&gt; referenceQueue) {
-        swReference = new StaffWeakReference(this, staff, referenceQueue);
-    }
-
-    public void cancel() {
-        // 可以做一些清理工作，或者通知其他相关类它所对应的Staff已经被回收
-    }
-}
-</code></pre><p>Company类：</p>
-<pre><code>public class Company {
-
-    static class CleanUpThread extends Thread {
-        ReferenceQueue&lt;?&gt; referenceQueue;
-        static final long TIME_OUT = 1000;
-
-        CleanUpThread(ReferenceQueue&lt;?&gt; referenceQueue) {
-            this.referenceQueue = referenceQueue;
-        }
-
-        @Override
-        public void run() {
-            while (true) {
-                try {
-                    Work.StaffWeakReference reference = (Work.StaffWeakReference) referenceQueue.remove(TIME_OUT);
-                    if (reference != null) {
-                        reference.work.cancel();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        ReferenceQueue&lt;Staff&gt; referenceQueue = new ReferenceQueue&lt;&gt;();
-        CleanUpThread cleanUpThread = new CleanUpThread(referenceQueue);
-        cleanUpThread.start();
-        Staff staff = new Staff();
-        Work work = new Work(staff, referenceQueue);
-        ...
-        ...
-    }
-}
-</code></pre><p>当main开始运行的时候，先开启一个CleanUpThread，这个类的run方法内部则是不断的从传入的ReferenceQueue当中读取所指向Staff对象已经被回收的引用，如果某个Staff已经被回收，那它在对应的Work里面对应的弱引用便会读取出来，这时候就可以调用读出的弱引用对应的Staff已经被回收的Work的cancel方法了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3298,7 +3516,7 @@ public Reference&lt;? extends T&gt; remove();
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -3307,7 +3525,7 @@ public Reference&lt;? extends T&gt; remove();
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
