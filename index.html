@@ -251,6 +251,255 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/14/使用Fork-Join架构进行归并排序/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/lion.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen's blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/14/使用Fork-Join架构进行归并排序/" itemprop="url">
+                  使用Fork/Join架构进行归并排序
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-14T23:37:51+08:00">
+                2017-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/14/使用Fork-Join架构进行归并排序/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/14/使用Fork-Join架构进行归并排序/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>注：</strong>以下部分文字，图片摘自《Java并发编程的艺术》</p>
+<h1 id="Fork-Join框架简介"><a href="#Fork-Join框架简介" class="headerlink" title="Fork/Join框架简介"></a>Fork/Join框架简介</h1><p>Fork/Join框架是jdk7中提供的并行框架，其主要的特点是把一个大任务分割成几块不同的小任务，由不同的线程去执行这一系列的小任务，最终结果合并成大任务的结果。</p>
+<p>其主要原理如图所示：<br><img src="http://cdn.infoqstatic.com/statics_s1_20170314-0434/resource/articles/fork-join-introduction/zh/resources/21.png" alt=""></p>
+<h1 id="工作窃取算法"><a href="#工作窃取算法" class="headerlink" title="工作窃取算法"></a>工作窃取算法</h1><p>工作窃取算法的意思是每个线程的任务队列执行完毕之后，此线程会将其他线程的任务队列中的任务“窃取”到本线程的任务队列中来。使用窃取算法的好处就是充分利用了线程的并行计算，有关工作窃取算法的更多内容，请看：<a href="https://en.wikipedia.org/wiki/Work_stealing" target="_blank" rel="external">Work Stealing</a></p>
+<h1 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h1><p>再实际应用上，要首先确定一个大的任务是否能够分成几个小的任务，是否能把小任务的结果进行合并，这样就自然而然的想到递归。下面笔者实现一个用Fork/Join架构实现的归并排序算法：</p>
+<pre><code>public class ForkJoinPractice {
+    static class SortTask&lt;T extends Comparable&lt;T&gt;&gt; extends RecursiveAction {
+        T[] array;
+        int start;
+        int end;
+        int mid;
+
+        public SortTask(T[] array, int start, int end) {
+            this.array = array;
+            this.start = start;
+            this.end = end;
+            this.mid = (this.start + this.end) / 2;
+        }
+
+        @Override
+        protected void compute() {
+            int mid;
+            if (start &lt; end) {
+                mid = (start + end) / 2;
+                //将任务分解
+                invokeAll(new SortTask&lt;T&gt;(array, start, mid), new SortTask&lt;T&gt;(array, mid + 1, end));
+                merge();
+            }
+        }
+
+        private void merge() {
+            int n1 = mid - start + 1;
+            int n2 = end - mid;
+            int i, j, k;
+
+            List&lt;T&gt; leftList = new ArrayList&lt;&gt;(n1);
+            List&lt;T&gt; rightList = new ArrayList&lt;&gt;(n2);
+
+            for (i = 0; i &lt; n1; i++) {
+                leftList.add(array[start + i]);
+            }
+
+            for (j = 0; j &lt; n2; j++) {
+                rightList.add(array[mid + 1 + j]);
+            }
+
+            i = j = 0;
+            k = start;
+
+            while (i &lt; n1 &amp;&amp; j &lt; n2) {
+                if (leftList.get(i).compareTo(rightList.get(j)) &lt; 0) {
+                    array[k++] = leftList.get(i++);
+                } else {
+                    array[k++] = rightList.get(j++);
+                }
+            }
+
+            while (i &lt; n1) {
+                array[k++] = leftList.get(i++);
+            }
+
+            while (j &lt; n2) {
+                array[k++] = rightList.get(j++);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Integer[] array = new Integer[90];
+        for (int i = 0; i &lt; 90; i++) {
+            array[i] = 90 - i;
+        }
+
+        SortTask&lt;Integer&gt; sortTask = new SortTask&lt;&gt;(array, 0, array.length - 1);
+        ForkJoinPool pool = new ForkJoinPool();
+        pool.submit(sortTask);
+        try {
+            //等待任务结束
+            pool.awaitTermination(3, TimeUnit.SECONDS);
+            pool.shutdown();
+            for (int i :  array) {
+                System.out.println(i);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/13/Java并发编程-一/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3255,261 +3504,6 @@ public static void loadImage(ImageView imageView, String imageUrl) {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/01/iOS-UIView/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Stephen Zhang">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/lion.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/01/iOS-UIView/" itemprop="url">
-                  iOS UIView
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-01T20:37:56+08:00">
-                2017-02-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/02/01/iOS-UIView/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/01/iOS-UIView/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="UIView简介"><a href="#UIView简介" class="headerlink" title="UIView简介"></a>UIView简介</h2><p>官方文档：  </p>
-<blockquote>
-<p>The UIView class defines a rectangular area on the screen and the interfaces for managing the content in that area.  </p>
-</blockquote>
-<p>说白了就是一块展现内容还能处理交互的矩形区域，比如一个按钮，一个输入框，重要性不再多说。  </p>
-<h2 id="重点"><a href="#重点" class="headerlink" title="重点"></a>重点</h2><p><strong>设置外观</strong><br>这个没什么好说的，常见的有backgroundColor(背景色)，isHidden(是否隐藏)，alpha(透明度)等等。一个比较重要的属性是layer，这个稍后再谈。  </p>
-<p><strong>frame, bounds</strong><br>先贴上一篇讲的非常好的博客：<br><a href="http://www.jianshu.com/p/964313cfbdaa" target="_blank" rel="external">frame和bounds的区别</a><br>通俗的讲，frame是针对superview来说的，bounds是针对subview来说的，下面来写一个小程序验证一下有什么作用:<br>代码如下：  </p>
-<pre><code>private var subView: UIView?
-private var subViewsSubView: UIView?
-
-override func viewDidLoad() {
-    super.viewDidLoad()
-    setUp()
-}
-
-private func setUp() {
-    setUpControllButtons()
-    setUpSubviews()
-} 
-    private func setUp() {
-    setUpControllButtons()
-    setUpSubviews()
-}
-
-private func setUpSubviews() {
-    subView = UIView(frame: CGRect(x: 40.0, y: 40.0, width: 200, height: 300))
-    subViewsSubView = UIView(frame: CGRect(x: 20.0, y: 20.0, width: 50, height: 50))
-    subViewsSubView?.backgroundColor = UIColor.yellow
-    subView?.backgroundColor = UIColor.blue
-    view.addSubview(subView!)
-    subView?.addSubview(subViewsSubView!)
-}
-
-private func setUpControllButtons() {
-    let cb1 = UIButton(frame: CGRect(x: 50.0, y: 500.0, width: 100, height: 100))
-    let cb2 = UIButton(frame: CGRect(x: 250.0, y: 500.0, width: 100, height: 100))
-
-    ......
-
-    cb1.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ViewController.onCb1Click)))
-    cb2.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ViewController.onCb2Click)))
-
-    view.addSubview(cb1)
-    view.addSubview(cb2)
-}
-
-func onCb1Click() {
-    if let subView = self.subView {
-        subView.frame = CGRect(x: subView.frame.minX, y: subView.frame.minY, width: subView.frame.width + 10, height: subView.frame.height + 10)
-    }
-}
-
-func onCb2Click() {
-    if let subView = self.subView {
-        subView.bounds = CGRect(x: subView.bounds.minX + 10, y: subView.bounds.minY + 10, width: subView.bounds.width, height: subView.bounds.height)
-    }
-}
-</code></pre><p>程序很简单，先是创建一个subView，设置其在父view(即Controller的RootView)的坐标(40.0, 40.0)，宽200，高300。再往subView里面添加子视图subViewsSubView，其相对于subView的坐标为(20.0, 20.0)。两个控制的按钮，一个title为frame，点击的效果是将subView的frame宽高都加10，效果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/screen1.gif" alt=""><br>可见frame的宽和高便是控件实际的宽高，而且改变之后，整个矩形区域的左上角的位置不发生改变，宽和高加长，现在修改onCb1Click()方法：</p>
-<pre><code>func onCb1Click() {
-    if let subView = self.subView {
-        subView.frame = CGRect(x: subView.frame.minX + 10, y: subView.frame.minY + 10, width: subView.frame.width, height: subView.frame.height)
-    }
-}
-</code></pre><p>运行效果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/screen2.gif" alt=""><br>可见frame的minX, minY是矩形区域左上角在父view的坐标，当其改变时，它在父view的位置便发生了改变。<br>下面来看bounds按钮点击的效果：<br><img src="http://ok34fi9ya.bkt.clouddn.com/screen3.gif" alt=""><br>当bounds的宽高改变的时候，view的宽高也会改变，不同的是frame的宽高改变的时候不动点在左上角，而bounds的宽高改变的时候不动点在view初始的center。改变onCb2Click()方法如下：</p>
-<pre><code>func onCb2Click() {
-    if let subView = self.subView {
-        subView.bounds = CGRect(x: subView.bounds.minX - 10, y: subView.bounds.minY - 10, width: subView.bounds.width, height: subView.bounds.height)
-    }
-}
-</code></pre><p>运行效果如图：<br><img src="http://ok34fi9ya.bkt.clouddn.com/screen4.gif" alt=""><br>这里应该这么想，初始的时候bounds的minX, minY都是0(坐标原点)，现在将其都剪去10，那么左上角变成了(-10, -10)，坐标原点向右下角移动，子view的位置是根据坐标原点的位置确定的，所以子view也跟着右下角移动了。</p>
-<p><strong>处理交互事件</strong><br>UIView继承于UIResponder，若想自定义的view按照自己的逻辑处理交互事件的话，需要重写四个方法：  </p>
-<pre><code>func touchesBegan(Set&lt;UITouch&gt;, with: UIEvent?)
-func touchesMoved(Set&lt;UITouch&gt;, with: UIEvent?)
-func touchesEnded(Set&lt;UITouch&gt;, with: UIEvent?)
-func touchesCancelled(Set&lt;UITouch&gt;, with: UIEvent?)
-</code></pre><p>这四个具体怎么用请看官方文档（我就是懒）<br>还有一种简单一点的办法，是在view初始化的时候给它注册GestureRecogniser，这时候target是自己就可以了。  </p>
-<p><strong>layer属性</strong><br>这是个比较重要的属性，可以控制view的外观，像圆角，阴影，渐变背景色都可以通过它来设置（搞不懂为什么view可以直接设置背景色向外暴露backgroundColor属性，不优雅），不过我认为它并不如安卓那样通过xml来控制简单方便。它是一个CALayer类，几个常用的属性：  </p>
-<pre><code>var cornerRadius: CGFloat { get set } //设置圆角
-var borderWidth: CGFloat { get set } //边框的宽度
-var borderColor: CGColor? { get set } //边框的颜色
-var backgroundColor: CGColor? { get set } //背景色
-</code></pre><p>此外，它还有一系列的子类，例如CAGradientLayer(设置渐变色)，CATextLayer, CAShapeLayer。下面画一个拥有渐变色背景的Button吧！ 代码如下：  </p>
-<pre><code>override func viewDidLoad() {
-    super.viewDidLoad()
-    setUp()
-}
-
-private func setUp() {
-    let button = UIButton()
-    button.frame = CGRect(x: 40.0, y: 40.0, width: 300, height: 200)
-    view.addSubview(button)
-
-    let backgroundLayer = CAGradientLayer()
-    //设置frame，不要忽略这一步！
-    backgroundLayer.frame = button.layer.bounds
-    //设置起点和终点, 范围是(0,0) -&gt; (1, 1)
-    backgroundLayer.startPoint = CGPoint(x: 0.5, y: 1.0)
-    backgroundLayer.endPoint = CGPoint(x: 0.5, y: 0.0)
-    //渐变颜色数组
-    backgroundLayer.colors = [ UIColor.blue.cgColor, UIColor.red.cgColor ]
-    button.layer.addSublayer(backgroundLayer)
-
-    button.layer.cornerRadius = 10
-}
-</code></pre><p>运行效果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/IMG_2159.PNG" alt=""></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3557,7 +3551,7 @@ private func setUp() {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
