@@ -84,23 +84,23 @@
 
 
 
-<meta name="description" content="概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
-抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Java资深软件工程师：程晓明）
-此时两个线程A,B的通">
+<meta name="description" content="注：一下部分文字图片来自《Java并发编程的艺术》
+概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
+抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Ja">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java内存模型(一)">
 <meta property="og:url" content="http://yoursite.com/2017/03/10/Java内存模型-一/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
-抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Java资深软件工程师：程晓明）
-此时两个线程A,B的通">
+<meta property="og:description" content="注：一下部分文字图片来自《Java并发编程的艺术》
+概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
+抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Ja">
 <meta property="og:image" content="http://cdn.infoqstatic.com/statics_s1_20170228-0434_4/resource/articles/java-memory-model-1/zh/resources/11.png">
-<meta property="og:updated_time" content="2017-03-11T07:55:11.000Z">
+<meta property="og:updated_time" content="2017-03-27T11:17:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java内存模型(一)">
-<meta name="twitter:description" content="概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
-抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Java资深软件工程师：程晓明）
-此时两个线程A,B的通">
+<meta name="twitter:description" content="注：一下部分文字图片来自《Java并发编程的艺术》
+概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
+抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Ja">
 <meta name="twitter:image" content="http://cdn.infoqstatic.com/statics_s1_20170228-0434_4/resource/articles/java-memory-model-1/zh/resources/11.png">
 
 
@@ -365,7 +365,8 @@
       
 
       
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。</p>
+        <p><strong>注：</strong>一下部分文字图片来自《Java并发编程的艺术》</p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。</p>
 <h1 id="抽象结构"><a href="#抽象结构" class="headerlink" title="抽象结构"></a>抽象结构</h1><p>程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：<br><img src="http://cdn.infoqstatic.com/statics_s1_20170228-0434_4/resource/articles/java-memory-model-1/zh/resources/11.png" alt=""><br>（本图作者为Java资深软件工程师：<a href="http://ifeve.com/author/25622818/" target="_blank" rel="external">程晓明</a>）</p>
 <p>此时两个线程A,B的通信流程为：</p>
 <ul>
@@ -594,7 +595,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

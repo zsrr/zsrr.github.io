@@ -84,25 +84,25 @@
 
 
 
-<meta name="description" content="多线程简介线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：
+<meta name="description" content="注：一下部分文字图片来自《Java并发编程的艺术》
+多线程简介线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：
 public class ThreadTest {
-    public static void main(String[] args) {
-        Thr">
+    public static void main(St">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java并发编程(一)">
 <meta property="og:url" content="http://yoursite.com/2017/03/13/Java并发编程-一/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="多线程简介线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：
+<meta property="og:description" content="注：一下部分文字图片来自《Java并发编程的艺术》
+多线程简介线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：
 public class ThreadTest {
-    public static void main(String[] args) {
-        Thr">
-<meta property="og:updated_time" content="2017-03-13T13:38:02.000Z">
+    public static void main(St">
+<meta property="og:updated_time" content="2017-03-27T11:19:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发编程(一)">
-<meta name="twitter:description" content="多线程简介线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：
+<meta name="twitter:description" content="注：一下部分文字图片来自《Java并发编程的艺术》
+多线程简介线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：
 public class ThreadTest {
-    public static void main(String[] args) {
-        Thr">
+    public static void main(St">
 
 
 
@@ -377,7 +377,8 @@ public class ThreadTest {
       
 
       
-        <h1 id="多线程简介"><a href="#多线程简介" class="headerlink" title="多线程简介"></a>多线程简介</h1><p>线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：</p>
+        <p><strong>注：</strong>一下部分文字图片来自《Java并发编程的艺术》</p>
+<h1 id="多线程简介"><a href="#多线程简介" class="headerlink" title="多线程简介"></a>多线程简介</h1><p>线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：</p>
 <pre><code>public class ThreadTest {
     public static void main(String[] args) {
         ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
@@ -698,8 +699,8 @@ Normal thread interrupted is true
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/03/14/使用Fork-Join架构进行归并排序/" rel="prev" title="使用Fork/Join架构进行归并排序">
-                使用Fork/Join架构进行归并排序 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/03/14/Java并发编程-二/" rel="prev" title="Java并发编程(二)">
+                Java并发编程(二) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -797,7 +798,7 @@ Normal thread interrupted is true
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

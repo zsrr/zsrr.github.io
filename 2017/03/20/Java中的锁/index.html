@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android," />
+  <meta name="keywords" content="Java,MutiThread," />
 
 
 
@@ -84,34 +84,19 @@
 
 
 
-<meta name="description" content="在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。
-利用反射这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改Typeface类的静态DEFAULT成员，如下所示：
-public class MyApplication extends Application {
-
-    @Override
-    public void onCreate() {">
+<meta name="description" content="此篇先解决一个主要的问题：
+ AQS的自旋过程不能保证锁的公平性么？">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android自定义字体解决方案">
-<meta property="og:url" content="http://yoursite.com/2017/02/26/Android自定义字体解决方案/index.html">
+<meta property="og:title" content="Java中的锁">
+<meta property="og:url" content="http://yoursite.com/2017/03/20/Java中的锁/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。
-利用反射这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改Typeface类的静态DEFAULT成员，如下所示：
-public class MyApplication extends Application {
-
-    @Override
-    public void onCreate() {">
-<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png">
-<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488100937.png">
-<meta property="og:updated_time" content="2017-02-26T09:27:20.000Z">
+<meta property="og:description" content="此篇先解决一个主要的问题：
+ AQS的自旋过程不能保证锁的公平性么？">
+<meta property="og:updated_time" content="2017-03-27T11:53:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android自定义字体解决方案">
-<meta name="twitter:description" content="在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。
-利用反射这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改Typeface类的静态DEFAULT成员，如下所示：
-public class MyApplication extends Application {
-
-    @Override
-    public void onCreate() {">
-<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png">
+<meta name="twitter:title" content="Java中的锁">
+<meta name="twitter:description" content="此篇先解决一个主要的问题：
+ AQS的自旋过程不能保证锁的公平性么？">
 
 
 
@@ -139,13 +124,13 @@ public class MyApplication extends Application {
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/02/26/Android自定义字体解决方案/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/03/20/Java中的锁/"/>
 
 
 
 
 
-  <title> Android自定义字体解决方案 | Stephen's blog </title>
+  <title> Java中的锁 | Stephen's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -268,7 +253,7 @@ public class MyApplication extends Application {
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/26/Android自定义字体解决方案/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/20/Java中的锁/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -292,7 +277,7 @@ public class MyApplication extends Application {
             
             
               
-                Android自定义字体解决方案
+                Java中的锁
               
             
           </h1>
@@ -307,8 +292,8 @@ public class MyApplication extends Application {
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T16:04:26+08:00">
-                2017-02-26
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-20T18:40:13+08:00">
+                2017-03-20
               </time>
             
 
@@ -330,8 +315,19 @@ public class MyApplication extends Application {
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/安卓开发/" itemprop="url" rel="index">
-                    <span itemprop="name">安卓开发</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
                   </a>
                 </span>
 
@@ -348,8 +344,8 @@ public class MyApplication extends Application {
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/26/Android自定义字体解决方案/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/26/Android自定义字体解决方案/" itemprop="commentCount"></span>
+                <a href="/2017/03/20/Java中的锁/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/20/Java中的锁/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -375,96 +371,8 @@ public class MyApplication extends Application {
       
 
       
-        <p>在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。</p>
-<h1 id="利用反射"><a href="#利用反射" class="headerlink" title="利用反射"></a>利用反射</h1><p>这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改<strong>Typeface</strong>类的静态<strong>DEFAULT</strong>成员，如下所示：</p>
-<pre><code>public class MyApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        Typeface typeface = Typeface.createFromAsset(getAssets(), &quot;fonts/CourierNewBold.ttf&quot;);
-        try {
-            Field field = Typeface.class.getDeclaredField(&quot;MONOSPACE&quot;);
-            field.setAccessible(true);
-            field.set(null, typeface);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            Log.e(&quot;Application&quot;, &quot;Error happened!&quot;);
-        }
-    }
-}
-</code></pre><p>style文件：</p>
-<pre><code>&lt;style name=&quot;AppTheme&quot; parent=&quot;android:Theme.Holo.Light.DarkActionBar&quot;&gt;
-    &lt;!-- Customize your theme here. --&gt;
-    &lt;item name=&quot;colorPrimary&quot;&gt;@color/colorPrimary&lt;/item&gt;
-    &lt;item name=&quot;colorPrimaryDark&quot;&gt;@color/colorPrimaryDark&lt;/item&gt;
-    &lt;item name=&quot;colorAccent&quot;&gt;@color/colorAccent&lt;/item&gt;
-    &lt;item name=&quot;android:typeface&quot;&gt;monospace&lt;/item&gt;
-&lt;/style&gt;
-</code></pre><p>运行效果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png" alt=""><br>这种方法的局限也很明显，就是在Android 5.0默认主题之上并不能运行，需要更换一个旧的主题，如果主题不是很重要的话，这种方法就比较合适了。</p>
-<h1 id="利用DataBinding"><a href="#利用DataBinding" class="headerlink" title="利用DataBinding"></a>利用DataBinding</h1><p>这是笔者认为最快速，最便捷的方法了，用<strong>BindingAdapters</strong>注解标注方法即可在xml文件中指定<strong>Typeface</strong>，方法如下：</p>
-<p>MyApplication:</p>
-<pre><code>public class MyApplication extends Application {
-
-    public static final Map&lt;String, Typeface&gt; FONTS_MAP = new HashMap&lt;&gt;();
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        FONTS_MAP.put(getString(R.string.courier_new_bold),
-                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
-                        getString(R.string.courier_new_bold)));
-        FONTS_MAP.put(getString(R.string.lao_sangam_mn),
-                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
-                        getString(R.string.lao_sangam_mn)));
-        FONTS_MAP.put(getString(R.string.microsoft_sans_serif),
-                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
-                        getString(R.string.microsoft_sans_serif)));
-    }
-}
-</code></pre><p>FontsUtils:</p>
-<pre><code>public class FontsUtils {
-    @BindingAdapter({&quot;fonts&quot;})
-    public static void setTextViewFonts(TextView tv, String fontName) {
-        tv.setTypeface(MyApplication.FONTS_MAP.get(fontName));
-    }
-}
-</code></pre><p>xml:</p>
-<pre><code>&lt;layout xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
-    &lt;data&gt;
-        &lt;import type=&quot;com.stephen.customfontdemo.FontsUtils&quot;/&gt;
-    &lt;/data&gt;
-    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-        xmlns:tools=&quot;http://schemas.android.com/tools&quot;
-        android:id=&quot;@+id/activity_main&quot;
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;match_parent&quot;
-        android:padding=&quot;16dp&quot;
-        android:orientation=&quot;vertical&quot;
-        tools:context=&quot;com.stephen.customfontdemo.MainActivity&quot;&gt;
-
-        &lt;TextView
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;测试字体1&quot;
-            app:fonts=&quot;@{@string/courier_new_bold}&quot;/&gt;
-        &lt;TextView
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;测试字体2&quot;
-            app:fonts=&quot;@{@string/lao_sangam_mn}&quot;/&gt;
-        &lt;TextView
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;测试字体3&quot;
-            app:fonts=&quot;@{@string/microsoft_sans_serif}&quot;/&gt;
-    &lt;/LinearLayout&gt;
-&lt;/layout&gt;
-</code></pre><p>运行效果：<img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488100937.png" alt=""><br>额……可能2和3看不出效果，不过确实已经更改了。</p>
-<p>需要注意的是： <strong>Typeface</strong>的加载要放在Application类当中，或者放在另一个线程当中进行，因为它是一个比较耗时的操作，如果大量的<strong>TextView</strong>用到自定义字体会造成卡顿。</p>
-<p>这样在需要自定义字体时，只需要在<strong>FONTS_MAP</strong>和strings.xml当中注册，在xml中一行代码即可指定！</p>
+        <p>此篇先解决一个主要的问题：</p>
+<p> AQS的自旋过程不能保证锁的公平性么？</p>
 
       
     </div>
@@ -488,7 +396,9 @@ public class MyApplication extends Application {
       
         <div class="post-tags">
           
-            <a href="/tags/Android/" rel="tag"># Android</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/MutiThread/" rel="tag"># MutiThread</a>
           
         </div>
       
@@ -497,8 +407,8 @@ public class MyApplication extends Application {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" rel="next" title="Mac OS Sierra下编译Android 7.1.1">
-                <i class="fa fa-chevron-left"></i> Mac OS Sierra下编译Android 7.1.1
+              <a href="/2017/03/14/使用Fork-Join架构进行归并排序/" rel="next" title="使用Fork/Join架构进行归并排序">
+                <i class="fa fa-chevron-left"></i> 使用Fork/Join架构进行归并排序
               </a>
             
           </div>
@@ -506,10 +416,6 @@ public class MyApplication extends Application {
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/02/SQL使用（一）/" rel="prev" title="MySQL使用（一）">
-                MySQL使用（一） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -558,8 +464,8 @@ public class MyApplication extends Application {
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/02/26/Android自定义字体解决方案/"
-           data-title="Android自定义字体解决方案" data-url="http://yoursite.com/2017/02/26/Android自定义字体解决方案/">
+      <div class="ds-thread" data-thread-key="2017/03/20/Java中的锁/"
+           data-title="Java中的锁" data-url="http://yoursite.com/2017/03/20/Java中的锁/">
       </div>
     
   </div>
@@ -583,17 +489,8 @@ public class MyApplication extends Application {
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/lion.jpg"
@@ -649,22 +546,6 @@ public class MyApplication extends Application {
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#利用反射"><span class="nav-number">1.</span> <span class="nav-text">利用反射</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#利用DataBinding"><span class="nav-number">2.</span> <span class="nav-text">利用DataBinding</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
     </div>

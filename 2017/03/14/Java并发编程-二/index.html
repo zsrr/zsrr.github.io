@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android," />
+  <meta name="keywords" content="Java,MutiThread," />
 
 
 
@@ -84,34 +84,25 @@
 
 
 
-<meta name="description" content="在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。
-利用反射这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改Typeface类的静态DEFAULT成员，如下所示：
-public class MyApplication extends Application {
-
-    @Override
-    public void onCreate() {">
+<meta name="description" content="注：以下内容均摘自《Java并发编程的艺术》
+等待／超时模式介绍等待／超时模式的典型应用场景是，等待一段时间，看是否能得到正确的结果，如果能，则将其返回，不能则返回默认值，其代码如下：
+public synchronized Object getObject(long millionSeconds) throws InterruptedException {
+    long future = S">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android自定义字体解决方案">
-<meta property="og:url" content="http://yoursite.com/2017/02/26/Android自定义字体解决方案/index.html">
+<meta property="og:title" content="Java并发编程(二)">
+<meta property="og:url" content="http://yoursite.com/2017/03/14/Java并发编程-二/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。
-利用反射这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改Typeface类的静态DEFAULT成员，如下所示：
-public class MyApplication extends Application {
-
-    @Override
-    public void onCreate() {">
-<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png">
-<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488100937.png">
-<meta property="og:updated_time" content="2017-02-26T09:27:20.000Z">
+<meta property="og:description" content="注：以下内容均摘自《Java并发编程的艺术》
+等待／超时模式介绍等待／超时模式的典型应用场景是，等待一段时间，看是否能得到正确的结果，如果能，则将其返回，不能则返回默认值，其代码如下：
+public synchronized Object getObject(long millionSeconds) throws InterruptedException {
+    long future = S">
+<meta property="og:updated_time" content="2017-03-27T12:07:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android自定义字体解决方案">
-<meta name="twitter:description" content="在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。
-利用反射这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改Typeface类的静态DEFAULT成员，如下所示：
-public class MyApplication extends Application {
-
-    @Override
-    public void onCreate() {">
-<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png">
+<meta name="twitter:title" content="Java并发编程(二)">
+<meta name="twitter:description" content="注：以下内容均摘自《Java并发编程的艺术》
+等待／超时模式介绍等待／超时模式的典型应用场景是，等待一段时间，看是否能得到正确的结果，如果能，则将其返回，不能则返回默认值，其代码如下：
+public synchronized Object getObject(long millionSeconds) throws InterruptedException {
+    long future = S">
 
 
 
@@ -139,13 +130,13 @@ public class MyApplication extends Application {
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/02/26/Android自定义字体解决方案/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/03/14/Java并发编程-二/"/>
 
 
 
 
 
-  <title> Android自定义字体解决方案 | Stephen's blog </title>
+  <title> Java并发编程(二) | Stephen's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -268,7 +259,7 @@ public class MyApplication extends Application {
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/26/Android自定义字体解决方案/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/14/Java并发编程-二/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -292,7 +283,7 @@ public class MyApplication extends Application {
             
             
               
-                Android自定义字体解决方案
+                Java并发编程(二)
               
             
           </h1>
@@ -307,8 +298,8 @@ public class MyApplication extends Application {
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T16:04:26+08:00">
-                2017-02-26
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-14T20:20:52+08:00">
+                2017-03-14
               </time>
             
 
@@ -330,8 +321,19 @@ public class MyApplication extends Application {
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/安卓开发/" itemprop="url" rel="index">
-                    <span itemprop="name">安卓开发</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
                   </a>
                 </span>
 
@@ -348,8 +350,8 @@ public class MyApplication extends Application {
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/26/Android自定义字体解决方案/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/26/Android自定义字体解决方案/" itemprop="commentCount"></span>
+                <a href="/2017/03/14/Java并发编程-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/14/Java并发编程-二/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -375,96 +377,84 @@ public class MyApplication extends Application {
       
 
       
-        <p>在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。</p>
-<h1 id="利用反射"><a href="#利用反射" class="headerlink" title="利用反射"></a>利用反射</h1><p>这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改<strong>Typeface</strong>类的静态<strong>DEFAULT</strong>成员，如下所示：</p>
-<pre><code>public class MyApplication extends Application {
+        <p><strong>注：</strong>以下内容均摘自《Java并发编程的艺术》</p>
+<h1 id="等待／超时模式"><a href="#等待／超时模式" class="headerlink" title="等待／超时模式"></a>等待／超时模式</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>等待／超时模式的典型应用场景是，等待一段时间，看是否能得到正确的结果，如果能，则将其返回，不能则返回默认值，其代码如下：</p>
+<pre><code>public synchronized Object getObject(long millionSeconds) throws InterruptedException {
+    long future = System.currentTimeMillis() + millionSeconds;
+    long remainingTime = millionSeconds;
+    while (obj == null &amp;&amp; remainingTime &gt; 0) {
+        wait(remainingTime);
+        remainingTime = future - System.currentTimeMillis();
+    }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    return obj;
+}
+</code></pre><h2 id="应用：数据库连接池"><a href="#应用：数据库连接池" class="headerlink" title="应用：数据库连接池"></a>应用：数据库连接池</h2><p>下面来模拟一个数据库连接池，用来从中获取和释放连接，客户端获取连接被设置为超时等待，程序如下：</p>
+<pre><code>public class ConnectionPool {
+    private final LinkedList&lt;Connection&gt; connections = new LinkedList&lt;&gt;();
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), &quot;fonts/CourierNewBold.ttf&quot;);
-        try {
-            Field field = Typeface.class.getDeclaredField(&quot;MONOSPACE&quot;);
-            field.setAccessible(true);
-            field.set(null, typeface);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            Log.e(&quot;Application&quot;, &quot;Error happened!&quot;);
+    public ConnectionPool(int initSize) {
+        if (initSize &lt;= 0)
+            throw new IllegalArgumentException(&quot;Init size must &gt; 0&quot;);
+        for (int i = 0; i &lt; initSize; i++) {
+            connections.addLast(ConnectionDriver.getConnection());
+        }
+    }
+
+    public void releaseConnection(Connection connection) {
+        synchronized (connections) {
+            connections.addLast(connection);
+            connections.notifyAll();
+        }
+    }
+
+    public Connection getConnection(long millionSeconds) throws InterruptedException {
+        synchronized (connections) {
+            if (millionSeconds &lt;= 0) {
+                while (connections.isEmpty()) {
+                    connections.wait();
+                }
+                return connections.removeFirst();
+            } else {
+                long future = System.currentTimeMillis() + millionSeconds;
+                long remaining = millionSeconds;
+
+                while (connections.isEmpty() &amp;&amp; remaining &gt; 0) {
+                    connections.wait(remaining);
+                    remaining = future - System.currentTimeMillis();
+                }
+
+                Connection connection = null;
+                if (!connections.isEmpty()) {
+                    connection = connections.removeFirst();
+                }
+
+                return connection;
+            }
         }
     }
 }
-</code></pre><p>style文件：</p>
-<pre><code>&lt;style name=&quot;AppTheme&quot; parent=&quot;android:Theme.Holo.Light.DarkActionBar&quot;&gt;
-    &lt;!-- Customize your theme here. --&gt;
-    &lt;item name=&quot;colorPrimary&quot;&gt;@color/colorPrimary&lt;/item&gt;
-    &lt;item name=&quot;colorPrimaryDark&quot;&gt;@color/colorPrimaryDark&lt;/item&gt;
-    &lt;item name=&quot;colorAccent&quot;&gt;@color/colorAccent&lt;/item&gt;
-    &lt;item name=&quot;android:typeface&quot;&gt;monospace&lt;/item&gt;
-&lt;/style&gt;
-</code></pre><p>运行效果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png" alt=""><br>这种方法的局限也很明显，就是在Android 5.0默认主题之上并不能运行，需要更换一个旧的主题，如果主题不是很重要的话，这种方法就比较合适了。</p>
-<h1 id="利用DataBinding"><a href="#利用DataBinding" class="headerlink" title="利用DataBinding"></a>利用DataBinding</h1><p>这是笔者认为最快速，最便捷的方法了，用<strong>BindingAdapters</strong>注解标注方法即可在xml文件中指定<strong>Typeface</strong>，方法如下：</p>
-<p>MyApplication:</p>
-<pre><code>public class MyApplication extends Application {
+</code></pre><p>ConnectionDriver通过动态代理技术返回一个Connection:</p>
+<pre><code>public class ConnectionDriver {
 
-    public static final Map&lt;String, Typeface&gt; FONTS_MAP = new HashMap&lt;&gt;();
+    public static class ConnectionHandler implements InvocationHandler {
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (method.getName().equals(&quot;commit&quot;)) {
+                Thread.sleep(1000);
+            }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+            return null;
+        }
+    }
 
-        FONTS_MAP.put(getString(R.string.courier_new_bold),
-                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
-                        getString(R.string.courier_new_bold)));
-        FONTS_MAP.put(getString(R.string.lao_sangam_mn),
-                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
-                        getString(R.string.lao_sangam_mn)));
-        FONTS_MAP.put(getString(R.string.microsoft_sans_serif),
-                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
-                        getString(R.string.microsoft_sans_serif)));
+    public static Connection getConnection() {
+        return (Connection) Proxy.newProxyInstance(Connection.class.getClassLoader(),
+                new Class[] {Connection.class},
+                new ConnectionHandler());
     }
 }
-</code></pre><p>FontsUtils:</p>
-<pre><code>public class FontsUtils {
-    @BindingAdapter({&quot;fonts&quot;})
-    public static void setTextViewFonts(TextView tv, String fontName) {
-        tv.setTypeface(MyApplication.FONTS_MAP.get(fontName));
-    }
-}
-</code></pre><p>xml:</p>
-<pre><code>&lt;layout xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
-    &lt;data&gt;
-        &lt;import type=&quot;com.stephen.customfontdemo.FontsUtils&quot;/&gt;
-    &lt;/data&gt;
-    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-        xmlns:tools=&quot;http://schemas.android.com/tools&quot;
-        android:id=&quot;@+id/activity_main&quot;
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;match_parent&quot;
-        android:padding=&quot;16dp&quot;
-        android:orientation=&quot;vertical&quot;
-        tools:context=&quot;com.stephen.customfontdemo.MainActivity&quot;&gt;
-
-        &lt;TextView
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;测试字体1&quot;
-            app:fonts=&quot;@{@string/courier_new_bold}&quot;/&gt;
-        &lt;TextView
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;测试字体2&quot;
-            app:fonts=&quot;@{@string/lao_sangam_mn}&quot;/&gt;
-        &lt;TextView
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;测试字体3&quot;
-            app:fonts=&quot;@{@string/microsoft_sans_serif}&quot;/&gt;
-    &lt;/LinearLayout&gt;
-&lt;/layout&gt;
-</code></pre><p>运行效果：<img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488100937.png" alt=""><br>额……可能2和3看不出效果，不过确实已经更改了。</p>
-<p>需要注意的是： <strong>Typeface</strong>的加载要放在Application类当中，或者放在另一个线程当中进行，因为它是一个比较耗时的操作，如果大量的<strong>TextView</strong>用到自定义字体会造成卡顿。</p>
-<p>这样在需要自定义字体时，只需要在<strong>FONTS_MAP</strong>和strings.xml当中注册，在xml中一行代码即可指定！</p>
+</code></pre><p>上面的连接池通过构造函数传入的initSize来定义里面的连接数量，通过<strong>release</strong>方法来释放用过的连接，此时连接被重新加入到队列内部，然后通知在<strong>connections</strong>上等待的线程此时有连接可以进行复用。<strong>getConnection</strong>通过制定的参数设置超时时间，并判断队列是否为空，不为空则直接从队列里面取出第一个并返回，不是的话则在<strong>connections</strong>上进行等待，知道超时或者又有复用的connection为止。</p>
 
       
     </div>
@@ -488,7 +478,9 @@ public class MyApplication extends Application {
       
         <div class="post-tags">
           
-            <a href="/tags/Android/" rel="tag"># Android</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/MutiThread/" rel="tag"># MutiThread</a>
           
         </div>
       
@@ -497,8 +489,8 @@ public class MyApplication extends Application {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" rel="next" title="Mac OS Sierra下编译Android 7.1.1">
-                <i class="fa fa-chevron-left"></i> Mac OS Sierra下编译Android 7.1.1
+              <a href="/2017/03/13/Java并发编程-一/" rel="next" title="Java并发编程(一)">
+                <i class="fa fa-chevron-left"></i> Java并发编程(一)
               </a>
             
           </div>
@@ -507,8 +499,8 @@ public class MyApplication extends Application {
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/03/02/SQL使用（一）/" rel="prev" title="MySQL使用（一）">
-                MySQL使用（一） <i class="fa fa-chevron-right"></i>
+              <a href="/2017/03/14/使用Fork-Join架构进行归并排序/" rel="prev" title="使用Fork/Join架构进行归并排序">
+                使用Fork/Join架构进行归并排序 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -558,8 +550,8 @@ public class MyApplication extends Application {
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/02/26/Android自定义字体解决方案/"
-           data-title="Android自定义字体解决方案" data-url="http://yoursite.com/2017/02/26/Android自定义字体解决方案/">
+      <div class="ds-thread" data-thread-key="2017/03/14/Java并发编程-二/"
+           data-title="Java并发编程(二)" data-url="http://yoursite.com/2017/03/14/Java并发编程-二/">
       </div>
     
   </div>
@@ -659,7 +651,7 @@ public class MyApplication extends Application {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#利用反射"><span class="nav-number">1.</span> <span class="nav-text">利用反射</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#利用DataBinding"><span class="nav-number">2.</span> <span class="nav-text">利用DataBinding</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#等待／超时模式"><span class="nav-number">1.</span> <span class="nav-text">等待／超时模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用：数据库连接池"><span class="nav-number">1.2.</span> <span class="nav-text">应用：数据库连接池</span></a></li></ol></li></ol></div>
             
 
           </div>
