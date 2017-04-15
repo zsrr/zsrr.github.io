@@ -251,6 +251,903 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/14/Java-ORM解决方案/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/lion.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen's blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/14/Java-ORM解决方案/" itemprop="url">
+                  Java ORM解决方案
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-14T15:31:14+08:00">
+                2017-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/14/Java-ORM解决方案/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/14/Java-ORM解决方案/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>注：</strong>此篇部分内容，图片来自<a href="http://ok34fi9ya.bkt.clouddn.com/jpa_tutorial.pdf" target="_blank" rel="external">JPA Tutorial</a></p>
+<h1 id="什么是ORM"><a href="#什么是ORM" class="headerlink" title="什么是ORM"></a>什么是ORM</h1><p>对象关系映射(Object Relational Mapping)，用面向对象的语言实现了数据的转换，存储等操作。</p>
+<h1 id="Java-ORM解决方案"><a href="#Java-ORM解决方案" class="headerlink" title="Java ORM解决方案"></a>Java ORM解决方案</h1><h2 id="Java-Persistence-Api"><a href="#Java-Persistence-Api" class="headerlink" title="Java Persistence Api"></a>Java Persistence Api</h2><p>Java持久化API（以下简称JPA），是从EJB发展而来的Java ORM框架。</p>
+<h3 id="主要结构"><a href="#主要结构" class="headerlink" title="主要结构"></a>主要结构</h3><p>其主要结构如下图所示：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%887.11.50.png" alt=""><br>主要组成部分有下面几个：</p>
+<ul>
+<li><strong>POJO class</strong>此种类定义了像id, name等等基本属性，相当于关系数据库的表。</li>
+<li><strong>Service class</strong>此种类实现了与数据库进行操作，包括获取对象，删除对象，更新对象等操作。</li>
+<li><strong>JPA Provider</strong>由各大厂商提供的对JPA的具体实现，如Eclipselink, Toplink, Hibernate等等。</li>
+<li><strong>Mapping file</strong>用来定义POJO class和关系数据库的映射关系。</li>
+</ul>
+<p>除了Mapping file，JPA还提供了各种形式的注解来定义POJO class和关系数据库之间的映射关系，主要的几个注解如下：</p>
+<ul>
+<li><strong>@Entity</strong>用来声明一个将要和关系数据库发生映射的POJO class。</li>
+<li><strong>@Table</strong>用来声明此类对应的表名, schema和catalog。</li>
+<li><strong>@Basic</strong>通常用来声明属性的加载方式。</li>
+<li><strong>@Id</strong>用来声明POJO class对应的表的主键。</li>
+<li><strong>@GeneratedValue</strong>用来指定主键的生成策略。</li>
+<li><strong>@Column</strong>用来声明属性对应的列。</li>
+</ul>
+<p>此外，POJO class应该具备Java Bean的标准形式。</p>
+<h3 id="用IntelliJ-IDEA建立JPA项目"><a href="#用IntelliJ-IDEA建立JPA项目" class="headerlink" title="用IntelliJ IDEA建立JPA项目"></a>用IntelliJ IDEA建立JPA项目</h3><p>笔者采用的环境是IDEA 2017.1.1，Hibernate 5.2.9，JPA 2.1。注意Hibernate的版本要和JPA的版本对应，不然会出错。</p>
+<h4 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h4><p><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%887.37.05.png" alt=""><br>勾选JavaEE Persistence项目，下面指定JPA的版本为2.1，Provider为Hibernate，建好项目后整个项目的结构如图所示：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%887.42.46.png" alt=""></p>
+<h4 id="加入Hibernate以及数据库驱动依赖"><a href="#加入Hibernate以及数据库驱动依赖" class="headerlink" title="加入Hibernate以及数据库驱动依赖"></a>加入Hibernate以及数据库驱动依赖</h4><p>笔者采用的是h2数据库，将相应的依赖包放在lib目录下，对用的jar依赖包的下载地址：<a href="http://ok34fi9ya.bkt.clouddn.com/jpa-with-hibernate.zip" target="_blank" rel="external">h2以及Hibernate依赖包</a></p>
+<p>将jar包放在lib文件夹之后，打开Project Struture，找到项目对应的Module，为其添加dependicies:<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%887.59.23.png" alt=""></p>
+<h4 id="配置persistence-xml文件"><a href="#配置persistence-xml文件" class="headerlink" title="配置persistence.xml文件"></a>配置persistence.xml文件</h4><p>此文件定义了数据源，映射类等基本信息，且一定要在项目类路径下的META-INF文件夹下，笔者采用的是h2数据库，配置如下：</p>
+<pre><code>&lt;persistence xmlns=&quot;http://xmlns.jcp.org/xml/ns/persistence&quot; version=&quot;2.1&quot;&gt;
+
+    &lt;persistence-unit name=&quot;HibernatePersistenceUnit&quot;&gt;
+        &lt;!--定义Provider--&gt;
+        &lt;provider&gt;org.hibernate.jpa.HibernatePersistenceProvider&lt;/provider&gt;
+        &lt;properties&gt;
+            &lt;property name=&quot;hibernate.connection.url&quot; value=&quot;jdbc:h2:~/test/test&quot;/&gt;
+            &lt;property name=&quot;hibernate.connection.driver_class&quot; value=&quot;org.h2.Driver&quot;/&gt;
+            &lt;property name=&quot;hibernate.connection.username&quot; value=&quot;sa&quot;/&gt;
+            &lt;!--&lt;property name=&quot;hibernate.connection.password&quot; value=&quot;&quot;/&gt;--&gt;
+            &lt;property name=&quot;hibernate.hbm2ddl.auto&quot; value=&quot;create&quot;/&gt;
+        &lt;/properties&gt;
+    &lt;/persistence-unit&gt;
+&lt;/persistence&gt;
+</code></pre><p>注意，笔者采用的是h2嵌入式数据库，因此不用提供用户的密码，还要注意里面的hbm2ddl.auto属性，此属性的值在这里是create，意味着应用程序每次启动都会创建一个新的表格，而上一次启动创建的表格将不复存在，关于此属性更多的内容，请见：<a href="http://blog.csdn.net/kjfcpua/article/details/4272415" target="_blank" rel="external">hibernate.hbm2ddl.auto属性配置</a></p>
+<p>至此，项目的基本配置完毕。</p>
+<h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><p>此小节通过小小的例子来阐述JPA的基本使用。</p>
+<p>Employee.java:</p>
+<pre><code>@Entity
+@Table(name = &quot;Employee&quot;, schema = &quot;PUBLIC&quot;, catalog = &quot;TEST&quot;)
+public class Employee {
+    @Id
+    private int eid;
+    private String ename;
+    private double salary;
+    private String deg;
+
+    public Employee(String ename, double salary, String deg) {
+        this.ename = ename;
+        this.salary = salary;
+        this.deg = deg;
+    }
+
+    public Employee() {
+
+    }
+
+    public int getEid() {
+        return eid;
+    }
+
+    public void setEid(int eid) {
+        this.eid = eid;
+    }
+
+    public String getEname() {
+        return ename;
+    }
+
+    public void setEname(String ename) {
+        this.ename = ename;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public String getDeg() {
+        return deg;
+    }
+
+    public void setDeg(String deg) {
+        this.deg = deg;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Employee{&quot; +
+                &quot;eid=&quot; + eid +
+                &quot;, ename=&apos;&quot; + ename + &apos;\&apos;&apos; +
+                &quot;, salary=&quot; + salary +
+                &quot;, deg=&apos;&quot; + deg + &apos;\&apos;&apos; +
+                &apos;}&apos;;
+    }
+}
+</code></pre><p>Main.java:</p>
+<pre><code>public class Main {
+    private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory(&quot;HibernatePersistenceUnit&quot;);
+
+    private static void createAnEmployee(Employee employee) {
+        EntityManager manager = factory.createEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        transaction.begin();
+        manager.persist(employee);
+        transaction.commit();
+        manager.close();
+    }
+
+    private static Employee findEmployee(int eid) {
+        EntityManager manager = factory.createEntityManager();
+        try {
+            return manager.find(Employee.class, eid);
+        } finally {
+            manager.close();
+        }
+    }
+
+    private static void deleteEmployee(int eid) {
+        EntityManager manager = factory.createEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        transaction.begin();
+        Employee employee = manager.find(Employee.class, eid);
+        manager.remove(employee);
+        transaction.commit();
+        manager.close();
+    }
+
+    private static void updateEmployeeSalary(int eid, double salary) {
+        EntityManager manager = factory.createEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        transaction.begin();
+        Employee employee = manager.find(Employee.class, eid);
+        System.out.println(employee);
+        employee.setSalary(salary);
+        transaction.commit();
+        manager.close();
+    }
+
+
+    public static void main(String[] args) {
+        Employee employee = new Employee();
+
+        employee.setEid(100);
+        employee.setEname(&quot;zsr&quot;);
+        employee.setSalary(3000);
+        employee.setDeg(&quot;Student&quot;);
+
+        createAnEmployee(employee);
+        System.out.println(findEmployee(100));
+        updateEmployeeSalary(100, 5000);
+        System.out.println(findEmployee(100));
+        deleteEmployee(100);
+        factory.close();
+    }
+}
+</code></pre><p>结果如下：</p>
+<pre><code>Employee{eid=100, ename=&apos;zsr&apos;, salary=3000.0, deg=&apos;Student&apos;}
+Employee{eid=100, ename=&apos;zsr&apos;, salary=3000.0, deg=&apos;Student&apos;}
+Employee{eid=100, ename=&apos;zsr&apos;, salary=5000.0, deg=&apos;Student&apos;}
+</code></pre><p>需要注意的是：如果要手动指定主键，就不要用<strong>@GeneratedValue</strong>去注释主键，否则会出现detached entity passed to persist异常。</p>
+<p>以上主要用到的类有下面几个：</p>
+<ul>
+<li><strong>EntityManagerFactory</strong>  EntityManager的工厂类，与EntityManager是一对多的关系。</li>
+<li><strong>EntityManager</strong> 用来执行对象持久化的类，是<strong>Query</strong>类的工厂类。</li>
+<li><strong>EntityTransaction</strong> 与EntityManager是一对一的关系，作用在EntityManager上更新表的操作存储在其中，最后用其commit()方法才正式生效。</li>
+<li><strong>Persistence</strong> 提供静态方法用来生成EntityManagerFactory对象。</li>
+</ul>
+<p>关系如下图所示：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%889.35.54.png" alt=""></p>
+<h3 id="JPQL"><a href="#JPQL" class="headerlink" title="JPQL"></a>JPQL</h3><p>JPQL是在SQL语句基础之上建立起来的标准语句，能够执行对表中对象的<strong>SELECT, UPDATE, DELETE</strong>。</p>
+<h4 id="基本使用-1"><a href="#基本使用-1" class="headerlink" title="基本使用"></a>基本使用</h4><p>main方法改成如下代码：</p>
+<pre><code>@SuppressWarnings(&quot;unchecked&quot;)
+public static void main(String[] args) {
+    Employee employee1 = new Employee(100, &quot;Gopal&quot;, 40000, &quot;Technical Manager&quot;);
+    Employee employee2 = new Employee(101, &quot;Manisha&quot;, 35000, &quot;Reader&quot;);
+    Employee employee3 = new Employee(102, &quot;Masthanvali&quot;, 37000, &quot;Teacher&quot;);
+    Employee employee4 = new Employee(103, &quot;Satish&quot;, 30000, &quot;Student&quot;);
+    Employee employee5 = new Employee(104, &quot;Krishna&quot;, 31000, &quot;Tutor&quot;);
+    Employee employee6 = new Employee(105, &quot;Kiran&quot;, 32000, &quot;Drinker&quot;);
+
+    createAnEmployee(employee1);
+    createAnEmployee(employee2);
+    createAnEmployee(employee3);
+    createAnEmployee(employee4);
+    createAnEmployee(employee5);
+    createAnEmployee(employee6);
+
+    EntityManager manager = factory.createEntityManager();
+
+    Query betweenQuery = manager.createQuery(&quot;select e from Employee e where e.salary between 30000 and 35000&quot;);
+    List&lt;Employee&gt; salaryQueryEmployees = (List&lt;Employee&gt;) betweenQuery.getResultList();
+
+    for (Employee employee : salaryQueryEmployees) {
+        System.out.println(employee);
+    }
+
+    System.out.println();
+
+    Query likeQuery = manager.createQuery(&quot;select  e from Employee e where e.ename like &apos;M%&apos;&quot;);
+    List&lt;Employee&gt; likeQueryResults = (List&lt;Employee&gt;) likeQuery.getResultList();
+
+    for (Employee employee : likeQueryResults) {
+        System.out.println(employee);
+    }
+
+    manager.close();
+    factory.close();
+}
+</code></pre><p>运行结果：</p>
+<pre><code>Employee{eid=101, ename=&apos;Manisha&apos;, salary=35000.0, deg=&apos;Reader&apos;}
+Employee{eid=103, ename=&apos;Satish&apos;, salary=30000.0, deg=&apos;Student&apos;}
+Employee{eid=104, ename=&apos;Krishna&apos;, salary=31000.0, deg=&apos;Tutor&apos;}
+Employee{eid=105, ename=&apos;Kiran&apos;, salary=32000.0, deg=&apos;Drinker&apos;}
+
+Employee{eid=101, ename=&apos;Manisha&apos;, salary=35000.0, deg=&apos;Reader&apos;}
+Employee{eid=102, ename=&apos;Masthanvali&apos;, salary=37000.0, deg=&apos;Teacher&apos;}
+</code></pre><p>sql语法实在是繁多，这里不再一一详细列举。</p>
+<h4 id="NamedQuery"><a href="#NamedQuery" class="headerlink" title="NamedQuery"></a>NamedQuery</h4><p><strong>@NamedQuery</strong>注解用实现定义好的且不可变的query语句来执行查询操作，这个query语句中含有未知的参数可以在别处指定，用法如下：</p>
+<p>Employee.java:</p>
+<pre><code>@Entity
+@Table(name = &quot;Employee&quot;, schema = &quot;PUBLIC&quot;, catalog = &quot;TEST&quot;)
+@NamedQuery(query = &quot;select e from Employee e where e.eid = :id&quot;, name = &quot;find employee by id&quot;)
+public class Employee {
+    ...
+}
+</code></pre><p>main函数：</p>
+<pre><code>@SuppressWarnings(&quot;unchecked&quot;)
+public static void main(String[] args) {
+    ...
+
+    EntityManager manager = factory.createEntityManager();
+
+    Query query = manager.createNamedQuery(&quot;find employee by id&quot;);
+    query.setParameter(&quot;id&quot;, 103);
+
+    Employee employee = (Employee) query.getSingleResult();
+    System.out.println(employee);
+
+    manager.close();
+    factory.close();
+}
+</code></pre><h3 id="JPA对继承的处理"><a href="#JPA对继承的处理" class="headerlink" title="JPA对继承的处理"></a>JPA对继承的处理</h3><p>Java对象之间存在错综复杂的继承关系，而关系数据库没有继承这种概念，JPA对这种情况提供了多种解决方案。</p>
+<p>考虑如下的继承关系：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%8810.25.29.png" alt=""></p>
+<h4 id="单一表策略"><a href="#单一表策略" class="headerlink" title="单一表策略"></a>单一表策略</h4><p>单一表策略是指将不同的对象（存在继承关系）放在一个表当中，代码如下：</p>
+<p>Staff.java:</p>
+<pre><code>@Entity
+@Table(name = &quot;Staff&quot;, schema = &quot;PUBLIC&quot;, catalog = &quot;TEST&quot;)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = &quot;type&quot;)
+public class Staff {
+    @Id
+    private int sid;
+    private String sname;
+
+    public Staff(int sid, String sname) {
+        this.sid = sid;
+        this.sname = sname;
+    }
+
+    public Staff() {
+
+    }
+
+    public int getSid() {
+        return sid;
+    }
+
+    public void setSid(int sid) {
+        this.sid = sid;
+    }
+
+    public String getSname() {
+        return sname;
+    }
+
+    public void setSname(String sname) {
+        this.sname = sname;
+    }
+}
+</code></pre><p>TeachingStaff.java:</p>
+<pre><code>@Entity
+@DiscriminatorValue(value = &quot;TS&quot;)
+public class TeachingStaff extends Staff {
+    private String qualification;
+    private String subjectexpertise;
+
+    public TeachingStaff(int sid, String sname, String qualification, String subjectexpertise) {
+        super(sid, sname);
+        this.qualification = qualification;
+        this.subjectexpertise = subjectexpertise;
+    }
+
+    public TeachingStaff() {
+        super();
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public String getSubjectexpertise() {
+        return subjectexpertise;
+    }
+
+    public void setSubjectexpertise(String subjectexpertise) {
+        this.subjectexpertise = subjectexpertise;
+    }
+}
+</code></pre><p>NonTeachingStaff.java:</p>
+<pre><code>@Entity
+@DiscriminatorValue(value = &quot;NST&quot;)
+public class NonTeachingStaff extends Staff {
+    private String areaexpertise;
+
+    public NonTeachingStaff(int sid, String sname, String areaexpertise) {
+        super(sid, sname);
+        this.areaexpertise = areaexpertise;
+    }
+
+    public NonTeachingStaff() {
+        super();
+    }
+
+    public String getAreaexpertise() {
+        return areaexpertise;
+    }
+
+    public void setAreaexpertise(String areaexpertise) {
+        this.areaexpertise = areaexpertise;
+    }
+}
+</code></pre><p>Main.java:</p>
+<pre><code>public class Main {
+    private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory(&quot;HibernatePersistenceUnit&quot;);
+
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static void main(String[] args) {
+        EntityManager manager = factory.createEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        transaction.begin();
+
+        TeachingStaff ts1 = new TeachingStaff(100, &quot;zsr&quot;, &quot;fine&quot;, &quot;a&quot;);
+        TeachingStaff ts2 = new TeachingStaff(101, &quot;zx&quot;, &quot;good&quot;, &quot;a&quot;);
+
+        NonTeachingStaff nts1 = new NonTeachingStaff(102, &quot;zy&quot;, &quot;a&quot;);
+        NonTeachingStaff nts2 = new NonTeachingStaff(103, &quot;zu&quot;, &quot;b&quot;);
+
+        manager.persist(ts1);
+        manager.persist(ts2);
+        manager.persist(nts1);
+        manager.persist(nts2);
+
+        transaction.commit();
+
+        manager.close();
+        factory.close();
+    }
+}
+</code></pre><p>运行结束后打开h2 console，执行:</p>
+<pre><code>SELECT * FROM STAFF;
+</code></pre><p>运行结果：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%8810.51.27.png" alt=""></p>
+<h4 id="合并表策略"><a href="#合并表策略" class="headerlink" title="合并表策略"></a>合并表策略</h4><p>合并表策略（不知道怎么翻译才是对的，原文是Joined Table Strategy）是指将几个对象模型中共有的东西抽出来，在此基础上为子类分别建表，代码如下：</p>
+<p>Staff.java:</p>
+<pre><code>@Entity
+@Table(name = &quot;Staff&quot;, schema = &quot;PUBLIC&quot;, catalog = &quot;TEST&quot;)
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Staff {
+    ...
+}
+</code></pre><p>TeachingStaff.java:</p>
+<pre><code>@Entity
+@PrimaryKeyJoinColumn(referencedColumnName = &quot;sid&quot;)
+public class TeachingStaff extends Staff {
+    ...
+}
+</code></pre><p>NonTeachingStaff的变化与TeachingStaff的相同，不再展示。</p>
+<p>main方法不变，执行完毕之后，打开h2 console，运行如下指令：</p>
+<pre><code>SELECT * FROM STAFF;
+SELECT * FROM TEACHINGSTAFF;
+SELECT * FROM NONTEACHINGSTAFF;
+</code></pre><p>结果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%8811.12.43.png" alt=""></p>
+<h4 id="一类一表策略"><a href="#一类一表策略" class="headerlink" title="一类一表策略"></a>一类一表策略</h4><p>顾名思义就是为每一个类都产生一个表，此方法不再做展示。</p>
+<h3 id="实体间关系"><a href="#实体间关系" class="headerlink" title="实体间关系"></a>实体间关系</h3><p>除了继承，实体之间也有很多复杂的组合关系，JPA为实体之间的关系提供了四种注解：<strong>@OneToOne @OneToMany @ManyToOne @ManyToMany</strong></p>
+<h4 id="ManyToOne"><a href="#ManyToOne" class="headerlink" title="ManyToOne"></a>ManyToOne</h4><p>考虑下面的模型：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%8811.28.37.png" alt=""><br>此时多个Employee可以对应一个Department，在关系数据库里面，Employee的did便是一个外键，且指向Department的id。</p>
+<p>代码如下：</p>
+<p>Employee.java:</p>
+<pre><code>@Entity
+@Table(name = &quot;Employee&quot;, schema = &quot;PUBLIC&quot;, catalog = &quot;TEST&quot;)
+public class Employee {
+    @Id
+    private int eid;
+    private String ename;
+    private double salary;
+    private String deg;
+    @ManyToOne
+    private Department department;
+
+    ...
+
+}
+</code></pre><p>Department.java:</p>
+<pre><code>@Entity
+public class Department {
+    @Id
+    private int did;
+    private String dname;
+
+    public Department(int did, String dname) {
+        this.did = did;
+        this.dname = dname;
+    }
+
+    public Department() {
+    }
+
+    public int getDid() {
+        return did;
+    }
+
+    public void setDid(int did) {
+        this.did = did;
+    }
+
+    public String getDname() {
+        return dname;
+    }
+
+    public void setDname(String dname) {
+        this.dname = dname;
+    }
+}
+</code></pre><p>Main.java:</p>
+<pre><code>public class Main {
+    private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory(&quot;HibernatePersistenceUnit&quot;);
+
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static void main(String[] args) {
+        EntityManager manager = factory.createEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        transaction.begin();
+
+        Department department = new Department(10, &quot;DingXiang&quot;);
+        manager.persist(department);
+
+        Employee employee1 = new Employee(100, &quot;zsr&quot;, 4000, &quot;Student&quot;);
+        employee1.setDepartment(department);
+
+        Employee employee2 = new Employee(101, &quot;yui&quot;, 4000, &quot;Student&quot;);
+        employee2.setDepartment(department);
+
+        Employee employee3 = new Employee(102, &quot;yuo&quot;, 4000, &quot;Student&quot;);
+        employee3.setDepartment(department);
+
+        manager.persist(employee1);
+        manager.persist(employee2);
+        manager.persist(employee3);
+
+        transaction.commit();
+
+        manager.close();
+        factory.close();
+    }
+} 
+</code></pre><p>执行结束后，打开h2 console，查看Employee和Department表，结果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-15%20%E4%B8%8B%E5%8D%8811.47.43.png" alt=""></p>
+<h4 id="OneToMany"><a href="#OneToMany" class="headerlink" title="OneToMany"></a>OneToMany</h4><p>上面的反过来说，一个Department可以对应多个Employee，代码修改如下：</p>
+<p>Department.java:</p>
+<pre><code>@Entity
+public class Department {
+    @Id
+    private int did;
+    private String dname;
+    @OneToMany(targetEntity = Employee.class)
+    private List&lt;Employee&gt; employeeList;
+
+    public Department(int did, String dname) {
+        this.did = did;
+        this.dname = dname;
+    }
+
+    public Department() {
+    }
+
+    public List&lt;Employee&gt; getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(List&lt;Employee&gt; employeeList) {
+        this.employeeList = employeeList;
+    }
+
+    public int getDid() {
+        return did;
+    }
+
+    public void setDid(int did) {
+        this.did = did;
+    }
+
+    public String getDname() {
+        return dname;
+    }
+
+    public void setDname(String dname) {
+        this.dname = dname;
+    }
+}
+</code></pre><p>Main.java:</p>
+<pre><code>public class Main {
+    private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory(&quot;HibernatePersistenceUnit&quot;);
+
+
+    public static void main(String[] args) {
+        EntityManager manager = factory.createEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        transaction.begin();
+
+        Department department = new Department(10, &quot;DingXiang&quot;);
+
+        Employee employee1 = new Employee(100, &quot;zsr&quot;, 4000, &quot;Student&quot;);
+        Employee employee2 = new Employee(101, &quot;yui&quot;, 4000, &quot;Student&quot;);
+        Employee employee3 = new Employee(102, &quot;yuo&quot;, 4000, &quot;Student&quot;);
+
+        manager.persist(employee1);
+        manager.persist(employee2);
+        manager.persist(employee3);
+
+        List&lt;Employee&gt; employees = new ArrayList&lt;&gt;();
+        employees.add(employee1);
+        employees.add(employee2);
+        employees.add(employee3);
+
+        department.setEmployeeList(employees);
+
+        manager.persist(department);
+
+        transaction.commit();
+
+        manager.close();
+        factory.close();
+    }
+}
+</code></pre><p>执行完毕之后，打开h2 console，查看表信息，如下所示：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-16%20%E4%B8%8A%E5%8D%8812.00.54.png" alt=""></p>
+<h4 id="OneToOne"><a href="#OneToOne" class="headerlink" title="OneToOne"></a>OneToOne</h4><p>假设上述Employee类和Department类是一一对应的关系，只需要把ManyToOne小节下Employee类中对department成员上的注解修改成<strong>@OneToOne</strong>，再在main方法中为每个Employee提供一个Department即可，执行完毕后，生成的表的格式和ManyToOne的格式相同，这里不再展示。</p>
+<h4 id="ManyToMany"><a href="#ManyToMany" class="headerlink" title="ManyToMany"></a>ManyToMany</h4><p>考虑下面的模型：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-16%20%E4%B8%8A%E5%8D%8812.13.46.png" alt=""><br>一个课程可以有多个老师同时教学，一个老师也可以教多个课程，代码如下：</p>
+<p>Clazz.java:</p>
+<pre><code>@Entity
+@Table(name = &quot;Clazz&quot;, schema = &quot;PUBLIC&quot;, catalog = &quot;TEST&quot;)
+public class Clazz {
+    @Id
+    private int cid;
+    private String cname;
+
+    @ManyToMany(targetEntity = Teacher.class)
+    private Set&lt;Teacher&gt; teachers;
+
+    public Clazz() {
+    }
+
+    public Clazz(int cid, String cname) {
+        this.cid = cid;
+        this.cname = cname;
+    }
+
+    public Set&lt;Teacher&gt; getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set&lt;Teacher&gt; teachers) {
+        this.teachers = teachers;
+    }
+
+    public int getCid() {
+        return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid = cid;
+    }
+
+    public String getCname() {
+        return cname;
+    }
+
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
+}
+</code></pre><p>Teacher.java:</p>
+<pre><code>@Entity
+@Table(name = &quot;Teacher&quot;, schema = &quot;PUBLIC&quot;, catalog = &quot;TEST&quot;)
+public class Teacher {
+    @Id
+    private int tid;
+    private String tname;
+
+    @ManyToMany(targetEntity = Clazz.class)
+    Set&lt;Clazz&gt; clazzes;
+
+    public Teacher(int tid, String tname) {
+        this.tid = tid;
+        this.tname = tname;
+    }
+
+    public Teacher() {
+    }
+
+    public int getTid() {
+        return tid;
+    }
+
+    public void setTid(int tid) {
+        this.tid = tid;
+    }
+
+    public String getTname() {
+        return tname;
+    }
+
+    public void setTname(String tname) {
+        this.tname = tname;
+    }
+
+    public Set&lt;Clazz&gt; getClazzes() {
+        return clazzes;
+    }
+
+    public void setClazzes(Set&lt;Clazz&gt; clazzes) {
+        this.clazzes = clazzes;
+    }
+}
+</code></pre><p>Main.java:</p>
+<pre><code>public class Main {
+    private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory(&quot;HibernatePersistenceUnit&quot;);
+
+
+    public static void main(String[] args) {
+        EntityManager manager = factory.createEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        transaction.begin();
+
+        Clazz clazz = new Clazz(10, &quot;Chinese&quot;);
+        Clazz clazz1 = new Clazz(11, &quot;Math&quot;);
+        Clazz clazz2 = new Clazz(12, &quot;English&quot;);
+
+        manager.persist(clazz);
+        manager.persist(clazz1);
+        manager.persist(clazz2);
+
+        Set&lt;Clazz&gt; clazzes = new HashSet&lt;&gt;();
+        clazzes.add(clazz);
+        clazzes.add(clazz1);
+        clazzes.add(clazz2);
+
+        Set&lt;Clazz&gt; clazzes1 = new HashSet&lt;&gt;(clazzes);
+        Set&lt;Clazz&gt; clazzes2 = new HashSet&lt;&gt;(clazzes);
+
+        Teacher teacher1 = new Teacher(1, &quot;zsr&quot;);
+        Teacher teacher2 = new Teacher(2, &quot;zx&quot;);
+        Teacher teacher3 = new Teacher(3, &quot;zo&quot;);
+
+        teacher1.setClazzes(clazzes);
+        teacher2.setClazzes(clazzes1);
+        teacher3.setClazzes(clazzes2);
+
+        manager.persist(teacher1);
+        manager.persist(teacher2);
+        manager.persist(teacher3);
+
+        transaction.commit();
+
+        manager.close();
+        factory.close();
+    }
+}
+</code></pre><p>执行完毕之后打开h2 console查看表，结果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-16%20%E4%B8%8A%E5%8D%8812.33.02.png" alt=""></p>
+<h3 id="Criteria-Api"><a href="#Criteria-Api" class="headerlink" title="Criteria Api"></a>Criteria Api</h3><p>Criteria Api是用来执行标准查询的api，其用法遵循以下流程：</p>
+<pre><code>EntityManager em = ...;
+CriteriaBuilder cb = em.getCriteriaBuilder(); CriteriaQuery&lt;Entity class&gt; cq = cb.createQuery(Entity.class); 
+Root&lt;Entity&gt; from = cq.from(Entity.class);
+cq.select(Entity);
+TypedQuery&lt;Entity&gt; q = em.createQuery(cq);
+List&lt;Entity&gt; allitems = q.getResultList();
+</code></pre><p>还是拿JPQL小节的数据当例子，代码如下：</p>
+<p>Main.java:</p>
+<pre><code>public class Main {
+    private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory(&quot;HibernatePersistenceUnit&quot;);
+
+    private static void createAnEmployee(EntityManager manager, Employee employee) {
+        EntityTransaction transaction = manager.getTransaction();
+        transaction.begin();
+        manager.persist(employee);
+        transaction.commit();
+    }
+
+
+    public static void main(String[] args) {
+        EntityManager manager = factory.createEntityManager();
+
+
+        Employee employee1 = new Employee(100, &quot;Gopal&quot;, 40000, &quot;Technical Manager&quot;);
+        Employee employee2 = new Employee(101, &quot;Manisha&quot;, 35000, &quot;Reader&quot;);
+        Employee employee3 = new Employee(102, &quot;Masthanvali&quot;, 37000, &quot;Teacher&quot;);
+        Employee employee4 = new Employee(103, &quot;Satish&quot;, 30000, &quot;Student&quot;);
+        Employee employee5 = new Employee(104, &quot;Krishna&quot;, 31000, &quot;Tutor&quot;);
+        Employee employee6 = new Employee(105, &quot;Kiran&quot;, 32000, &quot;Drinker&quot;);
+
+        createAnEmployee(manager, employee1);
+        createAnEmployee(manager, employee2);
+        createAnEmployee(manager, employee3);
+        createAnEmployee(manager, employee4);
+        createAnEmployee(manager, employee5);
+        createAnEmployee(manager, employee6);
+
+        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+        CriteriaQuery&lt;Employee&gt; employeeCriteriaQuery = criteriaBuilder.createQuery(Employee.class);
+        Root&lt;Employee&gt; from = employeeCriteriaQuery.from(Employee.class);
+
+        CriteriaQuery&lt;Employee&gt; betweenSelect = employeeCriteriaQuery.select(from)
+                .where(criteriaBuilder.between(from.get(&quot;salary&quot;), 30000, 35000));
+        TypedQuery&lt;Employee&gt; betweenSelectTypedQuery = manager.createQuery(betweenSelect);
+        List&lt;Employee&gt; betweenSelectResults = betweenSelectTypedQuery.getResultList();
+
+        for (Employee employee : betweenSelectResults) {
+            System.out.println(employee);
+        }
+
+        manager.close();
+        factory.close();
+    }
+}
+</code></pre><p>输出和JPQL小节的输出效果相同，可以看出Criteria更加面向对象。</p>
+<h2 id="Hibernate"><a href="#Hibernate" class="headerlink" title="Hibernate"></a>Hibernate</h2><p>上面再配置JPA项目的时候我们用Hibernate作为Provider。Hibernate是一个优秀的开源Java ORM框架，既可以适配JPA也可以拿出来单独使用，有了上面的基础其使用也就变的简单自然。Hibernate还提供了缓存和检索服务，拥有拦截功能，其具体使用请查看官方文档，教程推荐: <a href="http://wiki.jikexueyuan.com/project/hibernate/" target="_blank" rel="external">Hibernate教程</a></p>
+<p>另外，IntelliJ IDEA也可以直接建立Hibernate项目省去了配置的麻烦…</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2625,200 +3522,6 @@ VALUES (&apos;张师睿&apos;, 19, 2, 3, 127, 127, 138, (127 + 127 + 138) / 3.0)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Stephen Zhang">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/lion.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" itemprop="url">
-                  Mac OS Sierra下编译Android 7.1.1
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-16T19:46:37+08:00">
-                2017-02-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/安卓开发/" itemprop="url" rel="index">
-                    <span itemprop="name">安卓开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="为什么要编译源码"><a href="#为什么要编译源码" class="headerlink" title="为什么要编译源码"></a>为什么要编译源码</h1><p>安卓进阶的最好方式就是Read the fucking source code!不去研究源码的程序员不是好程序员，呵呵呵……好吧，其实笔者要编译源码的原因是因为想研究DataBinding源码结果发现自带的sdk看不到核心逻辑，而笔者却是一个处女座……</p>
-<h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><h2 id="配置repo"><a href="#配置repo" class="headerlink" title="配置repo"></a>配置repo</h2><p>repo是google为了方便Android源代码的管理，用一系列Python脚本封装git命令做成的工具，具体的请看：<a href="http://ticktick.blog.51cto.com/823160/1653304" target="_blank" rel="external">Repo的使用</a>  </p>
-<p>安装代码两行：</p>
-<pre><code>$ curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo
-$ chmod a+x ~/bin/repo
-</code></pre><h2 id="配置JDK"><a href="#配置JDK" class="headerlink" title="配置JDK"></a>配置JDK</h2><p>Android 7.1.1需要Java8，到官方下载安装即可：<a href="http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html" target="_blank" rel="external">传送门</a></p>
-<p>Java环境变量配置：</p>
-<pre><code>export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
-export PATH=$JAVA_HOME/bin:$PATH 
-export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-</code></pre><h2 id="安装curl"><a href="#安装curl" class="headerlink" title="安装curl"></a>安装curl</h2><p>Mac OS自带的curl不带有openssl，不满足Jack编译的条件，因此需要用brew手动下载并替换默认的curl，命令如下：</p>
-<pre><code>$ brew install curl --with-openssl
-$ export PATH=$(brew --prefix curl)/bin:$PATH
-</code></pre><h2 id="下载配置Mac-OS-sdk"><a href="#下载配置Mac-OS-sdk" class="headerlink" title="下载配置Mac OS sdk"></a>下载配置Mac OS sdk</h2><p>由于Mac OS 10.12sdk弃用了syscall函数，所以我们需要旧版本的sdk：<a href="https://github.com/phracker/MacOSX-SDKs/releases" target="_blank" rel="external">下载地址</a></p>
-<p>下载好之后解压（如果下载下来的文件格式是xz文件那就不能用系统默认的解压工具），将解压得到的文件夹放在<strong>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs</strong>下，大功告成。</p>
-<h2 id="创建大小写敏感的磁盘区域"><a href="#创建大小写敏感的磁盘区域" class="headerlink" title="创建大小写敏感的磁盘区域"></a>创建大小写敏感的磁盘区域</h2><p>由于Mac OS默认不区别大小写，为了防止之后下载的文件冲突，需要新建一块大小写敏感的磁盘区域：</p>
-<pre><code>$ hdiutil create -type SPARSE -fs &apos;Case-sensitive Journaled HFS+&apos; -size 85g ~/android.dmg
-</code></pre><p>大小尽量设置的大些，笔者的源码下载并且编译之后整个的大小是83g。创建完毕后即可在Finder中双击加载。</p>
-<h2 id="下载镜像文件"><a href="#下载镜像文件" class="headerlink" title="下载镜像文件"></a>下载镜像文件</h2><p>由于众所周知的原因，google官方的景象并不能有很好的体验，所以要用<a href="https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/" target="_blank" rel="external">清华大学的aosp镜像</a>，这里采用其官方推荐的做法，先下载一个每月更新的<a href="https://mirrors.tuna.tsinghua.edu.cn/aosp-monthly/aosp-latest.tar" target="_blank" rel="external">初始化包</a>（为求速度和稳定性请用迅雷）。</p>
-<p>下载完成后，将压缩包剪切到先前已经加载的磁盘区域当中，用终端cd到压缩包所在的目录，运行如下指令：</p>
-<pre><code>$ tar xf aosp-latest.tar
-$ cd aosp
-$ repo sync
-</code></pre><p>接下来便会等待一段时间，此时repo正将下载好的分支更新到最新，所以仍需下载。如果出现下载速度过慢，远程连接经常hang up，那就请为git设置代理，笔者采用的是ss代理，所以相应的设置如下：</p>
-<pre><code>git config --global http.proxy &apos;socks5://127.0.0.1:1080&apos;
-git config --global https.proxy &apos;socks5://127.0.0.1:1080&apos;
-</code></pre><h2 id="开始编译"><a href="#开始编译" class="headerlink" title="开始编译"></a>开始编译</h2><p>下载完后，用终端cd到aosp目录，做的第一件事就是加载封装好的命令集：</p>
-<pre><code>$ source build/envsetup.sh
-</code></pre><p>接着运行指令lunch，会给出很多选项，对应不同的设备，这里笔者只是想查看一下源码，并没有刷机的需求，所以我就选了aosp_arm-eng。</p>
-<p>接下来运行：</p>
-<pre><code>$ make -j4
-</code></pre><p>注意j4是因为笔者的笔记本是二核心的，如果是4核心就是8，以此类推。</p>
-<p>下面就是漫长的等待，大概3，4个小时左右吧。</p>
-<h2 id="导入Android-Studio"><a href="#导入Android-Studio" class="headerlink" title="导入Android Studio"></a>导入Android Studio</h2><p>编译完成之后，运行：</p>
-<pre><code>$ mmm development/tools/idegen/
-$ development/tools/idegen/idegen.sh
-</code></pre><p>如果出现找不到指令的错误，请重新加载指令集。</p>
-<p>为保证AS是大小写敏感的，在导入AS之前，先编辑<strong>/Applications/Android\ Studio.app/Contents/bin</strong>下的<strong>idea.properties</strong>文件，在其最后加上如下代码：</p>
-<pre><code>idea.case.sensitive.fs=true
-</code></pre><p>这时候aosp目录之下会出现android.ipr文件，此文件便是AS所需。用AS打开该文件，又是一个漫长的等待过程，大概20分钟左右吧。</p>
-<p>导入之后，为了防止我们在观察源码时跳转到不是我们需要的.class文件，还需要做额外的几件事情：</p>
-<h3 id="配置JDK和SDK"><a href="#配置JDK和SDK" class="headerlink" title="配置JDK和SDK"></a>配置JDK和SDK</h3><p><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-16%20%E4%B8%8B%E5%8D%889.38.12.png" alt=""><br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-16%20%E4%B8%8B%E5%8D%889.40.01.png" alt=""></p>
-<h3 id="删除jar依赖"><a href="#删除jar依赖" class="headerlink" title="删除jar依赖"></a>删除jar依赖</h3><p>在项目设置(command + ;)中点击Modules，删除所有的jar包依赖，再添加两个文件夹依赖，分别是aosp文件夹下的external和frameworks文件夹。</p>
-<h3 id="注释掉android-iml文件的-lt-sourceFloder-gt-标签"><a href="#注释掉android-iml文件的-lt-sourceFloder-gt-标签" class="headerlink" title="注释掉android.iml文件的&lt;sourceFloder&gt;标签"></a>注释掉android.iml文件的&lt;sourceFloder&gt;标签</h3><p>上面两步之后，一般情况下可以愉快的看源码了，可是有时候还会出现跳转错误，这是因为导入的其他的文件夹里面的类与external和frameworks冲突所致，这时候就需要编辑aosp目录下的android.iml文件，将发生冲突的文件夹的位置记录下来，并在iml文件中将&lt;sourceFolder&gt;标签注释掉。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2866,7 +3569,7 @@ $ development/tools/idegen/idegen.sh
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

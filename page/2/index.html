@@ -251,6 +251,200 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/lion.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen's blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" itemprop="url">
+                  Mac OS Sierra下编译Android 7.1.1
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-16T19:46:37+08:00">
+                2017-02-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安卓开发/" itemprop="url" rel="index">
+                    <span itemprop="name">安卓开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="为什么要编译源码"><a href="#为什么要编译源码" class="headerlink" title="为什么要编译源码"></a>为什么要编译源码</h1><p>安卓进阶的最好方式就是Read the fucking source code!不去研究源码的程序员不是好程序员，呵呵呵……好吧，其实笔者要编译源码的原因是因为想研究DataBinding源码结果发现自带的sdk看不到核心逻辑，而笔者却是一个处女座……</p>
+<h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><h2 id="配置repo"><a href="#配置repo" class="headerlink" title="配置repo"></a>配置repo</h2><p>repo是google为了方便Android源代码的管理，用一系列Python脚本封装git命令做成的工具，具体的请看：<a href="http://ticktick.blog.51cto.com/823160/1653304" target="_blank" rel="external">Repo的使用</a>  </p>
+<p>安装代码两行：</p>
+<pre><code>$ curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo
+$ chmod a+x ~/bin/repo
+</code></pre><h2 id="配置JDK"><a href="#配置JDK" class="headerlink" title="配置JDK"></a>配置JDK</h2><p>Android 7.1.1需要Java8，到官方下载安装即可：<a href="http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html" target="_blank" rel="external">传送门</a></p>
+<p>Java环境变量配置：</p>
+<pre><code>export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+export PATH=$JAVA_HOME/bin:$PATH 
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+</code></pre><h2 id="安装curl"><a href="#安装curl" class="headerlink" title="安装curl"></a>安装curl</h2><p>Mac OS自带的curl不带有openssl，不满足Jack编译的条件，因此需要用brew手动下载并替换默认的curl，命令如下：</p>
+<pre><code>$ brew install curl --with-openssl
+$ export PATH=$(brew --prefix curl)/bin:$PATH
+</code></pre><h2 id="下载配置Mac-OS-sdk"><a href="#下载配置Mac-OS-sdk" class="headerlink" title="下载配置Mac OS sdk"></a>下载配置Mac OS sdk</h2><p>由于Mac OS 10.12sdk弃用了syscall函数，所以我们需要旧版本的sdk：<a href="https://github.com/phracker/MacOSX-SDKs/releases" target="_blank" rel="external">下载地址</a></p>
+<p>下载好之后解压（如果下载下来的文件格式是xz文件那就不能用系统默认的解压工具），将解压得到的文件夹放在<strong>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs</strong>下，大功告成。</p>
+<h2 id="创建大小写敏感的磁盘区域"><a href="#创建大小写敏感的磁盘区域" class="headerlink" title="创建大小写敏感的磁盘区域"></a>创建大小写敏感的磁盘区域</h2><p>由于Mac OS默认不区别大小写，为了防止之后下载的文件冲突，需要新建一块大小写敏感的磁盘区域：</p>
+<pre><code>$ hdiutil create -type SPARSE -fs &apos;Case-sensitive Journaled HFS+&apos; -size 85g ~/android.dmg
+</code></pre><p>大小尽量设置的大些，笔者的源码下载并且编译之后整个的大小是83g。创建完毕后即可在Finder中双击加载。</p>
+<h2 id="下载镜像文件"><a href="#下载镜像文件" class="headerlink" title="下载镜像文件"></a>下载镜像文件</h2><p>由于众所周知的原因，google官方的景象并不能有很好的体验，所以要用<a href="https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/" target="_blank" rel="external">清华大学的aosp镜像</a>，这里采用其官方推荐的做法，先下载一个每月更新的<a href="https://mirrors.tuna.tsinghua.edu.cn/aosp-monthly/aosp-latest.tar" target="_blank" rel="external">初始化包</a>（为求速度和稳定性请用迅雷）。</p>
+<p>下载完成后，将压缩包剪切到先前已经加载的磁盘区域当中，用终端cd到压缩包所在的目录，运行如下指令：</p>
+<pre><code>$ tar xf aosp-latest.tar
+$ cd aosp
+$ repo sync
+</code></pre><p>接下来便会等待一段时间，此时repo正将下载好的分支更新到最新，所以仍需下载。如果出现下载速度过慢，远程连接经常hang up，那就请为git设置代理，笔者采用的是ss代理，所以相应的设置如下：</p>
+<pre><code>git config --global http.proxy &apos;socks5://127.0.0.1:1080&apos;
+git config --global https.proxy &apos;socks5://127.0.0.1:1080&apos;
+</code></pre><h2 id="开始编译"><a href="#开始编译" class="headerlink" title="开始编译"></a>开始编译</h2><p>下载完后，用终端cd到aosp目录，做的第一件事就是加载封装好的命令集：</p>
+<pre><code>$ source build/envsetup.sh
+</code></pre><p>接着运行指令lunch，会给出很多选项，对应不同的设备，这里笔者只是想查看一下源码，并没有刷机的需求，所以我就选了aosp_arm-eng。</p>
+<p>接下来运行：</p>
+<pre><code>$ make -j4
+</code></pre><p>注意j4是因为笔者的笔记本是二核心的，如果是4核心就是8，以此类推。</p>
+<p>下面就是漫长的等待，大概3，4个小时左右吧。</p>
+<h2 id="导入Android-Studio"><a href="#导入Android-Studio" class="headerlink" title="导入Android Studio"></a>导入Android Studio</h2><p>编译完成之后，运行：</p>
+<pre><code>$ mmm development/tools/idegen/
+$ development/tools/idegen/idegen.sh
+</code></pre><p>如果出现找不到指令的错误，请重新加载指令集。</p>
+<p>为保证AS是大小写敏感的，在导入AS之前，先编辑<strong>/Applications/Android\ Studio.app/Contents/bin</strong>下的<strong>idea.properties</strong>文件，在其最后加上如下代码：</p>
+<pre><code>idea.case.sensitive.fs=true
+</code></pre><p>这时候aosp目录之下会出现android.ipr文件，此文件便是AS所需。用AS打开该文件，又是一个漫长的等待过程，大概20分钟左右吧。</p>
+<p>导入之后，为了防止我们在观察源码时跳转到不是我们需要的.class文件，还需要做额外的几件事情：</p>
+<h3 id="配置JDK和SDK"><a href="#配置JDK和SDK" class="headerlink" title="配置JDK和SDK"></a>配置JDK和SDK</h3><p><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-16%20%E4%B8%8B%E5%8D%889.38.12.png" alt=""><br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-16%20%E4%B8%8B%E5%8D%889.40.01.png" alt=""></p>
+<h3 id="删除jar依赖"><a href="#删除jar依赖" class="headerlink" title="删除jar依赖"></a>删除jar依赖</h3><p>在项目设置(command + ;)中点击Modules，删除所有的jar包依赖，再添加两个文件夹依赖，分别是aosp文件夹下的external和frameworks文件夹。</p>
+<h3 id="注释掉android-iml文件的-lt-sourceFloder-gt-标签"><a href="#注释掉android-iml文件的-lt-sourceFloder-gt-标签" class="headerlink" title="注释掉android.iml文件的&lt;sourceFloder&gt;标签"></a>注释掉android.iml文件的&lt;sourceFloder&gt;标签</h3><p>上面两步之后，一般情况下可以愉快的看源码了，可是有时候还会出现跳转错误，这是因为导入的其他的文件夹里面的类与external和frameworks冲突所致，这时候就需要编辑aosp目录下的android.iml文件，将发生冲突的文件夹的位置记录下来，并在iml文件中将&lt;sourceFolder&gt;标签注释掉。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/15/Android-DataBinding（二）：源码解析/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2767,7 +2961,7 @@ public RequestCreator fit() {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
