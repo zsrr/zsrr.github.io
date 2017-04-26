@@ -84,27 +84,27 @@
 
 
 
-<meta name="description" content="ProGuard简介ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):
+<meta name="description" content="先附上一个github地址： android-proguard-snippets，里面记录了各种库的ProGuard规则。
+ProGuard简介ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):
 
-ProGuard要求制定Library jars，以此来重新组织class文件的依赖关系，Library jars通常是保持不变的。
-代码的某些地方不能被混淆，如main方法，这些地方称为入口点(Entr">
+ProGuard要求制定Library jars，以此来重新组织class文件的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android ProGuard">
 <meta property="og:url" content="http://yoursite.com/2017/04/24/Android-Proguard/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="ProGuard简介ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):
+<meta property="og:description" content="先附上一个github地址： android-proguard-snippets，里面记录了各种库的ProGuard规则。
+ProGuard简介ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):
 
-ProGuard要求制定Library jars，以此来重新组织class文件的依赖关系，Library jars通常是保持不变的。
-代码的某些地方不能被混淆，如main方法，这些地方称为入口点(Entr">
+ProGuard要求制定Library jars，以此来重新组织class文件的">
 <meta property="og:image" content="https://www.guardsquare.com/files/media/guardsquare2016/Website/ProGuard/ProGuard_build_process.png">
 <meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-26%20%E4%B8%8B%E5%8D%884.21.32.png">
-<meta property="og:updated_time" content="2017-04-26T09:21:36.000Z">
+<meta property="og:updated_time" content="2017-04-26T09:30:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android ProGuard">
-<meta name="twitter:description" content="ProGuard简介ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):
+<meta name="twitter:description" content="先附上一个github地址： android-proguard-snippets，里面记录了各种库的ProGuard规则。
+ProGuard简介ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):
 
-ProGuard要求制定Library jars，以此来重新组织class文件的依赖关系，Library jars通常是保持不变的。
-代码的某些地方不能被混淆，如main方法，这些地方称为入口点(Entr">
+ProGuard要求制定Library jars，以此来重新组织class文件的">
 <meta name="twitter:image" content="https://www.guardsquare.com/files/media/guardsquare2016/Website/ProGuard/ProGuard_build_process.png">
 
 
@@ -380,7 +380,8 @@ ProGuard要求制定Library jars，以此来重新组织class文件的依赖关�
       
 
       
-        <h1 id="ProGuard简介"><a href="#ProGuard简介" class="headerlink" title="ProGuard简介"></a>ProGuard简介</h1><p>ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):</p>
+        <p>先附上一个github地址： <a href="https://github.com/krschultz/android-proguard-snippets" target="_blank" rel="external">android-proguard-snippets</a>，里面记录了各种库的ProGuard规则。</p>
+<h1 id="ProGuard简介"><a href="#ProGuard简介" class="headerlink" title="ProGuard简介"></a>ProGuard简介</h1><p>ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):</p>
 <p><img src="https://www.guardsquare.com/files/media/guardsquare2016/Website/ProGuard/ProGuard_build_process.png" alt=""></p>
 <p>ProGuard要求制定Library jars，以此来重新组织class文件的依赖关系，Library jars通常是保持不变的。</p>
 <p>代码的某些地方不能被混淆，如main方法，这些地方称为入口点(Entry Points)。反射时用到的类、方法、属性名也不能被混淆。</p>

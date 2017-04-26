@@ -374,7 +374,8 @@
       
         
           
-            <h1 id="ProGuard简介"><a href="#ProGuard简介" class="headerlink" title="ProGuard简介"></a>ProGuard简介</h1><p>ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):</p>
+            <p>先附上一个github地址： <a href="https://github.com/krschultz/android-proguard-snippets" target="_blank" rel="external">android-proguard-snippets</a>，里面记录了各种库的ProGuard规则。</p>
+<h1 id="ProGuard简介"><a href="#ProGuard简介" class="headerlink" title="ProGuard简介"></a>ProGuard简介</h1><p>ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):</p>
 <p><img src="https://www.guardsquare.com/files/media/guardsquare2016/Website/ProGuard/ProGuard_build_process.png" alt=""></p>
 <p>ProGuard要求制定Library jars，以此来重新组织class文件的依赖关系，Library jars通常是保持不变的。</p>
 <p>代码的某些地方不能被混淆，如main方法，这些地方称为入口点(Entry Points)。反射时用到的类、方法、属性名也不能被混淆。</p>
