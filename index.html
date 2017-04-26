@@ -251,6 +251,257 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/24/Android-Proguard/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/lion.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen's blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/24/Android-Proguard/" itemprop="url">
+                  Android ProGuard
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-24T11:06:25+08:00">
+                2017-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/安卓开发/" itemprop="url" rel="index">
+                    <span itemprop="name">安卓开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/24/Android-Proguard/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/24/Android-Proguard/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="ProGuard简介"><a href="#ProGuard简介" class="headerlink" title="ProGuard简介"></a>ProGuard简介</h1><p>ProGuard是用来压缩，最优化，混淆，预检验Java代码的工具，能够防止class文件被反编译以及减小最终生成的程序的大小，其工作流程图如下图所示(图片来自官方文档):</p>
+<p><img src="https://www.guardsquare.com/files/media/guardsquare2016/Website/ProGuard/ProGuard_build_process.png" alt=""></p>
+<p>ProGuard要求制定Library jars，以此来重新组织class文件的依赖关系，Library jars通常是保持不变的。</p>
+<p>代码的某些地方不能被混淆，如main方法，这些地方称为入口点(Entry Points)。反射时用到的类、方法、属性名也不能被混淆。</p>
+<h1 id="ProGuard的使用"><a href="#ProGuard的使用" class="headerlink" title="ProGuard的使用"></a>ProGuard的使用</h1><p>先附上下载地址：<a href="http://ok34fi9ya.bkt.clouddn.com/proguard5.3.3.zip" target="_blank" rel="external">ProGuard 5.3.3下载地址</a></p>
+<p>下载完成之后切换到bin目录，在终端执行：</p>
+<pre><code>sh proguard.sh [options]
+</code></pre><p>也可以运行proguardgui.sh来开启图形界面。</p>
+<h2 id="ProGuard-Options"><a href="#ProGuard-Options" class="headerlink" title="ProGuard Options"></a>ProGuard Options</h2><p>options通常写在一个单独的configuration file里面，并且可以递归地读取配置文件，下面来介绍几个最常见的Options。</p>
+<h3 id="Input-Output-Options"><a href="#Input-Output-Options" class="headerlink" title="Input/Output Options"></a>Input/Output Options</h3><h4 id="inlcude-filename"><a href="#inlcude-filename" class="headerlink" title="-inlcude filename"></a>-inlcude <em>filename</em></h4><p>读取配置文件，可以在配置文件中声明表示递归地读取。</p>
+<h4 id="basedirectory-directoryname"><a href="#basedirectory-directoryname" class="headerlink" title="-basedirectory directoryname"></a>-basedirectory <em>directoryname</em></h4><p>声明配置文件的相对位置。</p>
+<h4 id="injars-class-path"><a href="#injars-class-path" class="headerlink" title="-injars class_path"></a>-injars <em>class_path</em></h4><p>指定需要处理的jar文件。jar中的class文件将被处理，并将处理之后的class文件写到output jars。默认情况下非class文件将只进行复制处理。</p>
+<h4 id="outjars-class-path"><a href="#outjars-class-path" class="headerlink" title="-outjars class_path"></a>-outjars <em>class_path</em></h4><p>指定output jars的名字，应该避免output jars重写掉input files。</p>
+<h4 id="libraryjars-class-path"><a href="#libraryjars-class-path" class="headerlink" title="-libraryjars class_path"></a>-libraryjars <em>class_path</em></h4><p>指定应用的库文件，这些文件不会再output jars里面出现。被应用中的类继承的class需要被指定，用到的class不用被指定，但是指定它们有助于最优化代码。</p>
+<h4 id="skipnonpubliclibraryclasses"><a href="#skipnonpubliclibraryclasses" class="headerlink" title="-skipnonpubliclibraryclasses"></a>-skipnonpubliclibraryclasses</h4><p>用来指定处理Library jars的时候跳过非公有类，以此来节省ProGuard运行时所占的时间和空间，但是不能总是指定这个选项，例如当某些类库中的非公有类被公有类继承的时候。</p>
+<h4 id="dontskipnonpubliclibraryclasses"><a href="#dontskipnonpubliclibraryclasses" class="headerlink" title="-dontskipnonpubliclibraryclasses"></a>-dontskipnonpubliclibraryclasses</h4><p>上一个选项的反义词，从版本4.5开始这是默认选项。</p>
+<h4 id="dontskipnonpubliclibraryclassmembers"><a href="#dontskipnonpubliclibraryclassmembers" class="headerlink" title="-dontskipnonpubliclibraryclassmembers"></a>-dontskipnonpubliclibraryclassmembers</h4><p>指定不要忽略包级私有类的成员（属性和方法）。由于这些类不经常被应用程序所引用，因此忽略它们是ProGuard的默认选项，但是在某些情况下不能忽略，例如应用程序的类与它们处在同一个包中，这时候被引用的包级私有类不能被忽略。</p>
+<h4 id="keepdirectories-directory-filter"><a href="#keepdirectories-directory-filter" class="headerlink" title="-keepdirectories [directory_filter]"></a>-keepdirectories [<em>directory_filter</em>]</h4><p>指定需要在Output jars里面保留的文件夹名。如果directory_filter为空，那么所有的文件夹都将被保存。</p>
+<h4 id="target-version"><a href="#target-version" class="headerlink" title="-target version"></a>-target <em>version</em></h4><p>指定class文件的级别。</p>
+<h4 id="forceprocessing"><a href="#forceprocessing" class="headerlink" title="-forceprocessing"></a>-forceprocessing</h4><p>对class文件进行强制处理，即便输出看起来是过时的。</p>
+<h3 id="Keep-Options"><a href="#Keep-Options" class="headerlink" title="Keep Options"></a>Keep Options</h3><h4 id="keep-modifier-…-class-specification"><a href="#keep-modifier-…-class-specification" class="headerlink" title="-keep [,modifier,…] class_specification"></a>-keep [,<em>modifier</em>,…] <em>class_specification</em></h4><p>指定类和类的成员当作入口点，例如一个Java应用程序的入口类以及main方法，对于类库来说，所有的public元素都应该当作入口点。此指令会保护类和其成员不被混淆和删除。</p>
+<h4 id="keepclassmembers-modifier-…-class-specification"><a href="#keepclassmembers-modifier-…-class-specification" class="headerlink" title="-keepclassmembers [,modifier,…] class_specification"></a>-keepclassmembers [,<em>modifier</em>,…] <em>class_specification</em></h4><p>指定保护类的成员，例如，实现了Serializable接口的用于序列化的类成员应该被保护。此指令会保证类成员不会被混淆和删除。</p>
+<h4 id="keepclasseswithmembers-modifier-…-class-specification"><a href="#keepclasseswithmembers-modifier-…-class-specification" class="headerlink" title="-keepclasseswithmembers [,modifier,…] class_specification"></a>-keepclasseswithmembers [,<em>modifier</em>,…] <em>class_specification</em></h4><p>指定保护拥有指定类成员的类及指定类成员。如在一个Java程序中，要保护拥有main方法的类，可以用这个指令，而不用一一列举。</p>
+<h4 id="keepnames-class-specification"><a href="#keepnames-class-specification" class="headerlink" title="-keepnames class_specification"></a>-keepnames <em>class_specification</em></h4><p>指定类的名称不会被混淆，前提是在压缩代码的时候此类仍然存在，仅在混淆阶段起作用。</p>
+<h4 id="keepclassmembernames-class-specification"><a href="#keepclassmembernames-class-specification" class="headerlink" title="-keepclassmembernames class_specification"></a>-keepclassmembernames <em>class_specification</em></h4><p>指定类成员的名字不会被混淆。仅在混淆阶段起作用，前提是Shrink过后类成员仍然存在。</p>
+<h4 id="keepclasseswithmembernames-class-specification"><a href="#keepclasseswithmembernames-class-specification" class="headerlink" title="-keepclasseswithmembernames class_specification"></a>-keepclasseswithmembernames <em>class_specification</em></h4><p>指定拥有指定类成员的类及指定类成员的名字不会被混淆，如要保护一个拥有本地方法的类名和其本地方法的名字不被混淆。仅在混淆阶段起作用。</p>
+<p>关于以上几个 -keep选项，详见下表：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-04-26%20%E4%B8%8B%E5%8D%884.21.32.png" alt="来自官方文档"></p>
+<h3 id="Shirinking-Options（非重点）"><a href="#Shirinking-Options（非重点）" class="headerlink" title="Shirinking Options（非重点）"></a>Shirinking Options（非重点）</h3><h4 id="dontshrink"><a href="#dontshrink" class="headerlink" title="-dontshrink"></a>-dontshrink</h4><p>指定不压缩代码，默认情况下，除了被上述多样的 -keep选项保护起来的类和类成员，以及它们直接或者间接依赖的类不被压缩外，其余的都不会被保留。</p>
+<h3 id="Optimization-options（非重点）"><a href="#Optimization-options（非重点）" class="headerlink" title="Optimization options（非重点）"></a>Optimization options（非重点）</h3><h4 id="dontoptimize"><a href="#dontoptimize" class="headerlink" title="-dontoptimize"></a>-dontoptimize</h4><p>指定不进行最优化，默认开启。</p>
+<h4 id="optimizationpasses-n"><a href="#optimizationpasses-n" class="headerlink" title="-optimizationpasses n"></a>-optimizationpasses n</h4><p>指定ProGuard进行对代码进行最优化的次数。</p>
+<h4 id="optimizations"><a href="#optimizations" class="headerlink" title="-optimizations"></a>-optimizations</h4><p>指定优化时所采取的算法，属于高级选项，关于optimizations filter，请查看：<a href="https://www.guardsquare.com/en/proguard/manual/optimizations" target="_blank" rel="external">optimizations</a></p>
+<h4 id="assumenosideeffects-class-specification"><a href="#assumenosideeffects-class-specification" class="headerlink" title="-assumenosideeffects class_specification"></a>-assumenosideeffects <em>class_specification</em></h4><p>指定无关紧要的方法，ProGuard会在优化阶段去除对此方法所有的调用，例如可以去除打log的方法调用，注意此举是危险的，除非我们能够确定一个方法在整个应用程序中是绝对没有用处的，否则不要轻易指定。</p>
+<h4 id="mergeinterfacesaggressively"><a href="#mergeinterfacesaggressively" class="headerlink" title="-mergeinterfacesaggressively"></a>-mergeinterfacesaggressively</h4><p>合并接口，能够减少最终输出类的数目，缩小体积。不过在某些Java虚拟机上会带来性能的损失。</p>
+<p><strong>注：</strong>Android Studio默认的配置文件最优化是不开启的，因为Android Java虚拟机对于优化和预检验的代码不友好。</p>
+<h3 id="Obfuscation-options"><a href="#Obfuscation-options" class="headerlink" title="Obfuscation options"></a>Obfuscation options</h3><h4 id="dontobfuscate"><a href="#dontobfuscate" class="headerlink" title="-dontobfuscate"></a>-dontobfuscate</h4><p>指定关闭混淆，混淆默认是开启的，除了被 -keep选项保护起来的类和类成员，其余的类和类成员都被赋予了随机的名字。</p>
+<h4 id="applymapping-filename"><a href="#applymapping-filename" class="headerlink" title="-applymapping filename"></a>-applymapping <em>filename</em></h4><p>重新利用指定file中的映射集，在此文件中列出的类和类成员被赋予映射集文件中指定的名字，没有在其中列举的但出现在输入中的类和类成员被赋予新的名字。</p>
+<h4 id="overloadaggressively"><a href="#overloadaggressively" class="headerlink" title="-overloadaggressively"></a>-overloadaggressively</h4><p>允许重载，很多类属性和方法会得到相同的名称，只要方法的参数名不同或者返回值不同（遵守Java的约定），这会使得输出的体积更小，不过很多虚拟机并不支持此选项，小心使用。</p>
+<h4 id="useuniqueclassmembernames"><a href="#useuniqueclassmembernames" class="headerlink" title="-useuniqueclassmembernames"></a>-useuniqueclassmembernames</h4><p>为名字相同的类成员指派相同的混淆名</p>
+<h4 id="dontusemixedcaseclassnames"><a href="#dontusemixedcaseclassnames" class="headerlink" title="-dontusemixedcaseclassnames"></a>-dontusemixedcaseclassnames</h4><p>指定不用大小写混合的混淆名，这在大小写不敏感的操作系统（如Mac OS）上尤其有用。</p>
+<h4 id="keeppackagenames-package-filter"><a href="#keeppackagenames-package-filter" class="headerlink" title="-keeppackagenames [package_filter]"></a>-keeppackagenames [<em>package_filter</em>]</h4><p>指定的包名不会被混淆。</p>
+<h4 id="keepattributes-attribute-filter"><a href="#keepattributes-attribute-filter" class="headerlink" title="-keepattributes [attribute_filter]"></a>-keepattributes [<em>attribute_filter</em>]</h4><p>指定不会被混淆的属性，具体支持的属性，请查看：<a href="https://www.guardsquare.com/en/proguard/manual/attributes" target="_blank" rel="external">属性列表</a> </p>
+<p>例如，为了便于调试，需要保存异常信息，则需要以下选项：</p>
+<pre><code>-keepattributes SourceFile,LineNumberTable
+</code></pre><h4 id="keepparameternames"><a href="#keepparameternames" class="headerlink" title="-keepparameternames"></a>-keepparameternames</h4><p>保证方法的参数名不被混淆。</p>
+<h3 id="Preverification-options"><a href="#Preverification-options" class="headerlink" title="Preverification options"></a>Preverification options</h3><p>Android Java虚拟机对其支持的不友好，默认关闭，在此不再列举该选项。</p>
+<p><strong>以上内容大部分为常用的，ProGuard的用法实在是太多了，没有必要在这里一一列举，混淆和保存选项是重要内容，其余请查看官方文档。</strong></p>
+<h3 id="class-specification"><a href="#class-specification" class="headerlink" title="class_specification"></a>class_specification</h3><p>用来指定类和其成员的语句，用在 -keep选项和 -assumenosideeffects选项当中，模板设计的风格非常像Java，还有很多通配符，具体的格式如下：</p>
+<pre><code>[@annotationtype] [[!]public|final|abstract|@ ...] [!]interface|class|enum classname
+[extends|implements [@annotationtype] classname]
+[{
+    [@annotationtype] [[!]public|private|protected|static|volatile|transient ...] &lt;fields&gt; |
+                                                                      (fieldtype fieldname);
+    [@annotationtype] [[!]public|private|protected|static|synchronized|native|abstract|strictfp ...] &lt;methods&gt; |
+                                                                                           &lt;init&gt;(argumenttype,...) |
+                                                                                           classname(argumenttype,...) |
+                                                                                           (returntype methodname(argumenttype,...));
+    [@annotationtype] [[!]public|private|protected|static ... ] *;
+    ...
+}]
+</code></pre><p>方括号[]代表内部的内容是可选的。</p>
+<p>…代表前面几个是可以进行多个选择的。</p>
+<p>classame必须写全称，例如java.lang.String。对于内部类来讲，类名前面和外部类后面要有”$”分隔。例如：<code>java.lang.Thread$State</code>。classname里面可以有如下的通配符：</p>
+<ul>
+<li>?：匹配任意一个字符。</li>
+<li>*：匹配任何不带.的语句，不能够匹配带有.号的包名。</li>
+<li>**：可以匹配带有.的语句，专门用来匹配带有.的包名。</li>
+</ul>
+<p>@annotationtype代表限制被注解类型注释的类，annotationtype和上述classname的规则是一样的。</p>
+<p>属性和方法名大部分和Java中是一样的，除了方法中参数列表只包含参数类型不包含参数名称，属性和方法名还可以包含以下通配符：</p>
+<ul>
+<li>&lt;init&gt; 匹配所有的构造函数。</li>
+<li>&lt;fields&gt; 匹配所有的属性。</li>
+<li>&lt;methods&gt; 匹配所有的方法。</li>
+<li><ul>
+<li>匹配所有的方法和属性。</li>
+</ul>
+</li>
+</ul>
+<p>类型描述符可以包含以下通配符：</p>
+<ul>
+<li>% 匹配任何值类型，如boolean, int等等。</li>
+<li>？ 匹配引用类型中的单个字符。</li>
+<li><ul>
+<li>匹配不带.的引用类型。</li>
+</ul>
+</li>
+<li>** 匹配带有包名的引用类型，但不匹配数组类型。</li>
+<li><em>*</em> 匹配任何类型，包括值类型和引用类型，以及数组类型。</li>
+<li>… 匹配任意数量的任意类型。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/14/Java-ORM解决方案/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3282,246 +3533,6 @@ VALUES (&apos;张师睿&apos;, 19, 2, 3, 127, 127, 138, (127 + 127 + 138) / 3.0)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/26/Android自定义字体解决方案/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Stephen Zhang">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/lion.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/26/Android自定义字体解决方案/" itemprop="url">
-                  Android自定义字体解决方案
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T16:04:26+08:00">
-                2017-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/安卓开发/" itemprop="url" rel="index">
-                    <span itemprop="name">安卓开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/02/26/Android自定义字体解决方案/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/26/Android自定义字体解决方案/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在安卓开发中我们通常需要自定义字体，下面笔者给出两种解决方案，以供参考。</p>
-<h1 id="利用反射"><a href="#利用反射" class="headerlink" title="利用反射"></a>利用反射</h1><p>这种方案通常情况下适用于替换整个app的默认字体，方法是利用反射更改<strong>Typeface</strong>类的静态<strong>DEFAULT</strong>成员，如下所示：</p>
-<pre><code>public class MyApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        Typeface typeface = Typeface.createFromAsset(getAssets(), &quot;fonts/CourierNewBold.ttf&quot;);
-        try {
-            Field field = Typeface.class.getDeclaredField(&quot;MONOSPACE&quot;);
-            field.setAccessible(true);
-            field.set(null, typeface);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            Log.e(&quot;Application&quot;, &quot;Error happened!&quot;);
-        }
-    }
-}
-</code></pre><p>style文件：</p>
-<pre><code>&lt;style name=&quot;AppTheme&quot; parent=&quot;android:Theme.Holo.Light.DarkActionBar&quot;&gt;
-    &lt;!-- Customize your theme here. --&gt;
-    &lt;item name=&quot;colorPrimary&quot;&gt;@color/colorPrimary&lt;/item&gt;
-    &lt;item name=&quot;colorPrimaryDark&quot;&gt;@color/colorPrimaryDark&lt;/item&gt;
-    &lt;item name=&quot;colorAccent&quot;&gt;@color/colorAccent&lt;/item&gt;
-    &lt;item name=&quot;android:typeface&quot;&gt;monospace&lt;/item&gt;
-&lt;/style&gt;
-</code></pre><p>运行效果如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488099698.png" alt=""><br>这种方法的局限也很明显，就是在Android 5.0默认主题之上并不能运行，需要更换一个旧的主题，如果主题不是很重要的话，这种方法就比较合适了。</p>
-<h1 id="利用DataBinding"><a href="#利用DataBinding" class="headerlink" title="利用DataBinding"></a>利用DataBinding</h1><p>这是笔者认为最快速，最便捷的方法了，用<strong>BindingAdapters</strong>注解标注方法即可在xml文件中指定<strong>Typeface</strong>，方法如下：</p>
-<p>MyApplication:</p>
-<pre><code>public class MyApplication extends Application {
-
-    public static final Map&lt;String, Typeface&gt; FONTS_MAP = new HashMap&lt;&gt;();
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        FONTS_MAP.put(getString(R.string.courier_new_bold),
-                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
-                        getString(R.string.courier_new_bold)));
-        FONTS_MAP.put(getString(R.string.lao_sangam_mn),
-                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
-                        getString(R.string.lao_sangam_mn)));
-        FONTS_MAP.put(getString(R.string.microsoft_sans_serif),
-                Typeface.createFromAsset(getAssets(), &quot;fonts/&quot; +
-                        getString(R.string.microsoft_sans_serif)));
-    }
-}
-</code></pre><p>FontsUtils:</p>
-<pre><code>public class FontsUtils {
-    @BindingAdapter({&quot;fonts&quot;})
-    public static void setTextViewFonts(TextView tv, String fontName) {
-        tv.setTypeface(MyApplication.FONTS_MAP.get(fontName));
-    }
-}
-</code></pre><p>xml:</p>
-<pre><code>&lt;layout xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
-    &lt;data&gt;
-        &lt;import type=&quot;com.stephen.customfontdemo.FontsUtils&quot;/&gt;
-    &lt;/data&gt;
-    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-        xmlns:tools=&quot;http://schemas.android.com/tools&quot;
-        android:id=&quot;@+id/activity_main&quot;
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;match_parent&quot;
-        android:padding=&quot;16dp&quot;
-        android:orientation=&quot;vertical&quot;
-        tools:context=&quot;com.stephen.customfontdemo.MainActivity&quot;&gt;
-
-        &lt;TextView
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;测试字体1&quot;
-            app:fonts=&quot;@{@string/courier_new_bold}&quot;/&gt;
-        &lt;TextView
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;测试字体2&quot;
-            app:fonts=&quot;@{@string/lao_sangam_mn}&quot;/&gt;
-        &lt;TextView
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;测试字体3&quot;
-            app:fonts=&quot;@{@string/microsoft_sans_serif}&quot;/&gt;
-    &lt;/LinearLayout&gt;
-&lt;/layout&gt;
-</code></pre><p>运行效果：<img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1488100937.png" alt=""><br>额……可能2和3看不出效果，不过确实已经更改了。</p>
-<p>需要注意的是： <strong>Typeface</strong>的加载要放在Application类当中，或者放在另一个线程当中进行，因为它是一个比较耗时的操作，如果大量的<strong>TextView</strong>用到自定义字体会造成卡顿。</p>
-<p>这样在需要自定义字体时，只需要在<strong>FONTS_MAP</strong>和strings.xml当中注册，在xml中一行代码即可指定！</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3569,7 +3580,7 @@ VALUES (&apos;张师睿&apos;, 19, 2, 3, 127, 127, 138, (127 + 127 + 138) / 3.0)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -3578,7 +3589,7 @@ VALUES (&apos;张师睿&apos;, 19, 2, 3, 127, 127, 138, (127 + 127 + 138) / 3.0)
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
