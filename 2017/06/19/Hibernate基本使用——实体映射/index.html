@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android," />
+  <meta name="keywords" content="数据库,ORM,Hibernate,Java Web," />
 
 
 
@@ -84,21 +84,25 @@
 
 
 
-<meta name="description" content="最近遇到一个写评论的需求，就是点击一个写评论的按钮跳出软键盘，软键盘之上有一个输入框和发送按钮，想了好半天决定采用悬浮窗，其主要想法来自：模仿微信，QQ评论输入框，其效果图如下：
-主要代码activity_main:&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;">
+<meta name="description" content="本篇记录Hibernate实体映射的基础，采用IntelliJ Idea搭建Hibernate项目，具体如何搭建参见：IntelliJ IDEA Hibernate 从入门到填坑
+实体类和映射一个实体类代表着数据库中的一个表，用@Entity进行标记，同时，一个持久化类内部要有一个id(主键)，用@Id进行注解，关于主键如何选择，参见：数据库中主键的选择和使用。如下所示：
+@Entity
+publ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="用PopupWindow实现键盘之上的悬浮窗">
-<meta property="og:url" content="http://yoursite.com/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/index.html">
+<meta property="og:title" content="Hibernate基本使用——实体映射">
+<meta property="og:url" content="http://yoursite.com/2017/06/19/Hibernate基本使用——实体映射/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="最近遇到一个写评论的需求，就是点击一个写评论的按钮跳出软键盘，软键盘之上有一个输入框和发送按钮，想了好半天决定采用悬浮窗，其主要想法来自：模仿微信，QQ评论输入框，其效果图如下：
-主要代码activity_main:&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;">
-<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1491657613.png">
-<meta property="og:updated_time" content="2017-04-08T13:54:30.000Z">
+<meta property="og:description" content="本篇记录Hibernate实体映射的基础，采用IntelliJ Idea搭建Hibernate项目，具体如何搭建参见：IntelliJ IDEA Hibernate 从入门到填坑
+实体类和映射一个实体类代表着数据库中的一个表，用@Entity进行标记，同时，一个持久化类内部要有一个id(主键)，用@Id进行注解，关于主键如何选择，参见：数据库中主键的选择和使用。如下所示：
+@Entity
+publ">
+<meta property="og:updated_time" content="2017-06-20T13:56:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="用PopupWindow实现键盘之上的悬浮窗">
-<meta name="twitter:description" content="最近遇到一个写评论的需求，就是点击一个写评论的按钮跳出软键盘，软键盘之上有一个输入框和发送按钮，想了好半天决定采用悬浮窗，其主要想法来自：模仿微信，QQ评论输入框，其效果图如下：
-主要代码activity_main:&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;">
-<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1491657613.png">
+<meta name="twitter:title" content="Hibernate基本使用——实体映射">
+<meta name="twitter:description" content="本篇记录Hibernate实体映射的基础，采用IntelliJ Idea搭建Hibernate项目，具体如何搭建参见：IntelliJ IDEA Hibernate 从入门到填坑
+实体类和映射一个实体类代表着数据库中的一个表，用@Entity进行标记，同时，一个持久化类内部要有一个id(主键)，用@Id进行注解，关于主键如何选择，参见：数据库中主键的选择和使用。如下所示：
+@Entity
+publ">
 
 
 
@@ -126,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/06/19/Hibernate基本使用——实体映射/"/>
 
 
 
 
 
-  <title> 用PopupWindow实现键盘之上的悬浮窗 | Stephen's blog </title>
+  <title> Hibernate基本使用——实体映射 | Stephen's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -255,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/19/Hibernate基本使用——实体映射/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -279,7 +283,7 @@
             
             
               
-                用PopupWindow实现键盘之上的悬浮窗
+                Hibernate基本使用——实体映射
               
             
           </h1>
@@ -294,8 +298,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-08T20:22:23+08:00">
-                2017-04-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-19T19:44:51+08:00">
+                2017-06-19
               </time>
             
 
@@ -317,8 +321,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/安卓开发/" itemprop="url" rel="index">
-                    <span itemprop="name">安卓开发</span>
+                  <a href="/categories/ORM/" itemprop="url" rel="index">
+                    <span itemprop="name">ORM</span>
                   </a>
                 </span>
 
@@ -335,8 +339,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/08/用PopupWindow实现键盘之上的悬浮窗/" itemprop="commentCount"></span>
+                <a href="/2017/06/19/Hibernate基本使用——实体映射/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/19/Hibernate基本使用——实体映射/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -362,151 +366,53 @@
       
 
       
-        <p>最近遇到一个写评论的需求，就是点击一个写评论的按钮跳出软键盘，软键盘之上有一个输入框和发送按钮，想了好半天决定采用悬浮窗，其主要想法来自：<a href="http://www.itdadao.com/articles/c15a380342p0.html" target="_blank" rel="external">模仿微信，QQ评论输入框</a>，其效果图如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1491657613.png" alt=""></p>
-<h1 id="主要代码"><a href="#主要代码" class="headerlink" title="主要代码"></a>主要代码</h1><h2 id="activity-main"><a href="#activity-main" class="headerlink" title="activity_main:"></a>activity_main:</h2><pre><code>&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
-    android:layout_width=&quot;match_parent&quot;
-    android:layout_height=&quot;match_parent&quot;
-    tools:context=&quot;com.stephen.popupwindowedittext.MainActivity&quot;
-    android:id=&quot;@+id/root&quot;&gt;
+        <p>本篇记录Hibernate实体映射的基础，采用IntelliJ Idea搭建Hibernate项目，具体如何搭建参见：<a href="http://www.jianshu.com/p/50e0a7a28b53" target="_blank" rel="external">IntelliJ IDEA Hibernate 从入门到填坑</a></p>
+<h1 id="实体类和映射"><a href="#实体类和映射" class="headerlink" title="实体类和映射"></a>实体类和映射</h1><p>一个实体类代表着数据库中的一个表，用<strong>@Entity</strong>进行标记，同时，一个持久化类内部要有一个id(主键)，用@Id进行注解，关于主键如何选择，参见：<a href="http://www.cnblogs.com/chuncn/archive/2009/04/22/1440901.html" target="_blank" rel="external">数据库中主键的选择和使用</a>。如下所示：</p>
+<pre><code>@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Long id;
 
-    &lt;LinearLayout
-        android:id=&quot;@+id/comment_part&quot;
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:orientation=&quot;horizontal&quot;
-        android:padding=&quot;12dp&quot;&gt;
-
-        &lt;TextView
-            android:id=&quot;@+id/comment&quot;
-            android:layout_width=&quot;0dp&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:layout_weight=&quot;1&quot;
-            android:textStyle=&quot;bold&quot;
-            android:text=&quot;评论&quot;
-            android:textSize=&quot;14sp&quot;/&gt;
-        &lt;Button
-            android:id=&quot;@+id/write_comment_button&quot;
-            android:background=&quot;@drawable/bg_write_comment_button&quot;
-            android:layout_width=&quot;48dp&quot;
-            android:layout_height=&quot;24dp&quot;
-            android:text=&quot;写评论&quot;
-            android:textSize=&quot;10sp&quot;
-            android:textColor=&quot;@android:color/white&quot;/&gt;
-    &lt;/LinearLayout&gt;
-
-    &lt;android.support.v7.widget.RecyclerView
-        android:id=&quot;@+id/comments_list&quot;
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_below=&quot;@id/comment_part&quot;/&gt;
-&lt;/RelativeLayout&gt;
-</code></pre><h2 id="window-edittext"><a href="#window-edittext" class="headerlink" title="window_edittext"></a>window_edittext</h2><pre><code>&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    android:orientation=&quot;horizontal&quot;
-    android:layout_width=&quot;match_parent&quot;
-    android:layout_height=&quot;wrap_content&quot;
-    android:paddingLeft=&quot;12dp&quot;
-    android:paddingRight=&quot;12dp&quot;&gt;
-
-    &lt;EditText
-        android:id=&quot;@+id/main_edit_text&quot;
-        android:layout_width=&quot;0dp&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_weight=&quot;1&quot;/&gt;
-    &lt;Button
-        android:background=&quot;@drawable/bg_send_button&quot;
-        android:id=&quot;@+id/send_button&quot;
-        android:layout_width=&quot;52dp&quot;
-        android:layout_height=&quot;24dp&quot;
-        android:layout_marginLeft=&quot;8dp&quot;
-        android:text=&quot;发送&quot;
-        android:textColor=&quot;@android:color/white&quot;
-        android:textSize=&quot;12sp&quot;/&gt;
-&lt;/LinearLayout&gt;
-</code></pre><h2 id="MainActivity"><a href="#MainActivity" class="headerlink" title="MainActivity:"></a>MainActivity:</h2><pre><code>public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private List&lt;String&gt; data = new ArrayList&lt;&gt;();
-    private RecyclerView rv;
-    private InputMethodManager imm;
-
-    private View commentPatternView;
-    private PopupWindow commentPatternWindow;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        initView();
-    }
-
-    private void initView() {
-        findViewById(R.id.write_comment_button).setOnClickListener(this);
-        rv = (RecyclerView) findViewById(R.id.comments_list);
-        rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rv.setAdapter(new CommentsListAdapter(data));
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.write_comment_button: {
-                showCommentPattern();
-                break;
-            }
-            case R.id.send_button: {
-                sendComment();
-                if (commentPatternWindow != null) {
-                    commentPatternWindow.dismiss();
-                }
-                break;
-            }
-        }
-    }
-
-    private void sendComment() {
-        String content = ((EditText) commentPatternView.findViewById(R.id.main_edit_text)).getText().toString();
-        data.add(content);
-        rv.getAdapter().notifyItemInserted(data.size() - 1);
-    }
-
-    private void showCommentPattern() {
-        View parent = findViewById(R.id.root);
-
-        if (commentPatternView == null) {
-            commentPatternView = getLayoutInflater().inflate(R.layout.window_edit_text, null);
-            commentPatternView.findViewById(R.id.send_button).setOnClickListener(this);
-        }
-
-        if (commentPatternWindow == null) {
-            commentPatternWindow = new PopupWindow(commentPatternView, WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT, true);
-            commentPatternWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-            commentPatternWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        }
-
-        commentPatternWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0);
-        commentPatternWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-            }
-        });
-
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                imm.showSoftInput(commentPatternView.findViewById(R.id.main_edit_text), InputMethodManager.SHOW_FORCED);
-            }
-        }, 100);
+    public Long getId() {
+        return id;
     }
 }
-</code></pre><p>上面两个布局文件没什么好说的，主要是第三个文件，首先要注意的是要调用<strong>PopupWindow</strong>的<strong>setBackgroundDrawable</strong>方法，否则会有各种意想不到的bug；其次要调用<strong>setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)</strong>，这是为了让<strong>PopupWindow</strong>出现在软键盘之上。</p>
-<p>软键盘的调用方式也是值得注意的地方，在<strong>showAtLocation</strong>方法调用完成之后不能立即使软键盘弹出，得有一个延时的过程，软键盘消失的事件与window消失的事件绑定在一起即可。</p>
-<h1 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h1><p>上述方法有一个缺陷，就是不能禁止掉<strong>outsideTouchable</strong>，因为要接受软键盘的输入，所以<strong>focusable</strong>必须为<strong>true</strong>，而<strong>setOutsideTouchable(false)</strong>方法必须在<strong>focusable</strong>为<strong>false</strong>，<strong>touchable</strong>为<strong>true</strong>时才生效，所以上述方法不能保证点击其余空白区域悬浮窗不消失。</p>
+</code></pre><p>将<strong>@Id</strong>注解在字段上，之后Hibernate存储和加载实例的时候，会直接访问类相应的字段，如果注解在访问器方法上，那之后Hibernate会访问相应的访问器方法。</p>
+<h2 id="配置键生成器"><a href="#配置键生成器" class="headerlink" title="配置键生成器"></a>配置键生成器</h2><h3 id="GenerationType"><a href="#GenerationType" class="headerlink" title="GenerationType"></a>GenerationType</h3><p>通常需要Hibernate自动生成一个代理键值，可以通过<strong>@GeneratedValue(strategy = …)</strong>来指定，其中strategy是<strong>GenerationType</strong>类型的枚举值，其枚举值如下：</p>
+<ul>
+<li><strong>GenerationType.AUTO</strong> ： Hibernate会根据hibernate.cfg.xml文件当中配置的数据库方言自动选择一种合适的策略，是默认的配置。</li>
+<li><strong>GenerationType.SEQUENCE</strong> ： Hibernate会在数据库中创建一个名为HIBERNATE_SEQUENCE的序列，如果数据库不支持序列的话，那么Hibernate将会创建一个只有一个列的表来模拟序列的行为，该序列会在INSERT之前调用，用来生成唯一的主键。</li>
+<li><strong>GenerationType.IDENTITY</strong> ： Hibernate会在建表的DDL语句当中生成一个自增长列，用于生成代理键。</li>
+<li><strong>GenerationType.TABLE</strong> ： Hibernate通过创建额外的表来单独保存主键值。</li>
+</ul>
+<h3 id="自定义Generator"><a href="#自定义Generator" class="headerlink" title="自定义Generator"></a>自定义Generator</h3><p>可以通过<strong>@GenericGenerator</strong>注解来自定义生成器，一般放在package-info.java中作为包级元注解，如下所示：</p>
+<pre><code>@org.hibernate.annotations.GenericGenerator(
+    name = &quot;CUSTOM_GENERATOR&quot;,
+    strategy = &quot;enhanced-sequence&quot;,
+    parameters = {
+            @org.hibernate.annotations.Parameter(
+                    name = &quot;sequence_name&quot;,
+                    value = &quot;custom_sequence&quot;
+            ),
+            @org.hibernate.annotations.Parameter(
+                    name = &quot;initial_value&quot;,
+                    value = &quot;1000&quot;
+            )
+    }
+)
+package com.stephen.hibernatepractice;
+</code></pre><p>其中strategy对应的是标识符生成器策略，名为”sequence_name”的参数代表着序列的名称（如果数据库不支持序列则代表序列表的名称），initial_value代表的是生成键的初始值，以后以此值为基础进行递增。</p>
+<h4 id="生成器策略"><a href="#生成器策略" class="headerlink" title="生成器策略"></a>生成器策略</h4><p>对于生成器策略，如果想让Hibernate自动进行选择，那么可以开启GenerationType.AUTO，Hibernate会根据设置的数据库方言选择合适的解决方案，最有可能是序列或者是标识，但是可能不是最佳的可移植方案。如果需要灵活的可移植行为，则可以采用上述的”enhanced-sequence”。关于完整的主键生成策略，可以参见：<a href="http://www.cnblogs.com/flyoung2008/articles/2165759.html" target="_blank" rel="external">Hibernate主键生成策略</a>。</p>
+<p>需要注意的是，对于某些生成器策略，主键id并不能立即生成，有可能是在INSERT之后才生成，因此可能存在<strong>em.persist(something)</strong>之后，<strong>something.getId()</strong>为空，因此应当尽量选择插入前生成策略的主键生成策略，一般情况下”enhanced-sequence”是最好的选择。</p>
+<h2 id="实体映射选项"><a href="#实体映射选项" class="headerlink" title="实体映射选项"></a>实体映射选项</h2><h3 id="控制名称"><a href="#控制名称" class="headerlink" title="控制名称"></a>控制名称</h3><p>可以通过下列方式控制生成的表的名称，默认情况下生成的表名称为类名的大写：</p>
+<pre><code>@Entity
+@Table(name = &quot;USERS&quot;)
+public class User {
+    ...
+}
+</code></pre><h3 id="动态SQL生成"><a href="#动态SQL生成" class="headerlink" title="动态SQL生成"></a>动态SQL生成</h3><p>默认情况下，Hibernate会为每一个持久化单元生成CRUD语句并缓存起来，如果一个表的结构非常巨大，那么这种缓存将影响性能。对于UPDATE语句来说，由于更新的列是未知的，那Hibernate在启动时将会生成对所有列进行更新的UPDATE语句，对于没有变化的值来说，Hibernate会将其设置为旧值。</p>
+<p>如果需要动态生成SQL语句，可以通过<strong>@DynamicInsert</strong>和<strong>@DynamicUpdate</strong>注解来标识持久化类。</p>
 
       
     </div>
@@ -530,7 +436,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Android/" rel="tag"># Android</a>
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/ORM/" rel="tag"># ORM</a>
+          
+            <a href="/tags/Hibernate/" rel="tag"># Hibernate</a>
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
           
         </div>
       
@@ -539,8 +451,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/14/使用Fork-Join架构进行归并排序/" rel="next" title="使用Fork/Join架构进行归并排序">
-                <i class="fa fa-chevron-left"></i> 使用Fork/Join架构进行归并排序
+              <a href="/2017/06/10/MySQL锁机制/" rel="next" title="MySQL锁机制">
+                <i class="fa fa-chevron-left"></i> MySQL锁机制
               </a>
             
           </div>
@@ -548,10 +460,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/04/14/Java-ORM解决方案/" rel="prev" title="Java ORM解决方案">
-                Java ORM解决方案 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -600,8 +508,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/04/08/用PopupWindow实现键盘之上的悬浮窗/"
-           data-title="用PopupWindow实现键盘之上的悬浮窗" data-url="http://yoursite.com/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/">
+      <div class="ds-thread" data-thread-key="2017/06/19/Hibernate基本使用——实体映射/"
+           data-title="Hibernate基本使用——实体映射" data-url="http://yoursite.com/2017/06/19/Hibernate基本使用——实体映射/">
       </div>
     
   </div>
@@ -701,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#主要代码"><span class="nav-number">1.</span> <span class="nav-text">主要代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#activity-main"><span class="nav-number">1.1.</span> <span class="nav-text">activity_main:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#window-edittext"><span class="nav-number">1.2.</span> <span class="nav-text">window_edittext</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MainActivity"><span class="nav-number">1.3.</span> <span class="nav-text">MainActivity:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缺陷"><span class="nav-number">2.</span> <span class="nav-text">缺陷</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实体类和映射"><span class="nav-number">1.</span> <span class="nav-text">实体类和映射</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置键生成器"><span class="nav-number">1.1.</span> <span class="nav-text">配置键生成器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GenerationType"><span class="nav-number">1.1.1.</span> <span class="nav-text">GenerationType</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义Generator"><span class="nav-number">1.1.2.</span> <span class="nav-text">自定义Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#生成器策略"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">生成器策略</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实体映射选项"><span class="nav-number">1.2.</span> <span class="nav-text">实体映射选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#控制名称"><span class="nav-number">1.2.1.</span> <span class="nav-text">控制名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态SQL生成"><span class="nav-number">1.2.2.</span> <span class="nav-text">动态SQL生成</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

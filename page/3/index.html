@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android,源码分析," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -84,24 +84,15 @@
 
 
 
-<meta name="description" content="Picasso简介Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  
-Github地址： http://square.github.io/picasso/Picasso使用详解： http://www.jianshu.com/p/ae8e6ed18e23  
-Github上">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Picasso源码分析">
-<meta property="og:url" content="http://yoursite.com/2017/01/20/Picasso源码分析/index.html">
+<meta name="description" content="Stephen Zhang&apos;s notes.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Stephen's blog">
+<meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="Picasso简介Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  
-Github地址： http://square.github.io/picasso/Picasso使用详解： http://www.jianshu.com/p/ae8e6ed18e23  
-Github上">
-<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/picasso_structure.png">
-<meta property="og:updated_time" content="2017-01-21T10:10:26.000Z">
+<meta property="og:description" content="Stephen Zhang&apos;s notes.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Picasso源码分析">
-<meta name="twitter:description" content="Picasso简介Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  
-Github地址： http://square.github.io/picasso/Picasso使用详解： http://www.jianshu.com/p/ae8e6ed18e23  
-Github上">
-<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/picasso_structure.png">
+<meta name="twitter:title" content="Stephen's blog">
+<meta name="twitter:description" content="Stephen Zhang&apos;s notes.">
 
 
 
@@ -129,13 +120,13 @@ Github上">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/01/20/Picasso源码分析/"/>
+  <link rel="canonical" href="http://yoursite.com/page/3/"/>
 
 
 
 
 
-  <title> Picasso源码分析 | Stephen's blog </title>
+  <title> Stephen's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -156,7 +147,9 @@ Github上">
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-left 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -247,9 +240,9 @@ Github上">
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -282,7 +275,10 @@ Github上">
             
             
               
-                Picasso源码分析
+                
+                <a class="post-title-link" href="/2017/01/20/Picasso源码分析/" itemprop="url">
+                  Picasso源码分析
+                </a>
               
             
           </h1>
@@ -365,7 +361,9 @@ Github上">
       
 
       
-        <h2 id="Picasso简介"><a href="#Picasso简介" class="headerlink" title="Picasso简介"></a>Picasso简介</h2><p>Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  </p>
+        
+          
+            <h2 id="Picasso简介"><a href="#Picasso简介" class="headerlink" title="Picasso简介"></a>Picasso简介</h2><p>Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  </p>
 <p>Github地址： <a href="http://square.github.io/picasso/" target="_blank" rel="external">http://square.github.io/picasso/</a><br>Picasso使用详解： <a href="http://www.jianshu.com/p/ae8e6ed18e23" target="_blank" rel="external">http://www.jianshu.com/p/ae8e6ed18e23</a>  </p>
 <p>Github上的源码中的示例代码是个不错的学习资源哦！</p>
 <h2 id="Picasso工作原理"><a href="#Picasso工作原理" class="headerlink" title="Picasso工作原理"></a>Picasso工作原理</h2><p>工作原理如图所示，图中所标记的类下文会一一进行剖析。（笔者的图确实画的不怎么样，见谅）  </p>
@@ -811,87 +809,41 @@ public RequestCreator fit() {
 }
 </code></pre><p>不必多说，最后根据result是否为空调用action的complete或者error方法。就拿ImageViewAction来说吧，成功的话，就会将图片加载到对应的ImageView中去（此时ImageView是此Action的Target)，失败则加载errorImage，整个工作流程就此结束。</p>
 
+          
+        
       
     </div>
 
     <div>
       
-        
-
-      
     </div>
 
     <div>
-      
-        
-
       
     </div>
 
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/源码分析/" rel="tag"># 源码分析</a>
-          
-        </div>
+
       
 
       
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/01/22/Java-ReferenceQueue实战/" rel="prev" title="Java ReferenceQueue实战">
-                Java ReferenceQueue实战 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
+    
+  </section>
 
-    <div class="post-spread">
-      
-        <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-  <a class="jiathis_button_tsina"></a>
-  <a class="jiathis_button_tqq"></a>
-  <a class="jiathis_button_weixin"></a>
-  <a class="jiathis_button_cqq"></a>
-  <a class="jiathis_button_douban"></a>
-  <a class="jiathis_button_renren"></a>
-  <a class="jiathis_button_qzone"></a>
-  <a class="jiathis_button_kaixin001"></a>
-  <a class="jiathis_button_copy"></a>
-  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
-  <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" >
-  var jiathis_config={
-    hideMore:false
-  }
-</script>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
 
-      
-    </div>
-  </div>
 
           
           </div>
@@ -899,14 +851,6 @@ public RequestCreator fit() {
 
 
           
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2017/01/20/Picasso源码分析/"
-           data-title="Picasso源码分析" data-url="http://yoursite.com/2017/01/20/Picasso源码分析/">
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -926,17 +870,8 @@ public RequestCreator fit() {
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/lion.jpg"
@@ -992,22 +927,6 @@ public RequestCreator fit() {
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Picasso简介"><span class="nav-number">1.</span> <span class="nav-text">Picasso简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Picasso工作原理"><span class="nav-number">2.</span> <span class="nav-text">Picasso工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Picasso工作流程源码分析"><span class="nav-number">3.</span> <span class="nav-text">Picasso工作流程源码分析</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
     </div>
@@ -1114,10 +1033,6 @@ public RequestCreator fit() {
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
 
   
 
