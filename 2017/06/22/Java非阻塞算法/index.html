@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Java,MutiThread," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -84,24 +84,22 @@
 
 
 
-<meta name="description" content="注：一下部分文字图片来自《Java并发编程的艺术》
-概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
-抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Ja">
+<meta name="description" content="啊，于今日可算是看完了《Java并发编程实战》这本书。
+非阻塞算法简介在基于锁的并发实现中，如果一个线程在持有锁时发生阻塞I/O，socket阻塞等等状况，那可能其他等待获取锁的线程都不能执行下去。如果某种算法使线程的失败不会导致此线程挂起或着阻塞至条件为真，只是单纯地返回，那么此算法称为非阻塞算法，通常在硬件层面得到支持。非阻塞算法在中低下的竞争环境下比锁的性能要好得多。
+基于CAS的非阻塞算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java内存模型(一)">
-<meta property="og:url" content="http://yoursite.com/2017/03/10/Java内存模型-一/index.html">
+<meta property="og:title" content="Java非阻塞算法">
+<meta property="og:url" content="http://yoursite.com/2017/06/22/Java非阻塞算法/index.html">
 <meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="注：一下部分文字图片来自《Java并发编程的艺术》
-概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
-抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Ja">
-<meta property="og:image" content="http://cdn.infoqstatic.com/statics_s1_20170228-0434_4/resource/articles/java-memory-model-1/zh/resources/11.png">
-<meta property="og:updated_time" content="2017-03-27T11:17:37.000Z">
+<meta property="og:description" content="啊，于今日可算是看完了《Java并发编程实战》这本书。
+非阻塞算法简介在基于锁的并发实现中，如果一个线程在持有锁时发生阻塞I/O，socket阻塞等等状况，那可能其他等待获取锁的线程都不能执行下去。如果某种算法使线程的失败不会导致此线程挂起或着阻塞至条件为真，只是单纯地返回，那么此算法称为非阻塞算法，通常在硬件层面得到支持。非阻塞算法在中低下的竞争环境下比锁的性能要好得多。
+基于CAS的非阻塞算法">
+<meta property="og:updated_time" content="2017-06-22T10:00:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java内存模型(一)">
-<meta name="twitter:description" content="注：一下部分文字图片来自《Java并发编程的艺术》
-概述JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。
-抽象结构程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：（本图作者为Ja">
-<meta name="twitter:image" content="http://cdn.infoqstatic.com/statics_s1_20170228-0434_4/resource/articles/java-memory-model-1/zh/resources/11.png">
+<meta name="twitter:title" content="Java非阻塞算法">
+<meta name="twitter:description" content="啊，于今日可算是看完了《Java并发编程实战》这本书。
+非阻塞算法简介在基于锁的并发实现中，如果一个线程在持有锁时发生阻塞I/O，socket阻塞等等状况，那可能其他等待获取锁的线程都不能执行下去。如果某种算法使线程的失败不会导致此线程挂起或着阻塞至条件为真，只是单纯地返回，那么此算法称为非阻塞算法，通常在硬件层面得到支持。非阻塞算法在中低下的竞争环境下比锁的性能要好得多。
+基于CAS的非阻塞算法">
 
 
 
@@ -129,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/03/10/Java内存模型-一/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/06/22/Java非阻塞算法/"/>
 
 
 
 
 
-  <title> Java内存模型(一) | Stephen's blog </title>
+  <title> Java非阻塞算法 | Stephen's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -258,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/10/Java内存模型-一/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/22/Java非阻塞算法/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -282,7 +280,7 @@
             
             
               
-                Java内存模型(一)
+                Java非阻塞算法
               
             
           </h1>
@@ -297,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-10T20:06:10+08:00">
-                2017-03-10
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-22T16:18:13+08:00">
+                2017-06-22
               </time>
             
 
@@ -338,8 +336,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/10/Java内存模型-一/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/10/Java内存模型-一/" itemprop="commentCount"></span>
+                <a href="/2017/06/22/Java非阻塞算法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/22/Java非阻塞算法/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -365,93 +363,104 @@
       
 
       
-        <p><strong>注：</strong>一下部分文字图片来自《Java并发编程的艺术》</p>
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。</p>
-<h1 id="抽象结构"><a href="#抽象结构" class="headerlink" title="抽象结构"></a>抽象结构</h1><p>程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：<br><img src="http://cdn.infoqstatic.com/statics_s1_20170228-0434_4/resource/articles/java-memory-model-1/zh/resources/11.png" alt=""><br>（本图作者为Java资深软件工程师：<a href="http://ifeve.com/author/25622818/" target="_blank" rel="external">程晓明</a>）</p>
-<p>此时两个线程A,B的通信流程为：</p>
-<ul>
-<li>线程A更新本地内存中共享变量的副本，并将其写入主内存。</li>
-<li>线程B从主内存中读取更新过的共享变量。</li>
-</ul>
-<h1 id="重排序"><a href="#重排序" class="headerlink" title="重排序"></a>重排序</h1><p>重排序是指为了提高程序运行的性能，充分利用并行，来对指令进行重新排序，主要分为编译器优化重排序和指令级并行重排序。关于重排序的更多理解，参见：<a href="http://blog.hesey.net/2011/07/reordering.html" target="_blank" rel="external">理解重排序</a></p>
-<h2 id="数据依赖性"><a href="#数据依赖性" class="headerlink" title="数据依赖性"></a>数据依赖性</h2><p>数据依赖性分为三种情况：</p>
-<ul>
-<li>写后读，对一个变量写之后再进行读取。</li>
-<li>读后写，对一个变量读取之后再进行写入。</li>
-<li>写后写，对一个变量写之后再进行写入。</li>
-</ul>
-<p>以上三种情况若两个指令发生了重排序，则产生的结果与预期不一致，称以上三个指令对两指令之间存在数据依赖性，存在数据依赖性的两个指令不会发生重排序。</p>
-<h2 id="as-if-serial"><a href="#as-if-serial" class="headerlink" title="as-if-serial"></a>as-if-serial</h2><p><strong>as-if-serial</strong>的含义是指，对于一个单线程而言，无论怎么重排序，其结果与顺序执行的结果一致。为了遵循这个原则，在单线程环境中，如果两个指令指令之间存在数据依赖性，那么这两个指令便不会发生重排序。</p>
-<h2 id="对多线程的影响"><a href="#对多线程的影响" class="headerlink" title="对多线程的影响"></a>对多线程的影响</h2><p>假设有以下程序：</p>
-<pre><code>public class RecorderExample {
-    private boolean flag = false;
-    private int i = 0;
+        <p>啊，于今日可算是看完了《Java并发编程实战》这本书。</p>
+<h1 id="非阻塞算法简介"><a href="#非阻塞算法简介" class="headerlink" title="非阻塞算法简介"></a>非阻塞算法简介</h1><p>在基于锁的并发实现中，如果一个线程在持有锁时发生阻塞I/O，socket阻塞等等状况，那可能其他等待获取锁的线程都不能执行下去。如果某种算法使线程的失败不会导致此线程挂起或着阻塞至条件为真，只是单纯地返回，那么此算法称为非阻塞算法，通常在硬件层面得到支持。非阻塞算法在中低下的竞争环境下比锁的性能要好得多。</p>
+<h1 id="基于CAS的非阻塞算法"><a href="#基于CAS的非阻塞算法" class="headerlink" title="基于CAS的非阻塞算法"></a>基于CAS的非阻塞算法</h1><p>在大多数的处理器架构中采用比较并交换（Compare And Swap）的方法实现非阻塞算法。CAS包含了三个操作数——需要读写的内存位置V，进行的比较的值A和要设置的值B，只有当V中的值为A时，CAS才会通过原子的方式将V中的值设置为B。<strong>java.util.concurrent.atomic</strong>包下的各种原子类都提供了CAS操作。</p>
+<p>下面通过实现一个非阻塞计数器来说明CAS非阻塞算法的用法：</p>
+<pre><code>public class CASCounter {
+    private AtomicInteger counter = new AtomicInteger(0);
 
-    public void write() {
-        i = 1;       //1
-        flag = true; //2
+    public int getValue() {
+        return counter.get();
     }
 
-    public void read() {
-        if (flag) {
-            int a = i * i; 
+    public void increase() {
+        int v;
+        do {
+            v = counter.get();
+        } while (!counter.compareAndSet(v, v + 1));
+    }
+}
+</code></pre><p>如果其他线程比当前线程提前更新了counter的值，那么将会导致此线程进行重试。CAS算法一个麻烦的地方就是要自己手动写重试的条件及内容。</p>
+<h1 id="非阻塞数据结构"><a href="#非阻塞数据结构" class="headerlink" title="非阻塞数据结构"></a>非阻塞数据结构</h1><p>在使用过程中不会使当前线程发生阻塞的数据结构为非阻塞数据结构。如<strong>ArrayBlockingQueue</strong>为阻塞数据结构，<strong>ConcurrentLinkedQueue</strong>为非阻塞数据结构。</p>
+<p>非阻塞数据结构一般设计起来比较困难，需要专业算法工程师进行操作，下面通过两个简单的例子来说明非阻塞数据结构的设计使用。</p>
+<h2 id="非阻塞栈"><a href="#非阻塞栈" class="headerlink" title="非阻塞栈"></a>非阻塞栈</h2><p>下面通过<strong>Treiber</strong>算法实现一个非阻塞的栈：</p>
+<pre><code>public class ConcurrentStack&lt;E&gt; {
+
+    AtomicReference&lt;Node&lt;E&gt;&gt; top = new AtomicReference&lt;&gt;();
+
+    public void push(E item) {
+        Node&lt;E&gt; newHead = new Node&lt;&gt;(item);
+        Node&lt;E&gt; oldHead = null;
+        do {
+            oldHead = top.get();
+            newHead.next = oldHead;
+        } while (!top.compareAndSet(oldHead, newHead));
+    }
+
+    public E pop() {
+        Node&lt;E&gt; oldHead, newHead;
+        do {
+            oldHead = top.get();
+            if (oldHead == null)
+                return null;
+            newHead = oldHead.next;
+        } while (!top.compareAndSet(oldHead, newHead));
+        return oldHead.item;
+    }
+
+    private static class Node&lt;E&gt; {
+        final E item;
+        Node&lt;E&gt; next;
+
+        Node(E item) {
+            this.item = item;
+        }
+    }
+}
+</code></pre><p>栈是一种最简单的链式结构，无需多说，特别简单。</p>
+<p>非阻塞栈和之前的技术器很好地说明了CAS的基本使用模式：在更新某个值时存在不确定性，尝试失败后重新尝试。技巧在于：将执行原子修改的范围缩小到单个变量上。</p>
+<h2 id="非阻塞链表"><a href="#非阻塞链表" class="headerlink" title="非阻塞链表"></a>非阻塞链表</h2><p>链表的实现比栈更加复杂，插入元素的时候，最后一个元素节点（尾节点）以及最后一个元素的下一个节点都需要更新。乍看起来，这两步操作不能通过原子变量来实现，这里需要两个技巧：第一个技巧是，即便在一个包含多个步骤的更新操作当中，需要确保数据结构处于一致的状态。当线程B到达时，如果发现线程A正在执行更新，那么线程B不能立即执行自己的更新操作；第二个技巧是，如果线程B发现线程A正在更新数据结构，那么线程B可以“帮助”线程A完成更新操作。代码如下：</p>
+<pre><code>public class ConcurrentLinkedQueue&lt;E&gt; {
+    private static class Node&lt;E&gt; {
+        final E item;
+        final AtomicReference&lt;Node&lt;E&gt;&gt; next;
+
+        public Node(E item, Node&lt;E&gt; next) {
+            this.item = item;
+            this.next = new AtomicReference&lt;&gt;(next);
         }
     }
 
-    public static void main(String[] args) {
-        RecorderExample re = new RecorderExample();
-        new Thread(re::write).start();
-        new Thread(re::read).start();
-    }
-}
-</code></pre><p>在第一个线程里面，1、2指令由于没有数据依赖，所以可以进行重排序，若两个进行了重排序，<strong>flag</strong>设置成true之后，切换到第二个线程进行条件判断，判断完成后对a进行赋值，此时变量<strong>i</strong>并没有进行设置，所以会发生异常的结果，也就是说，<strong>重排序会破坏多线程的语义</strong>。</p>
-<h1 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h1><p>它指的是一组用来实现对内存操作的顺序限制的处理器指令，会根据需求禁止特定类型的重排序。先假定这样一个事实：内存数据被推送到缓冲区，就会有消息协议来保证缓存和内存的数据一致性，这种尽快保证数据可见性的技术称为内存屏障。</p>
-<p>内存屏障有三种类型：</p>
-<ul>
-<li>Store屏障：在该屏障之前的Store指令都会被执行，即写操作都会刷新到主内存当中去。</li>
-<li>Load屏障，在该屏障之后的load指令在该屏障之后执行，保证了处理器缓存加载成功后进行读操作。</li>
-<li>Full Barrier:即结合了上述两种屏障功能的屏障。</li>
-</ul>
-<p>一个比较典型的例子是Java当中的<strong>volatile</strong>关键字，对<strong>volatile</strong>变量写指令的后面会加上store屏障，对<strong>volatile</strong>变量读命令的前面会加上load屏障。</p>
-<p>关于内存屏障的更多内容，参见<a href="http://www.infoq.com/cn/articles/memory_barriers_jvm_concurrency" target="_blank" rel="external">内存屏障与JVM并发</a></p>
-<h1 id="happens-before"><a href="#happens-before" class="headerlink" title="happens-before"></a>happens-before</h1><p>如果一个操作的结果对另一个操作是可见的，那么这两个操作必须遵循<strong>happens-before</strong>关系。在这里两个操作可以在同一个线程里面，也可以在不同的线程里面，常见的规则如下：</p>
-<ul>
-<li>单个线程中的操作，happens-before于其后续操作。</li>
-</ul>
-<p>这句话很好理解，假定单个线程中的两条指令不存在数据依赖性，那这两条指令则不满足<strong>happens-before</strong>的先决条件；若存在数据的依赖性，则一条指令必定发生在另一条之前。</p>
-<ul>
-<li>对一个锁的解锁，happens-before于对这个锁的加锁。</li>
-<li>对一个<strong>volatile</strong>写操作happens-before于对这个变量的读操作。</li>
-</ul>
-<h1 id="顺序一致性模型"><a href="#顺序一致性模型" class="headerlink" title="顺序一致性模型"></a>顺序一致性模型</h1><p>是一个理想化的理论模型，主要有两大特征：</p>
-<ul>
-<li>单个线程的操作必须按照程序的顺序来执行。</li>
-<li>每个线程都只有一个单一的执行序列（不管是否同步），且每个操作必须立刻对所有线程可见。</li>
-</ul>
-<h2 id="JVM的实现"><a href="#JVM的实现" class="headerlink" title="JVM的实现"></a>JVM的实现</h2><h3 id="同步执行"><a href="#同步执行" class="headerlink" title="同步执行"></a>同步执行</h3><p>还是刚才的RecorderExample,现在修改如下：</p>
-<pre><code>public class RecorderExample {
-    private boolean flag = false;
-    private int i = 0;
+    private final Node&lt;E&gt; dummy = new Node&lt;&gt;(null, null);
+    private final AtomicReference&lt;Node&lt;E&gt;&gt; head = new AtomicReference&lt;&gt;(dummy);
+    private final AtomicReference&lt;Node&lt;E&gt;&gt; tail = new AtomicReference&lt;&gt;(dummy);
 
-    public synchronized void write() {
-        i = 1; //1
-        flag = true; //2
-    }
+    private void push(E item) {
+        Node&lt;E&gt; newNode = new Node&lt;&gt;(item, null);
+        while (true) {
+            Node&lt;E&gt; curTail = tail.get();
+            Node&lt;E&gt; tailNext = curTail.next.get();
 
-    public synchronized void read() {
-        if (flag) {
-            int a = i * i;
+            if (curTail == tail.get()) {
+                //当前处于中间状态，此时其余线程正在修改数据结构
+                if (tailNext != null) {
+                    //尝试完成其他线程的工作
+                    tail.compareAndSet(curTail, tailNext);
+                } else {
+                    //尝试插入新节点
+                    if (curTail.next.compareAndSet(null, newNode)) {
+                        //推进旧节点
+                        tail.compareAndSet(curTail, newNode);
+                        return;
+                    }
+                }
+            }
         }
     }
-
-    public static void main(String[] args) {
-        RecorderExample re = new RecorderExample();
-        new Thread(re::write).start();
-        new Thread(re::read).start();
-    }
 }
-</code></pre><p>加上<strong>synchronized</strong>关键字之后，<strong>write</strong> happens-before <strong>read</strong>，但是在第一个线程当中，1和2操作是有可能被重排序的，但是对结果没有任何的影响，可以看成是和顺序一致性模型达到了相同的效果。</p>
-<h3 id="非同步执行"><a href="#非同步执行" class="headerlink" title="非同步执行"></a>非同步执行</h3><p>非同步的执行结果无法预知，也没有什么实际意义。JVM对非同步执行只提供一种安全性，即在读一个变量的时候，要么是某个其他线程已经设置好的值，要么是零值，这里无需再做分析。</p>
+</code></pre><h1 id="ABA问题"><a href="#ABA问题" class="headerlink" title="ABA问题"></a>ABA问题</h1><p>在CAS算法当中，如果在内存V处的值A先变成B，然后再变成A，那么普通的方式会认为没有发生改变，那么就不会发生交换操作，但实际上已经发生了改变，属于CAS的一种异常情况。</p>
+<p>常见的解决方案是通过版本号来标识对象，即便对象从A到B再到A，其版本号也是不同的。<strong>AtomicStampedReference</strong>支持在两个变量上执行原子的条件更新，通过更新引用的版本号，可以避免ABA问题。</p>
 
       
     </div>
@@ -477,8 +486,6 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/MutiThread/" rel="tag"># MutiThread</a>
-          
         </div>
       
 
@@ -486,8 +493,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/02/26/Android自定义字体解决方案/" rel="next" title="Android自定义字体解决方案">
-                <i class="fa fa-chevron-left"></i> Android自定义字体解决方案
+              <a href="/2017/06/21/Hibernate基本使用——值类型映射/" rel="next" title="Hibernate基本使用——值类型映射">
+                <i class="fa fa-chevron-left"></i> Hibernate基本使用——值类型映射
               </a>
             
           </div>
@@ -495,10 +502,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/11/Java内存模型-二/" rel="prev" title="Java内存模型(二)">
-                Java内存模型(二) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -547,8 +550,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/03/10/Java内存模型-一/"
-           data-title="Java内存模型(一)" data-url="http://yoursite.com/2017/03/10/Java内存模型-一/">
+      <div class="ds-thread" data-thread-key="2017/06/22/Java非阻塞算法/"
+           data-title="Java非阻塞算法" data-url="http://yoursite.com/2017/06/22/Java非阻塞算法/">
       </div>
     
   </div>
@@ -648,7 +651,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#抽象结构"><span class="nav-number">2.</span> <span class="nav-text">抽象结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重排序"><span class="nav-number">3.</span> <span class="nav-text">重排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据依赖性"><span class="nav-number">3.1.</span> <span class="nav-text">数据依赖性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#as-if-serial"><span class="nav-number">3.2.</span> <span class="nav-text">as-if-serial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对多线程的影响"><span class="nav-number">3.3.</span> <span class="nav-text">对多线程的影响</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存屏障"><span class="nav-number">4.</span> <span class="nav-text">内存屏障</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#happens-before"><span class="nav-number">5.</span> <span class="nav-text">happens-before</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#顺序一致性模型"><span class="nav-number">6.</span> <span class="nav-text">顺序一致性模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM的实现"><span class="nav-number">6.1.</span> <span class="nav-text">JVM的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步执行"><span class="nav-number">6.1.1.</span> <span class="nav-text">同步执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非同步执行"><span class="nav-number">6.1.2.</span> <span class="nav-text">非同步执行</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#非阻塞算法简介"><span class="nav-number">1.</span> <span class="nav-text">非阻塞算法简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于CAS的非阻塞算法"><span class="nav-number">2.</span> <span class="nav-text">基于CAS的非阻塞算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#非阻塞数据结构"><span class="nav-number">3.</span> <span class="nav-text">非阻塞数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞栈"><span class="nav-number">3.1.</span> <span class="nav-text">非阻塞栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞链表"><span class="nav-number">3.2.</span> <span class="nav-text">非阻塞链表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ABA问题"><span class="nav-number">4.</span> <span class="nav-text">ABA问题</span></a></li></ol></div>
             
 
           </div>
