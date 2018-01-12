@@ -1,0 +1,816 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
+
+
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据库,ORM,Hibernate,Java Web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本篇主要介绍延迟加载和急加载，抓取策略和配置文件，集中于Hibernate对数据的抓取。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate抓取数据">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/07/20/Hibernate抓取数据/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="本篇主要介绍延迟加载和急加载，抓取策略和配置文件，集中于Hibernate对数据的抓取。">
+<meta property="og:updated_time" content="2017-08-04T13:26:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate抓取数据">
+<meta name="twitter:description" content="本篇主要介绍延迟加载和急加载，抓取策略和配置文件，集中于Hibernate对数据的抓取。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/07/20/Hibernate抓取数据/"/>
+
+
+
+
+
+  <title> Hibernate抓取数据 | Stephen的小本本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Stephen的小本本</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/07/20/Hibernate抓取数据/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Hibernate抓取数据
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-20T12:39:26+08:00">
+                2017-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ORM/" itemprop="url" rel="index">
+                    <span itemprop="name">ORM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇主要介绍延迟加载和急加载，抓取策略和配置文件，集中于Hibernate对数据的抓取。<br><a id="more"></a></p>
+<h1 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h1><p>如果使用延迟加载策略映射所有的关联和集合，那么Hibernate会在你调用访问器方法时加载数据。实现延迟加载的基本实现方式是代理。</p>
+<h2 id="实体代理"><a href="#实体代理" class="headerlink" title="实体代理"></a>实体代理</h2><p>当调用<strong>EntityManager#getReference()</strong>时，会生成实体类的相应代理类：</p>
+<pre><code>EntityManager em = EMF.createEntityManager();
+Item item = em.getReference(Item.class, 1L);
+</code></pre><p>此时生成的是Item类的代理子类，因此在equals()方法中不能够使用代理的getClass()方法进行比较，应使用<strong>instanceof</strong>。为了能够生成正确的代理子类，应该保证实体类有一个公共的或者受保护的无参构造函数，同时实体类中的方法不应该被final修饰。</p>
+<p><strong>调用代理类上的任何非标识符获取方法都会触发代理的初始化并访问数据库。</strong>即对于前面的示例，调用item.getId()不会发生代理的初始化，但是item.getName()则会发生初始化并访问数据库。</p>
+<p>当在<strong>@ManyToOne</strong>和<strong>@OneToOne</strong>注解中开启延迟加载时，对应的实体类实例将被延迟加载，即不去查询实体类对用的表。</p>
+<h2 id="延迟持久化集合"><a href="#延迟持久化集合" class="headerlink" title="延迟持久化集合"></a>延迟持久化集合</h2><p>对于集合，其默认的抓取策略是延迟加载。对于一下的代码：</p>
+<pre><code>EntityManager em = EMF.createEntityManager();
+Item item = em.find(Item.class, 1L);
+Set&lt;Bid&gt; bids = item.getBids();
+</code></pre><p>bids是未初始化(还未遍历该集合)的集合，Hibernate会采用<strong>org.hibernate.collection.internal.PersistentSet</strong>来包装该集合。此集合可以检测到访问它们的时间并在该时间内加载数据。只要开始遍历集合，就会加载所有的出价：</p>
+<pre><code>// SELECT * FROM BID WHERE ITEM_ID = ...
+Bid firstBid = bids.iterator().next();
+</code></pre><p>Hibernate为集合提供了专有设置，可以尽量避免加载整个集合到内存中：</p>
+<pre><code>@OneToMany(mappedBy = &quot;item&quot;, cascade = CascadeType.PERSIST)
+@org.hibernate.annotations.LazyCollection(
+        LazyCollectionOption.EXTRA
+)
+protected Set&lt;Bid&gt; bids = new HashSet&lt;&gt;();
+</code></pre><p>使用EXTRA选项，集合就会在某些时刻避免不必要的初始化工作，如调用item.getBids().size()此时会执行一个SELECT COUNT() SQL查询。在所有的额外延迟集合上都对isEmpty()和contains()方法执行类似查询。当调用add()方法时，延迟的Set会使用简单查询来避免重复值。当调用get(index)方法时，额外的延迟List只会加载一个元素(前提是开启<strong>@OrderColumn</strong>)。</p>
+<h1 id="关联和集合的急加载"><a href="#关联和集合的急加载" class="headerlink" title="关联和集合的急加载"></a>关联和集合的急加载</h1><p>有时候需要指定关联实体实例和集合的急加载，希望确保其在内存中可用，而不需要额外的数据库访问。</p>
+<p>例如，如果希望在item实例处于分离状态下访问其中的user实例。当持久化上下文关闭的时候，延迟加载就会不可用。此时试图初始化user实=实例的代理会得到一个<strong>LazyInitializationException</strong>异常。为了让其在分离状态下可以访问，可以在持久化状态时手动加载，也可以指定<strong>FetchType.EAGER</strong>设置成急加载。</p>
+<p>对于集合来说，急加载并非一个好的加载策略。如果急加载多个集合，还会出现笛卡尔积的问题，对于集合尽可能使用默认的延迟加载策略。</p>
+<h1 id="选取抓取策略"><a href="#选取抓取策略" class="headerlink" title="选取抓取策略"></a>选取抓取策略</h1><p>如果采用推荐的延迟加载策略，可能会造成很多的sql语句，产生n+1查询问题。如果使用急加载，将大块的数据加载到内存中，可能会产生笛卡尔积的问题。</p>
+<h2 id="n-1查询问题"><a href="#n-1查询问题" class="headerlink" title="n+1查询问题"></a>n+1查询问题</h2><h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>假定有以下查询：</p>
+<pre><code>List&lt;Item&gt; items = session.createQuery(&quot;select i from Item i&quot;).getResultList();
+
+for (Item i : items) {
+    System.out.println(i.getUser().getName());
+}
+</code></pre><p>其中Item中的user属性被设置成延迟加载的，那么假设集合的大小为n，那么总共需要执行n+1个select语句，但最少只需要一句select语句。</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="批量预加载数据"><a href="#批量预加载数据" class="headerlink" title="批量预加载数据"></a>批量预加载数据</h4><p>此解决方案的基本工作流程为：初始化一个代理，可以同时初始化多个代理。批量预加载数据的设置：</p>
+<pre><code>@Entity
+@org.hibernate.annotations.BatchSize(size = 10)
+public class User {
+    ...
+}
+</code></pre><p>这样在上面描述的例子当中，循环中执行一次i.getUser().getName()初始化一个User代理，同时就可以初始化10个在持久化上下文中的User类代理，直至持久化上下文中没有相应的代理为止。</p>
+<p>批量预处理加载还可以用于集合：</p>
+<pre><code>@OneToMany(mappedBy = &quot;user&quot;, fetch = FetchType.LAZY)
+@org.hibernate.annotations.BatchSize(size = 10)
+protected Set&lt;Item&gt; items = new HashSet&lt;&gt;();
+</code></pre><p>这样通过调用<strong>user.getItems().iterator().next()</strong>初始化一个集合代理时，便会同时有10个集合代理被初始化。</p>
+<p>批量预加载数据是一种盲目优化算法。</p>
+<h4 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h4><p>子查询目前为止只能应用到集合上：</p>
+<pre><code>@OneToMany(mappedBy = &quot;user&quot;, fetch = FetchType.LAZY)
+@org.hibernate.annotations.Fetch(
+        FetchMode.SUBSELECT
+)
+protected Set&lt;Item&gt; items = new HashSet&lt;&gt;();
+</code></pre><p>这样设置后一个集合代理被初始化后，持久化上下文中所有的User类实例的集合代理都将被初始化。</p>
+<h2 id="笛卡尔积问题"><a href="#笛卡尔积问题" class="headerlink" title="笛卡尔积问题"></a>笛卡尔积问题</h2><h3 id="描述-1"><a href="#描述-1" class="headerlink" title="描述"></a>描述</h3><p>当采用急加载策略同时加载两个集合时，因为所产生的sql语句是跨多个表的JOIN语句，所以会在底层数据库中产生<strong>n*m</strong>个行数的结果集，Hibernate再对此结果集进行压缩。</p>
+<h3 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="采用多个SELECT语句"><a href="#采用多个SELECT语句" class="headerlink" title="采用多个SELECT语句"></a>采用多个SELECT语句</h4><p>可以为一个集合的加载配置一个单独的SELECT语句，而不用JOIN语句加载所有的集合：</p>
+<pre><code>@OneToMany(mappedBy = &quot;user&quot;, fetch = FetchType.EAGER)
+@org.hibernate.annotations.Fetch(
+        FetchMode.SELECT
+)
+protected Set&lt;Item&gt; items = new HashSet&lt;&gt;();
+
+@OneToMany(fetch = FetchType.EAGER)
+@org.hibernate.annotations.Fetch(
+        FetchMode.SELECT
+)
+protected List&lt;Image&gt; images = new ArrayList&lt;&gt;();
+</code></pre><p>这样加载一个User实例时，会产生三个select语句。</p>
+<h4 id="动态急抓取"><a href="#动态急抓取" class="headerlink" title="动态急抓取"></a>动态急抓取</h4><p>可以通过在JPQL语句当中添加<strong>join fetch</strong>关键字强制进行急抓取，即便配置的抓取策略是<strong>FetchType.LAZY</strong>：</p>
+<pre><code>// 加载实体
+List&lt;Item&gt; items = session.createQuery(&quot;select i from Item i join fetch i.user&quot;).getResultList();
+// 加载集合
+List&lt;Item&gt; items = session.createQuery(&quot;select i from Item i left join fetch i.bids&quot;).getResultList();
+</code></pre><p>注意<strong>left join fetch</strong>是一个左外连接，因为即便一个item没有出价也应该被加载。<strong>join fetch</strong>是一个内连接。</p>
+<h1 id="FetchProfile"><a href="#FetchProfile" class="headerlink" title="FetchProfile"></a>FetchProfile</h1><p>可以声明Hibernate自带的配置文件，一般是包级别的定义：</p>
+<pre><code>@org.hibernate.annotations.FetchProfiles(
+    @FetchProfile(
+            name = &quot;ITEM_JOIN_USER&quot;,
+            fetchOverrides = @FetchProfile.FetchOverride(
+                    entity = Item.class,
+                    association = &quot;user&quot;,
+                    mode = FetchMode.JOIN
+            )
+    )
+)
+package com.stephen.hibernatepractice;
+</code></pre><p>启用<strong>FetchProfile</strong>:</p>
+<pre><code>session.enableFetchProfile(&quot;ITEM_JOIN_USER&quot;);
+// 此时user是急抓取的。
+session.find(Item.class, 1000L);
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/ORM/" rel="tag"># ORM</a>
+          
+            <a href="/tags/Hibernate/" rel="tag"># Hibernate</a>
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/19/BTM2-with-Hibernate5/" rel="next" title="Bitronix with Hibernate5">
+                <i class="fa fa-chevron-left"></i> Bitronix with Hibernate5
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/29/Hibernate查询/" rel="prev" title="Hibernate查询">
+                Hibernate查询 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Stephen Zhang" />
+          <p class="site-author-name" itemprop="name">Stephen Zhang</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#延迟加载"><span class="nav-number">1.</span> <span class="nav-text">延迟加载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实体代理"><span class="nav-number">1.1.</span> <span class="nav-text">实体代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延迟持久化集合"><span class="nav-number">1.2.</span> <span class="nav-text">延迟持久化集合</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关联和集合的急加载"><span class="nav-number">2.</span> <span class="nav-text">关联和集合的急加载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选取抓取策略"><span class="nav-number">3.</span> <span class="nav-text">选取抓取策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#n-1查询问题"><span class="nav-number">3.1.</span> <span class="nav-text">n+1查询问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#描述"><span class="nav-number">3.1.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案"><span class="nav-number">3.1.2.</span> <span class="nav-text">解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#批量预加载数据"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">批量预加载数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#子查询"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">子查询</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#笛卡尔积问题"><span class="nav-number">3.2.</span> <span class="nav-text">笛卡尔积问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#描述-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#采用多个SELECT语句"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">采用多个SELECT语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态急抓取"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">动态急抓取</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FetchProfile"><span class="nav-number">4.</span> <span class="nav-text">FetchProfile</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Stephen Zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

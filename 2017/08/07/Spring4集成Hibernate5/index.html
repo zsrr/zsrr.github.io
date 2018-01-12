@@ -1,0 +1,898 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
+
+
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hibernate,Java Web,Spring," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本篇记录一下Spring与Hibernate的集成，所使用的是Spring4和Hibernate5。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring4集成Hibernate5">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/08/07/Spring4集成Hibernate5/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="本篇记录一下Spring与Hibernate的集成，所使用的是Spring4和Hibernate5。">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-08-07%20%E4%B8%8B%E5%8D%888.55.58.png">
+<meta property="og:updated_time" content="2017-08-07T13:28:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring4集成Hibernate5">
+<meta name="twitter:description" content="本篇记录一下Spring与Hibernate的集成，所使用的是Spring4和Hibernate5。">
+<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-08-07%20%E4%B8%8B%E5%8D%888.55.58.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/08/07/Spring4集成Hibernate5/"/>
+
+
+
+
+
+  <title> Spring4集成Hibernate5 | Stephen的小本本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Stephen的小本本</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/08/07/Spring4集成Hibernate5/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Spring4集成Hibernate5
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-07T18:47:05+08:00">
+                2017-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇记录一下Spring与Hibernate的集成，所使用的是Spring4和Hibernate5。<br><a id="more"></a></p>
+<h1 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h1><h2 id="配置FactoryBean"><a href="#配置FactoryBean" class="headerlink" title="配置FactoryBean"></a>配置FactoryBean</h2><p>为了可以在DAO中注入SessionFactory，需要配置Spring提供的便利类<strong>org.springframework.orm.hibernate5.LocalSessionFactoryBean</strong>，注意版本号，不同的Hibernate版本用到的FactoryBean是不一样的：</p>
+<pre><code>@Bean
+LocalSessionFactoryBean factoryBean(DataSource dataSource) {
+    LocalSessionFactoryBean sfb = new LocalSessionFactoryBean();
+    sfb.setDataSource(dataSource);
+    sfb.setAnnotatedPackages(&quot;com.stephen.bangbang.domain&quot;);
+    sfb.setPackagesToScan(&quot;com.stephen.bangbang.domain&quot;);
+
+    // 要配置的属性，对应于hibernate.cfg.xml，也可以使用xml文件配置，但是两者不能同时使用
+    Properties properties = new Properties();
+    properties.put(&quot;hibernate.show_sql&quot;, &quot;true&quot;);
+    properties.put(&quot;hibernate.format_sql&quot;, &quot;true&quot;);
+
+    ...
+
+    sfb.setHibernateProperties(properties);
+    return sfb;
+}
+</code></pre><p>注意可以使用<strong>LocalSessionFactoryBean#setConfigLocation()</strong>方法使用传统的<strong>hibernate.cfg.xml</strong>文件来配置Hibernate，但是据笔者自测，似乎不能和上述展示的手动配置Properties的方法同时使用，使用配置文件也很难进行动态配置，因为<strong>hibernate.cfg.xml</strong>文件似乎不能引入外值。</p>
+<h2 id="根据Profile动态配置"><a href="#根据Profile动态配置" class="headerlink" title="根据Profile动态配置"></a>根据Profile动态配置</h2><p>有时候要根据Profile选择不同的数据源，相应的有不同的Hibernate配置，例如方言(Dialect)和<strong>hibernate.hbm2ddl.auto</strong>属性，关于<strong>hibernate.hbm2ddl.auto</strong>，参见：<a href="http://www.cnblogs.com/talo/articles/1662244.html" target="_blank" rel="external">hibernate.hbm2ddl.auto配置详解</a></p>
+<p>可以新建一个类封装Hibernate需要动态配置的属性，然后根据不同的环境返回不同的配置：</p>
+<pre><code>@Configuration
+public class HibernateConfig {
+
+
+    public static class HibernatePropertiesConfig {
+        private final String dialect;
+        private final String hbm2ddl_auto;
+
+        public HibernatePropertiesConfig(String dialect, String hbm2ddl_auto) {
+            this.dialect = dialect;
+            this.hbm2ddl_auto = hbm2ddl_auto;
+        }
+
+        public String getDialect() {
+            return dialect;
+        }
+
+        public String hbm2ddl_auto() {
+            return hbm2ddl_auto;
+        }
+    }
+
+    @Bean
+    LocalSessionFactoryBean factoryBean(DataSource dataSource, HibernatePropertiesConfig propertiesConfig) {
+        LocalSessionFactoryBean sfb = new LocalSessionFactoryBean();
+        sfb.setDataSource(dataSource);
+        sfb.setAnnotatedPackages(&quot;com.stephen.bangbang.domain&quot;);
+        sfb.setPackagesToScan(&quot;com.stephen.bangbang.domain&quot;);
+        Properties properties = new Properties();
+        properties.put(&quot;hibernate.dialect&quot;, propertiesConfig.getDialect());
+        properties.put(&quot;hibernate.hbm2ddl.auto&quot;, propertiesConfig.hbm2ddl_auto());
+        properties.put(&quot;hibernate.show_sql&quot;, &quot;true&quot;);
+        properties.put(&quot;hibernate.format_sql&quot;, &quot;true&quot;);
+        sfb.setHibernateProperties(properties);
+        return sfb;
+    }
+
+    @Bean
+    @Profile(&quot;production&quot;)
+    public HibernatePropertiesConfig productionDialect() {
+        return new HibernatePropertiesConfig(&quot;org.hibernate.dialect.MySQL57Dialect&quot;, &quot;update&quot;);
+    }
+
+    @Bean
+    @Profile(&quot;dev&quot;)
+    public HibernatePropertiesConfig testDialect() {
+        return new HibernatePropertiesConfig(&quot;org.hibernate.dialect.H2Dialect&quot;, &quot;create&quot;);
+    }
+}
+</code></pre><h2 id="配置事务管理"><a href="#配置事务管理" class="headerlink" title="配置事务管理"></a>配置事务管理</h2><p>可以将Hibernate的事务交由Spring进行统一管理，关于Spring事务的更多内容，参见：<a href="https://www.ibm.com/developerworks/cn/education/opensource/os-cn-spring-trans/index.html" target="_blank" rel="external">全面分析 Spring 的编程式事务管理及声明式事务管理</a></p>
+<p>如果是使用Java类配置的话，则在配置类上加上<strong>@EnableTransactionManagement</strong>注解，并提供Spring为Hibernate提供的事务管理器即可：</p>
+<pre><code>@Configuration
+@EnableTransactionManagement
+public class HibernateConfig {
+
+    ...
+
+    @Bean
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory);
+        return transactionManager;
+    }
+}
+</code></pre><p>如果使用xml配置方法，则需要使用：</p>
+<pre><code>&lt;tx:annotation-driven transaction-manager=&quot;transactionManager&quot;/&gt;
+</code></pre><p>注意<strong>transactionManager</strong>是默认的名字，如果为<strong>HibernateTransactionManager</strong>指定了不同名字的话，则需要在注解上或者在<strong>&lt;tx:annotation-driven&gt;</strong>节点上指定。</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="得到特定于线程的持久化上下文"><a href="#得到特定于线程的持久化上下文" class="headerlink" title="得到特定于线程的持久化上下文"></a>得到特定于线程的持久化上下文</h2><p>接下来就可以在DAO类当中使用<strong>SessionFactory</strong>，需要使用持久化上下文时，推荐的做法是调用<strong>SessionFactory#getCurrentSession()</strong>方法：</p>
+<pre><code>protected Session getCurrentSession() {
+    return sessionFactory.getCurrentSession();
+}
+</code></pre><p>因为此方法会获得特定于线程的<strong>Session</strong>，当当前线程没有Session时则创建一个并返回。此方法获得持久化上下文还可以与Spring的事务管理无缝对接，当一个事务提交时，当前线程的Session会自动关闭。</p>
+<h2 id="生成DTO类"><a href="#生成DTO类" class="headerlink" title="生成DTO类"></a>生成DTO类</h2><p>有时候不需要全部返回实体类，为了方便客户端和服务端的消息通信，有时候需要DTO层，Hibernate可以通过JPQL来生成DTO类或者通过<strong>ResultTransformer</strong>来生成DTO类。</p>
+<p>直接生成DTO:</p>
+<pre><code>Query&lt;TaskSnapshot&gt; snapshotQuery = session.createQuery(&quot;select new com.stephen.bangbang.dto.TaskSnapshot(h) from HelpingTask h where h.user.id = :userId order by h.id desc&quot;).setParameter(&quot;userId&quot;, userId);
+List&lt;TaskSnapshot&gt; snapshots = snapshotQuery.getResultList();
+</code></pre><p>ResultTransformer:</p>
+<pre><code>query.setResultTransformer(new AliasToBeanResultTransformer(TaskSnapshot.class));
+</code></pre><p>⚠️<strong>注意：</strong>上述<strong>ResultTransformer</strong>的使用方式在Hibernate5.2版本中已经被弃用了，目前我还没有找到解决的办法，官方文档只说setResultTransformer方法被弃用了没给出新的解决方案……所以第二种解决方案还是在5.2之前的版本中使用吧。</p>
+<p>使用<strong>AliasToBeanResultTransformer</strong>时转换的类应该具有与查询语句中别名相同的属性或者拥有设置方法。</p>
+<h2 id="分页技术"><a href="#分页技术" class="headerlink" title="分页技术"></a>分页技术</h2><p>分页是非常常见的一种技术，主要有两种实现方案：偏移量分页和搜寻分页。</p>
+<h3 id="偏移量分页"><a href="#偏移量分页" class="headerlink" title="偏移量分页"></a>偏移量分页</h3><p>偏移量分页适用于这种UI:<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-08-07%20%E4%B8%8B%E5%8D%888.55.58.png" alt=""><br>实现方式也很容易，通过<strong>setFirstResult</strong>和<strong>setMaxResults</strong>方法即可实现，不过此种方法有一定的限制：</p>
+<ul>
+<li>如果数据量十分巨大，那偏移量分页的性能将难以接受，此时需要进行一系列的优化，有关数据库分页的优化方法，参见：<a href="http://imysql.com/2014/07/26/mysql-optimization-case-paging-optimize.shtml" target="_blank" rel="external">MySQL分页优化</a></li>
+<li>偏移量分页会产生不正确的结果，例如用户查看第一页的时候其余的用户往集合当中插入了数据，此时读取数据的用户跳到第二页有可能看到第一页已经看到的数据，这种错误在网页上还可以接受，因为网页大多只展示一页的结果，可对于移动端APP，此种错误将难以接受，因为移动端大多数是通过上拉加载来请求数据的，第一页的数据通常还在用户的可视范围之内。</li>
+</ul>
+<p>综上两个原因，偏移量分页适用于数据量小且不容易变更的数据。</p>
+<h3 id="搜寻分页"><a href="#搜寻分页" class="headerlink" title="搜寻分页"></a>搜寻分页</h3><p>搜寻分页解决了偏移量分页面对的两个问题，其基本思路是：假如读取数据集合时需要根据某些属性进行排序(通常情况下也是如此)，那么可以通过传入的上一页的最后一个数据的被用于排序的属性来加载下一页。此种方法适用于移动端列表上拉加载的那种UI界面，不适合根据指定页数跳到相应界面的情况。</p>
+<p>通过一个项目中的小例子来看一下搜寻分页的使用：</p>
+<pre><code>@Repository
+@Transactional(isolation = Isolation.SERIALIZABLE)
+    public class TaskRepositoryImpl extends BaseRepositoryImpl implements TaskRepository {
+
+    @Inject
+    public TaskRepositoryImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
+
+    @Override
+    public TasksResponse findAllTasks(Long lastTaskId, int number) {
+        Session session = getCurrentSession();
+        int totalPage = getPageCount(number);
+        int currentPage;
+
+        // 为0则请求第一页
+        if (lastTaskId == 0) {
+            currentPage = 1;
+            if (currentPage &gt; totalPage)
+                currentPage = totalPage;
+            Query&lt;TaskSnapshot&gt; snapshotQuery = session.createQuery(&quot;select new com.stephen.bangbang.dto.TaskSnapshot(h) from HelpingTask h order by h.id desc&quot;).setMaxResults(number);
+            List&lt;TaskSnapshot&gt; snapshots = snapshotQuery.getResultList();
+            return new TasksResponse(new Pagination(currentPage, totalPage), snapshots);
+        } else {
+            currentPage = getCurrentPage(lastTaskId, number);
+            if (currentPage &gt; totalPage) {
+                currentPage = totalPage;
+                return new TasksResponse(new Pagination(currentPage, totalPage), null);
+            }
+            Query&lt;TaskSnapshot&gt; snapshotQuery = session.createQuery(&quot;select new com.stephen.bangbang.dto.TaskSnapshot(h) from HelpingTask h where h.id &lt; :lastId order by h.id desc&quot;).setMaxResults(number);
+            List&lt;TaskSnapshot&gt; snapshots = snapshotQuery.getResultList();
+            return new TasksResponse(new Pagination(currentPage, totalPage), snapshots);
+        }
+    }
+
+    private int getPageCount(int numberPerPage) {
+        Session session = getCurrentSession();
+        Query&lt;Long&gt; query = session.createQuery(&quot;select count(h) from HelpingTask h&quot;);
+        long total = query.getSingleResult();
+        return countPage((int) total, numberPerPage);
+    }
+
+    private int getCurrentPage(Long lastTaskId, int numberPerPage) {
+        Session session = getCurrentSession();
+        Query&lt;Long&gt; query = session.createQuery(&quot;select count(h) from HelpingTask h where h.id &gt;= :lastId&quot;).setParameter(&quot;lastId&quot;, lastTaskId);
+        long count = query.getSingleResult() + 1;
+        return countPage((int) count, numberPerPage);
+    }
+
+    private int countPage(int total, int numberPerPage) {
+        if (total % numberPerPage == 0) {
+            return total / numberPerPage;
+        }
+
+        return total / numberPerPage + 1;
+    }
+
+}
+</code></pre><p>Pagination类只是对分页信息的简单封装，包括用户所在的页数和总页数，总页数可以很容易被计算出来，至于得出用户所在的界面，则需要知道排序规则，上一页中最后一个数据的排序属性值，以及一页要多少个数据，三项都知道则可以计算出在最后一个数据之前有多少个数据，得出来的结果与每页数据数一比即可得出用户所在页数。</p>
+<p>好了先讲这么多，以后再继续补充！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hibernate/" rel="tag"># Hibernate</a>
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/29/Hibernate查询/" rel="next" title="Hibernate查询">
+                <i class="fa fa-chevron-left"></i> Hibernate查询
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/15/Spring-IoC容器/" rel="prev" title="Spring IoC容器学习笔记">
+                Spring IoC容器学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Stephen Zhang" />
+          <p class="site-author-name" itemprop="name">Stephen Zhang</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本配置"><span class="nav-number">1.</span> <span class="nav-text">基本配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置FactoryBean"><span class="nav-number">1.1.</span> <span class="nav-text">配置FactoryBean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据Profile动态配置"><span class="nav-number">1.2.</span> <span class="nav-text">根据Profile动态配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置事务管理"><span class="nav-number">1.3.</span> <span class="nav-text">配置事务管理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#得到特定于线程的持久化上下文"><span class="nav-number">2.1.</span> <span class="nav-text">得到特定于线程的持久化上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成DTO类"><span class="nav-number">2.2.</span> <span class="nav-text">生成DTO类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分页技术"><span class="nav-number">2.3.</span> <span class="nav-text">分页技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#偏移量分页"><span class="nav-number">2.3.1.</span> <span class="nav-text">偏移量分页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜寻分页"><span class="nav-number">2.3.2.</span> <span class="nav-text">搜寻分页</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Stephen Zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

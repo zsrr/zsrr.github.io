@@ -1,0 +1,921 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
+
+
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据库,ORM,Hibernate,Java Web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本篇致力于Hibernate对数据的查询，主要有JPQL和Criteria两种方式，以前者为主。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate查询">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/07/29/Hibernate查询/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="本篇致力于Hibernate对数据的查询，主要有JPQL和Criteria两种方式，以前者为主。">
+<meta property="og:updated_time" content="2017-08-04T13:24:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate查询">
+<meta name="twitter:description" content="本篇致力于Hibernate对数据的查询，主要有JPQL和Criteria两种方式，以前者为主。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/07/29/Hibernate查询/"/>
+
+
+
+
+
+  <title> Hibernate查询 | Stephen的小本本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Stephen的小本本</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/07/29/Hibernate查询/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Hibernate查询
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-29T10:15:58+08:00">
+                2017-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ORM/" itemprop="url" rel="index">
+                    <span itemprop="name">ORM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇致力于Hibernate对数据的查询，主要有JPQL和Criteria两种方式，以前者为主。<br><a id="more"></a></p>
+<h1 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h1><p>选择所有的实例：</p>
+<pre><code>Session session = em.unwrap(Session.class);
+Query query = session.createQuery(&quot;select i from Item i&quot;);
+List&lt;Item&gt; items = query.getResultList();
+
+for (Item item: items) {
+    System.out.println(item);
+}
+
+CriteriaBuilder cb = em.getCriteriaBuilder();
+CriteriaQuery&lt;Item&gt; criteriaQuery = cb.createQuery(Item.class);
+criteriaQuery.select(criteriaQuery.from(Item.class));
+TypedQuery&lt;Item&gt; typedQuery = em.createQuery(criteriaQuery);
+List&lt;Item&gt; itemList = typedQuery.getResultList();
+for (Item item : itemList) {
+    System.out.println(item);
+}
+</code></pre><h2 id="多态查询"><a href="#多态查询" class="headerlink" title="多态查询"></a>多态查询</h2><p>对于具有继承关系的实体类来说，可以采用多态查询：</p>
+<pre><code>Query&lt;Super&gt; superQuery = session.createQuery(&quot;select s from Super s&quot;);
+Query&lt;Derived1&gt; derived1Query = session.createQuery(&quot;select d1 from Derived1 d1&quot;);
+Query&lt;Derived2&gt; derived2Query = session.createQuery(&quot;select d2 from Derived2 d2&quot;);
+</code></pre><p>指定具体的类：</p>
+<pre><code>Query&lt;Super&gt; superQuery = session.createQuery(&quot;select s from Super s where type(s) = Derived1&quot;);
+List&lt;Super&gt; derived1s = superQuery.getResultList();
+for (Super s : derived1s) {
+    System.out.println(s.getClass().getName());
+}
+
+Query&lt;Super&gt; superQuery = session.createQuery(&quot;select s from Super s where type(s) in :types&quot;);
+superQuery.setParameter(&quot;types&quot;, Arrays.asList(Super.class, Derived1.class));
+List&lt;Super&gt; derived1s = superQuery.getResultList();
+for (Super s : derived1s) {
+    System.out.println(s.getClass().getName());
+}
+</code></pre><h1 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h1><p>限制对应的是<strong>SQL</strong>中的<strong>where</strong>子句：</p>
+<pre><code>Query&lt;Item&gt; query = session.createQuery(&quot;select i from Item i where i.name = :name&quot;);
+query.setParameter(&quot;name&quot;, &quot;Java Persistence With Hibernate&quot;);
+Item item = query.getSingleResult();
+System.out.println(item);
+
+CriteriaBuilder cb = em.getCriteriaBuilder();
+CriteriaQuery&lt;Item&gt; criteriaQuery = cb.createQuery(Item.class);
+Root&lt;Item&gt; root = criteriaQuery.from(Item.class);
+criteriaQuery.select(root).where(cb.equal(root.get(&quot;name&quot;), cb.parameter(String.class, &quot;itemName&quot;)));
+javax.persistence.Query itemQuery = em.createQuery(criteriaQuery).setParameter(&quot;itemName&quot;, &quot;Java Persistence With Hibernate&quot;);
+Item item1 = (Item) itemQuery.getSingleResult();
+System.out.println(item1);
+</code></pre><p>对于日期来进行比较的话，可以用JDBC转义语法：</p>
+<pre><code>where i.auctionEnd = {d &apos;2017-7-29&apos;}
+</code></pre><h2 id="比较表达式"><a href="#比较表达式" class="headerlink" title="比较表达式"></a>比较表达式</h2><h3 id="between"><a href="#between" class="headerlink" title="between"></a>between</h3><p>利用between关键字可以进行范围内查找：</p>
+<pre><code>Query&lt;Bid&gt; query = session.createQuery(&quot;select b from Bid b where b.amount between 90 and 100&quot;);
+List&lt;Bid&gt; bids = query.getResultList();
+for (Bid bid : bids) {
+    System.out.println(bid);
+}
+
+CriteriaBuilder cb = em.getCriteriaBuilder();
+CriteriaQuery&lt;Bid&gt; criteriaQuery = cb.createQuery(Bid.class);
+Root&lt;Bid&gt; root = criteriaQuery.from(Bid.class);
+criteriaQuery.select(root).where(cb.between(root.&lt;BigDecimal&gt;get(&quot;amount&quot;), new BigDecimal(90), new BigDecimal(100)));
+javax.persistence.Query bidQuery = em.createQuery(criteriaQuery);
+List&lt;Bid&gt; bidList = bidQuery.getResultList();
+for (Bid bid: bidList) {
+    System.out.println(bid);
+}
+</code></pre><p>Criterial API实在是太冗杂了，之后不再展示，具体去查官方文档。</p>
+<h3 id="gt-lt-lt-gt"><a href="#gt-lt-lt-gt" class="headerlink" title="&gt; &lt; &lt;&gt; ="></a>&gt; &lt; &lt;&gt; =</h3><p>很简单，第三个是不等于的意思:</p>
+<pre><code>Query&lt;Bid&gt; query = session.createQuery(&quot;select b from Bid b where b.amount &lt;&gt; 90&quot;);
+List&lt;Bid&gt; bids = query.getResultList();
+for (Bid bid : bids) {
+    System.out.println(bid);
+}
+</code></pre><p>需要注意的是和<strong>null</strong>的比较，SQL使用三元逻辑表示限制，任何与null值的比较返回的都是null而非true和false，因此要用is null|is not null来和null值进行比较。</p>
+<h3 id="like通配符搜索"><a href="#like通配符搜索" class="headerlink" title="like通配符搜索"></a>like通配符搜索</h3><p>可以用like关键字来搜索匹配模式串的记录：</p>
+<pre><code>Query&lt;Item&gt; query = session.createQuery(&quot;select i from Item i where i.name like &apos;%sr&apos;&quot;);
+List&lt;Item&gt; items = query.getResultList();
+for (Item item : items) {
+    System.out.println(item);
+}
+</code></pre><p>关于like的更多操作，参见：<a href="http://www.w3school.com.cn/sql/sql_like.asp" target="_blank" rel="external">SQL LIKE操作符</a><br>不同的条件可以用and/or关联，太简单不说了。</p>
+<h2 id="使用集合的表达式"><a href="#使用集合的表达式" class="headerlink" title="使用集合的表达式"></a>使用集合的表达式</h2><p>JPQL提供了对应的函数来检测集合：</p>
+<pre><code>Query&lt;Item&gt; query = session.createQuery(&quot;select i from Item i where i.bids is not empty&quot;);
+List&lt;Item&gt; items = query.getResultList();
+
+Query&lt;Item&gt; query = session.createQuery(&quot;select i from Item i where size(i.bids) &gt; 1&quot;);
+List&lt;Item&gt; items = query.getResultList();
+
+Query&lt;Item&gt; query = session.createQuery(&quot;select i from Item i where :item member of i.bids&quot;);
+List&lt;Item&gt; items = query.getResultList();
+</code></pre><p>对于Map而言，可以使用key(), value(), entry()来操作：</p>
+<pre><code>Query&lt;Item&gt; query = session.createQuery(&quot;select value(image) from Item i join i.images image where key(image) like &apos;@.jpg&apos;&quot;);
+List&lt;Item&gt; items = query.getResultList();
+</code></pre><h2 id="调用函数"><a href="#调用函数" class="headerlink" title="调用函数"></a>调用函数</h2><p>可以在where子句中调用函数，对于有哪些函数，我就不在这里细谈，参见：<a href="http://www.jianshu.com/p/4a4410075bab" target="_blank" rel="external">JPQL学习</a></p>
+<p>⚠️<strong>注意：</strong>对于Hibernate不知道的函数，如果出现在where子句中，则Hibernate会将其传递到数据库底层，要想在原生JPA当中调用适用于特定数据库的函数，则应使用<strong>function()</strong>函数：</p>
+<pre><code>select i from Item i where function(&apos;DATEDIFF&apos;, &apos;DAY&apos;, i.createdOn, i.auctionEnd) &gt; 1
+</code></pre><h2 id="对查询结果进行排序"><a href="#对查询结果进行排序" class="headerlink" title="对查询结果进行排序"></a>对查询结果进行排序</h2><p>可以用<strong>order by</strong>关键字对结果进行排序，默认为升序：</p>
+<pre><code>select i from Item i order by i.name [desc|asc]
+</code></pre><p>可以对多个属性进行排序：</p>
+<pre><code>select i from Item i order by i.name desc, id asc
+</code></pre><h3 id="null的顺序"><a href="#null的顺序" class="headerlink" title="null的顺序"></a>null的顺序</h3><p>如果可为空的列出现在order by子句中的话，那么空值可能出现在结果集的最前面或者最后面，具体行为取决于DBMS，可以在Hibernate配置文件配置属性<strong>hibernate.order_by.default_null_ordering</strong>为none(默认),first,last来指定。</p>
+<h1 id="投影"><a href="#投影" class="headerlink" title="投影"></a>投影</h1><p>有时候不需要将一个实例的全部属性加载，这个时候需要投影来查询部分属性。</p>
+<h2 id="实体和标量值的投影"><a href="#实体和标量值的投影" class="headerlink" title="实体和标量值的投影"></a>实体和标量值的投影</h2><p>对于以下查询：</p>
+<pre><code>Query query = session.createQuery(&quot;select i, b from Item i, Bid b&quot;);
+List&lt;Object[]&gt; resultList = query.getResultList();
+Set&lt;Item&gt; itemSet = new HashSet&lt;&gt;();
+Set&lt;Bid&gt; bidSet = new HashSet&lt;&gt;();
+
+for (Object[] row : resultList) {
+    if (row[0] instanceof Item) {
+        itemSet.add((Item) row[0]);
+    }
+
+    if (row[1] instanceof Bid) {
+        bidSet.add((Bid) row[1]);
+    }
+}
+
+System.out.println(resultList.size());
+System.out.println(itemSet.size());
+System.out.println(bidSet.size());
+</code></pre><p>若是投影多个实体类，得到的是两个集合的笛卡尔乘积，可以用HashSet对结果进行过滤。</p>
+<p>以下查询也会有Object[]的集合：</p>
+<pre><code>select u.id, u.username, u.address from User u
+</code></pre><p>查询返回的Object[]第一个位置是Long类型，第二个是String类型，第三个是Address类型，选择出来的都是处于瞬时状态的实例，不会进行脏检查和更新。</p>
+<p>在使用瞬时实例的场景中(例如web应用中的DTO)，可以使用动态实例化或者ResultTransformer来把结果转换成瞬时的DTO实例，在接下来的Spring+Hibernate整合篇讲。</p>
+<h2 id="选择唯一值"><a href="#选择唯一值" class="headerlink" title="选择唯一值"></a>选择唯一值</h2><p>对于可能出现重复值的列，可以用distinct关键字进行过滤：</p>
+<pre><code>select distinct u.username from User u
+</code></pre><h2 id="在投影中使用函数"><a href="#在投影中使用函数" class="headerlink" title="在投影中使用函数"></a>在投影中使用函数</h2><p>除了在where子句中使用函数之外，也可以在select子句当中使用函数，此时Hibernate不可以将未知的函数传递到数据库的底层，要想用特定于数据库的函数，只能用function函数。同时也可以在投影中使用case/when表达式。</p>
+<h2 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h2><p>可以使用count(), max(), min(), avg()等聚合函数：</p>
+<pre><code>select count(distinct u.name) from User u
+</code></pre><p>此时返回的是一个Long值，对于以下查询：</p>
+<pre><code>select min(b.amount), max(b.amount) from Bid b
+</code></pre><p>此时返回的是一个Object[]数组。</p>
+<h2 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h2><p>可以在JPQL中使用<strong>GROUP BY</strong>和<strong>HAVING</strong>子句，在select子句当中出现的任何属性除了聚集函数之外都应该在GROUP BY当中出现：</p>
+<pre><code>select i.name, avg(b.amount) from Bid b join b.item i group by i.name
+</code></pre><p>Hibernate分组存在限制，例如不能编写以下查询：</p>
+<pre><code>select i, avg(b.amount) from Bid b join b.item i group by i
+</code></pre><h1 id="联结"><a href="#联结" class="headerlink" title="联结"></a>联结</h1><p>联结是JPQL中最难理解的部分，首先应该知道了解sql中联结的概念：<a href="http://www.jb51.net/article/39432.htm" target="_blank" rel="external">深入理解sql中的四种连接</a></p>
+<h2 id="JPA联结选项"><a href="#JPA联结选项" class="headerlink" title="JPA联结选项"></a>JPA联结选项</h2><p>JPA提供了四个联结选项：</p>
+<ul>
+<li>使用路径表达式的隐式连接。</li>
+<li>在FROM子句当中使用Join关键字的普通联结。</li>
+<li>在FROM子句当中使用Join Fetch进行动态急抓取。</li>
+<li>在Where子句中使用theta风格联结。</li>
+</ul>
+<p>接下来对四种方式挨个进行介绍。</p>
+<h2 id="隐式联结"><a href="#隐式联结" class="headerlink" title="隐式联结"></a>隐式联结</h2><p>在多对一／一对一关系当中，已经指定了相应的外键关联，因此在JPQL语句当中访问对应属性时会产生隐式关联：</p>
+<pre><code>select b from Bid b where b.item.name like &apos;D%&apos;
+</code></pre><p>当执行此语句时，Hibernate会产生一个从Bid到Item表的Inner Join语句(也有可能是中间表)。隐式联结出现在多对一／一对一关联当中，不会出现在一对多关联，所以不能编写item.bids.amount &gt; 10这种语句。</p>
+<p>单路径表达式中可以使用多个联结：</p>
+<pre><code>select b from Bid b where b.item.seller.username = &apos;zsr&apos;
+</code></pre><p>此语句创建了从Bid到Item到User表的关联。</p>
+<h2 id="显式联结"><a href="#显式联结" class="headerlink" title="显式联结"></a>显式联结</h2><p>如上所述，隐式联结适合于对一关联，要想对对多关系进行联结，则需要使用显式联结：</p>
+<pre><code>select i from Item i join i.bids b where b.amount &gt; 10
+</code></pre><p>以上查询语句建立了从Item到Bid表的内联结，内联结的条件是Item表中的主键和对应于Bid表中的外键相等，这里可以忽略不写。最后对结果集进行过滤，过滤的条件是Bid表中的出价大于10。</p>
+<p>⚠️<strong>注意：</strong>由于是一对多关联，所以对连接表查询的结果映射到List<item>会有重复项出现，可以使用Set进行过滤：</item></p>
+<pre><code>Query query = session.createQuery(&quot;select i from Item i join i.bids b where b.amount &gt; 0&quot;);
+List&lt;Item&gt; items = query.getResultList();
+Set&lt;Item&gt; items1 = new HashSet&lt;&gt;(items);
+System.out.println(items.size()); // 5
+System.out.println(items1.size()); // 2
+</code></pre><p>也可以扩展联结on之后的条件，例如想要查找未出价或者有最小出价的商品：</p>
+<pre><code>select i from Item i left join i.bids b on b.amount &gt; 100
+</code></pre><p>首先要有left join，这会将不具备出价的Item包含在查询的结果集当中；其次，上述语句on关键字出现的地方不能被where代替，on的语义是指：对满足两表主外键值相等的联结条件进行扩展，增加”Bid表中amount值应大于100”这一条件，而where的语义是联结条件不变，对结果集进行过滤，因此若把之前的on换成where，那left join将不会有任何效果，结果集中所有的Bid表中的部分都不为空。</p>
+<h2 id="动态急抓取"><a href="#动态急抓取" class="headerlink" title="动态急抓取"></a>动态急抓取</h2><p>实体的集合属性默认是延迟加载的，可以通过编写JPQL来改变此行为：</p>
+<pre><code>select i form Item i left join fetch i.bids
+</code></pre><p>此时选出的每一个Item其bids集合都是经过初始化的，由于其本质上还是连接查询，因此会产生重复项，需要用Set集合进行去重或者使用distinct关键字：</p>
+<pre><code>select distinct i form Item i left join fetch i.bids
+</code></pre><p>动态急抓取需要注意下面几点：</p>
+<ul>
+<li>不要为进一步限制或者投影将别名指定给抓取的关联实体或者集合。例如：left join fetch i.bids b where b.amount &gt; 100，此查询是无效的。但是别名可以用来进一步抓取：left join fetch i.bids b join fetch b.bidder。</li>
+<li>不应该抓取多个集合，否则会产生笛卡尔乘积问题。</li>
+<li>如果急抓取一个集合，要注意重复项问题。</li>
+<li>急抓取无法在数据库层面进行分页，例如对于select i from Item i left join fetch i.bids。如果对于此Query设置firstResult以及maxResults，则数据库无法对其进行分页。此时Hibernate会将所有的Item加载到内存中并执行分页，此行为可能导致性能瓶颈出现。</li>
+</ul>
+<h2 id="theta风格联结"><a href="#theta风格联结" class="headerlink" title="theta风格联结"></a>theta风格联结</h2><p>当两个表不是通过外键建立参照完整性约束时，就可以创建theta风格的关联，例如：</p>
+<pre><code>select u, log from User u, LogRecord log where u.username = log.username
+</code></pre><p>User表和LogRecord表之间没有建立任何的关联，此时返回的元组列表每一个元组对应的两个记录用户名相同。</p>
+<h2 id="比较标识符"><a href="#比较标识符" class="headerlink" title="比较标识符"></a>比较标识符</h2><p>JPA支持隐式标识符比较：</p>
+<pre><code>select i, u from Item i, User u where i.seller = u and u.username like &apos;D%&apos;
+</code></pre><p>相当于以下theta风格的查询：</p>
+<pre><code>select i, u from Item i, User u where i.seller.id = u.id and u.username like &apos;D%&apos;
+</code></pre><p>⚠️<strong>注意</strong>，以id结尾的路径表达式指向的是实体中@Id注解的属性，不管这个属性是否叫做id，因此将标识符属性命名为id可以减轻混淆。</p>
+<h1 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h1><p>JPA仅支持where子句的子查询，select和from子句的子查询不支持。</p>
+<p>一个子查询通常会返回单行或者多行，返回单行的子查询通常会调用聚合函数：</p>
+<pre><code>select u from User u where (select count(i) from Item i where i.seller = u) &gt; 1
+</code></pre><p>此内查询同时也是一个相关的子查询，用到了外部传来的u。</p>
+<h2 id="量化"><a href="#量化" class="headerlink" title="量化"></a>量化</h2><p>常用的标准量词：</p>
+<ul>
+<li>ALL: 对于子查询结果集所有结果比较结果都为真。</li>
+<li>ANY: 对于子查询结果集中任意一个结果比较为真。</li>
+<li>EXITS: 子查询结果不为空。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/ORM/" rel="tag"># ORM</a>
+          
+            <a href="/tags/Hibernate/" rel="tag"># Hibernate</a>
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/20/Hibernate抓取数据/" rel="next" title="Hibernate抓取数据">
+                <i class="fa fa-chevron-left"></i> Hibernate抓取数据
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/07/Spring4集成Hibernate5/" rel="prev" title="Spring4集成Hibernate5">
+                Spring4集成Hibernate5 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Stephen Zhang" />
+          <p class="site-author-name" itemprop="name">Stephen Zhang</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#选择"><span class="nav-number">1.</span> <span class="nav-text">选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多态查询"><span class="nav-number">1.1.</span> <span class="nav-text">多态查询</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#限制"><span class="nav-number">2.</span> <span class="nav-text">限制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#比较表达式"><span class="nav-number">2.1.</span> <span class="nav-text">比较表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#between"><span class="nav-number">2.1.1.</span> <span class="nav-text">between</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gt-lt-lt-gt"><span class="nav-number">2.1.2.</span> <span class="nav-text">> < <> =</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#like通配符搜索"><span class="nav-number">2.1.3.</span> <span class="nav-text">like通配符搜索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用集合的表达式"><span class="nav-number">2.2.</span> <span class="nav-text">使用集合的表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用函数"><span class="nav-number">2.3.</span> <span class="nav-text">调用函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对查询结果进行排序"><span class="nav-number">2.4.</span> <span class="nav-text">对查询结果进行排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null的顺序"><span class="nav-number">2.4.1.</span> <span class="nav-text">null的顺序</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#投影"><span class="nav-number">3.</span> <span class="nav-text">投影</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实体和标量值的投影"><span class="nav-number">3.1.</span> <span class="nav-text">实体和标量值的投影</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择唯一值"><span class="nav-number">3.2.</span> <span class="nav-text">选择唯一值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在投影中使用函数"><span class="nav-number">3.3.</span> <span class="nav-text">在投影中使用函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚合函数"><span class="nav-number">3.4.</span> <span class="nav-text">聚合函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组"><span class="nav-number">3.5.</span> <span class="nav-text">分组</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#联结"><span class="nav-number">4.</span> <span class="nav-text">联结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JPA联结选项"><span class="nav-number">4.1.</span> <span class="nav-text">JPA联结选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隐式联结"><span class="nav-number">4.2.</span> <span class="nav-text">隐式联结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显式联结"><span class="nav-number">4.3.</span> <span class="nav-text">显式联结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态急抓取"><span class="nav-number">4.4.</span> <span class="nav-text">动态急抓取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#theta风格联结"><span class="nav-number">4.5.</span> <span class="nav-text">theta风格联结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较标识符"><span class="nav-number">4.6.</span> <span class="nav-text">比较标识符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#子查询"><span class="nav-number">5.</span> <span class="nav-text">子查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#量化"><span class="nav-number">5.1.</span> <span class="nav-text">量化</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Stephen Zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

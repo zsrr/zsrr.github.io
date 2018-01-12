@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,8 +18,12 @@
 
 
 
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
 
 
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
 
 
 
@@ -84,20 +88,17 @@
 
 
 
-<meta name="description" content="最近遇到一个写评论的需求，就是点击一个写评论的按钮跳出软键盘，软键盘之上有一个输入框和发送按钮，想了好半天决定采用悬浮窗，其主要想法来自：模仿微信，QQ评论输入框，其效果图如下：
-主要代码activity_main:&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;">
+<meta name="description" content="一个常用的控件，有时间可以考虑封装一下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用PopupWindow实现键盘之上的悬浮窗">
-<meta property="og:url" content="http://yoursite.com/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/index.html">
-<meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="最近遇到一个写评论的需求，就是点击一个写评论的按钮跳出软键盘，软键盘之上有一个输入框和发送按钮，想了好半天决定采用悬浮窗，其主要想法来自：模仿微信，QQ评论输入框，其效果图如下：
-主要代码activity_main:&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="一个常用的控件，有时间可以考虑封装一下">
 <meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1491657613.png">
-<meta property="og:updated_time" content="2017-04-08T13:54:30.000Z">
+<meta property="og:updated_time" content="2017-08-04T13:19:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用PopupWindow实现键盘之上的悬浮窗">
-<meta name="twitter:description" content="最近遇到一个写评论的需求，就是点击一个写评论的按钮跳出软键盘，软键盘之上有一个输入框和发送按钮，想了好半天决定采用悬浮窗，其主要想法来自：模仿微信，QQ评论输入框，其效果图如下：
-主要代码activity_main:&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;">
+<meta name="twitter:description" content="一个常用的控件，有时间可以考虑封装一下">
 <meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1491657613.png">
 
 
@@ -106,12 +107,12 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -126,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/"/>
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/"/>
 
 
 
 
 
-  <title> 用PopupWindow实现键盘之上的悬浮窗 | Stephen's blog </title>
+  <title> 用PopupWindow实现键盘之上的悬浮窗 | Stephen的小本本 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -163,7 +164,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">Stephen's blog</span>
+      <span class="site-title">Stephen的小本本</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -255,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -264,9 +265,9 @@
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
+    <meta itemprop="name" content="Stephen的小本本">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
     </span>
   </span>
 
@@ -330,16 +331,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/08/用PopupWindow实现键盘之上的悬浮窗/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -362,7 +353,8 @@
       
 
       
-        <p>最近遇到一个写评论的需求，就是点击一个写评论的按钮跳出软键盘，软键盘之上有一个输入框和发送按钮，想了好半天决定采用悬浮窗，其主要想法来自：<a href="http://www.itdadao.com/articles/c15a380342p0.html" target="_blank" rel="external">模仿微信，QQ评论输入框</a>，其效果图如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1491657613.png" alt=""></p>
+        <p>一个常用的控件，有时间可以考虑封装一下<br><a id="more"></a></p>
+<p>最近遇到一个写评论的需求，就是点击一个写评论的按钮跳出软键盘，软键盘之上有一个输入框和发送按钮，想了好半天决定采用悬浮窗，其主要想法来自：<a href="http://www.itdadao.com/articles/c15a380342p0.html" target="_blank" rel="external">模仿微信，QQ评论输入框</a>，其效果图如下：<br><img src="http://ok34fi9ya.bkt.clouddn.com/Screenshot_1491657613.png" alt=""></p>
 <h1 id="主要代码"><a href="#主要代码" class="headerlink" title="主要代码"></a>主要代码</h1><h2 id="activity-main"><a href="#activity-main" class="headerlink" title="activity_main:"></a>activity_main:</h2><pre><code>&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
     xmlns:tools=&quot;http://schemas.android.com/tools&quot;
     android:layout_width=&quot;match_parent&quot;
@@ -600,10 +592,6 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/04/08/用PopupWindow实现键盘之上的悬浮窗/"
-           data-title="用PopupWindow实现键盘之上的悬浮窗" data-url="http://yoursite.com/2017/04/08/用PopupWindow实现键盘之上的悬浮窗/">
-      </div>
-    
   </div>
 
 
@@ -641,14 +629,14 @@
                src="/uploads/avatar.png"
                alt="Stephen Zhang" />
           <p class="site-author-name" itemprop="name">Stephen Zhang</p>
-          <p class="site-description motion-element" itemprop="description">zsr的小本本</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
         </div>
         <nav class="site-state motion-element">
         
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -657,7 +645,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -666,7 +654,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -737,7 +725,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -805,13 +793,6 @@
   
   
 
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
-
-
-
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
@@ -827,37 +808,32 @@
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"zsrcodingme"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
   
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
+
+
+
+
+	
+
+
+
+
+
   
 
 
 
 
 
+  
 
-
-
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
 
 
 
@@ -870,6 +846,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

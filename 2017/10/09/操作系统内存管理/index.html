@@ -1,0 +1,757 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
+
+
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="操作系统," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本篇介绍操作系统内存管理的基本方式，主要集中于页式管理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统内存管理">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/10/09/操作系统内存管理/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="本篇介绍操作系统内存管理的基本方式，主要集中于页式管理。">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-13%20%E4%B8%8B%E5%8D%883.42.21.png">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-13%20%E4%B8%8B%E5%8D%883.45.53.png">
+<meta property="og:updated_time" content="2017-10-13T08:34:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统内存管理">
+<meta name="twitter:description" content="本篇介绍操作系统内存管理的基本方式，主要集中于页式管理。">
+<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-13%20%E4%B8%8B%E5%8D%883.42.21.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/10/09/操作系统内存管理/"/>
+
+
+
+
+
+  <title> 操作系统内存管理 | Stephen的小本本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Stephen的小本本</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/10/09/操作系统内存管理/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                操作系统内存管理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-09T16:30:41+08:00">
+                2017-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇介绍操作系统内存管理的基本方式，主要集中于页式管理。</p>
+<a id="more"></a>
+<h1 id="逻辑地址和物理地址"><a href="#逻辑地址和物理地址" class="headerlink" title="逻辑地址和物理地址"></a>逻辑地址和物理地址</h1><p>在介绍地址相关概念之前，先介绍一下地址空间的概念。</p>
+<h2 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h2><p>地址空间分为物理空间和虚拟空间。物理空间是实际物理内存的存储单元。虚拟空间是操作系统分配给每个进程的地址空间，是对物理层的抽象，在32位的操作系统当中，系统为每一个进程分配的虚拟空间的大小为2 ^ 32 = 4GB。虚拟空间的大小有可能比实际物理内存还要大。</p>
+<h2 id="物理地址"><a href="#物理地址" class="headerlink" title="物理地址"></a>物理地址</h2><p>物理地址也叫做实地址，放在地址总线上，以电子的形式存在，对应于真实物理内存的存储单元。</p>
+<h2 id="逻辑地址"><a href="#逻辑地址" class="headerlink" title="逻辑地址"></a>逻辑地址</h2><p>对应于虚拟空间中的地址，实际上是一个段内偏移量，需要被MMU(CPU的内存管理单元)转换成线性地址，并最终转换成物理地址(如果没有开启分页机制，那么线性地址就是物理地址)。例如在C语言编程的时候，读到的指针的值就是一个逻辑地址。<br>在保护模式下(没有分段或者分页机制的情况下)，逻辑地址和物理地址相等。</p>
+<p>以上知识做最基本的介绍，有关的更多内容参见：<a href="https://vosamo.github.io/2016/01/VA2PA/" target="_blank" rel="external">逻辑地址，物理地址，线性地址</a></p>
+<h1 id="页式管理"><a href="#页式管理" class="headerlink" title="页式管理"></a>页式管理</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>页式管理的逻辑是将逻辑地址空间分成大小相等的页，物理地址空间被分成相应的页框。页式管理的地址结构分成两部分，一部分是页号(Virtual Page Number, VPN)，在32位操作系统当中占据20位，12位用来表示位移量，页的大小一般是和位移量有关的，例如对于上述所说，12位表示位移量则页的大小为: 2 ^ 12 = 4kb。</p>
+<h2 id="页表"><a href="#页表" class="headerlink" title="页表"></a>页表</h2><p>对于页式管理来说，需要有一个从虚拟内存中的页到物理内存中页框的映射，这个映射表就是页表(Page Table)。页表只能存在于主存当中，不能通过交换技术存到二级存储设备。每一个进程都有自己的独立的页表，PCB块中存在指向本进程页表的指针，当CPU调度到某个进程时，会将其页表加载到CR3寄存器。对于某个VPN来说，有一个物理页框页号(Physical Frame Number)与之对应，物理页号加上最后的偏移量是最终的物理地址。</p>
+<p>现在只考虑一级页表的情况，当进程初始化时，其地址空间中对应的所有页都会在页表中存在映射，但是其对应的页框可能并未被初始化。考虑在32位系统当中，一个页表项的大小为4B, 一个页的大小为4kb，页的数目为2 ^ 32 / 2 ^ 12 = 2 ^ 20。所以页表所占的内存大小为：2 ^ 20 * 4B = 4MB。即一个进程要在内存中存在一个大小为4MB的页表。</p>
+<h3 id="PTE"><a href="#PTE" class="headerlink" title="PTE"></a>PTE</h3><p>PTE(Page Table Entry)可以理解成页表当中一行。在32位操作系统中其大小为4B。除了保存物理页号之外，还存有很多位来标记内存的状态，下面介绍几个常见的位：</p>
+<ul>
+<li>Present: 用来标记页是否对应实际内存的存储单元，当页对应的物理内存被交换到二级存储设备中时，此位实效。</li>
+<li>Dirty: 用来标记内存是否对文件进行写入操作。操作系统可以根据此位来决定是否对硬盘文件进行更新操作。</li>
+<li>Access: 用来标记内存访问，交换技术中的LRU算法可以根据此位确定要交换到硬盘的内存。</li>
+<li>RWX: 用来标记内存的访问权限。</li>
+</ul>
+<h3 id="分级页表"><a href="#分级页表" class="headerlink" title="分级页表"></a>分级页表</h3><p>上面曾经提到过在32位系统当中，1个进程对应的页表的大小为4MB，这个数字是很可怕的。当处于64位时，页表的大小变得难以接受，而且页表无法通过交换存储到硬盘空间。一级页表浪费内存的关键是<strong>对于一个进程，初始化之后无论某个页是否被使用，在页表中都有对应的项。</strong>因此需要采用多级页表来减小页表的大小。</p>
+<p>以下拿二级页表来说明，多级与之类似, 二级页表的设计如图所示:</p>
+<p><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-13%20%E4%B8%8B%E5%8D%883.42.21.png" alt=""></p>
+<p>当采用二级页表的时候，原来的虚拟地址被分成了三个部分(原来是VPN + Offset)，Offset部分不变，VPN被拆成两部分, 第一个是Outer page table的位置，第二个指向了Inner page table的位置，如图所示：</p>
+<p><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-10-13%20%E4%B8%8B%E5%8D%883.45.53.png" alt=""></p>
+<p>Inner Page Table只有在需要的时候才会被分配，这是节省内存的关键所在。下面假设有一个16位的操作系统，前2位用来表示Outer Page Table中的位置，中间4位表示Inner Page Table中的位置，最后10位表示Offset，先计算一下一级页表的内存占用情况：</p>
+<p>一级页表中VPN占了6位，所以有2 ^ 6 = 64个页表项，一个页表项占了2B，所以一个一级页表占用的内存128B。</p>
+<p>16位操作系统，操作系统为一个进程分配的虚拟内存的大小为: 2 ^ 16 = 64KB，假设前16KB被分配使用。<br>对于上述的情况，描述Outer Page Table的位置占了2个位，所以外层表有四个项，占了8B。所以最多有4个Inner Page Table，一个内层表有2 ^ 4 = 16个项，占了32B, 4个表加起来有64个项(和之前一级列表相同)。这里就很明白了，64KB的虚拟内存被平摊到4个表中，所以一个表能够平摊16KB，所以对于上述假设的情况只有一个内层表被分配，页表占的总大小为：8 + 32 = 40B，比之前的128B小了很多。</p>
+<h3 id="Inverted-Page-Table"><a href="#Inverted-Page-Table" class="headerlink" title="Inverted Page Table"></a>Inverted Page Table</h3><p>既然操作系统为每一个进程分配一个页表，那为什么不共享一个页表呢？Inverted Page Table就是这么一个共享的页表。其在内存中只有一份。其中的每一项都和物理页框相对应。</p>
+<p>因为要分清是那个进程的，所以项的结构也要发生改变，增加了一个PID，用来标记所属的进程。还有一个P, 用来标记虚拟内存中的页号。项在页表中的位置就是物理页号。</p>
+<p>Inverted Page Table的主要问题就是线性查找所带来的性能负担。为了解决这个问题，先对PID和P求哈希值，得出的哈希值对应页表的一项。因为可能产生哈希冲突，所以页表的每一项都维持一个链表。链表的每一项记录着PID和P值。</p>
+<h3 id="TLB"><a href="#TLB" class="headerlink" title="TLB"></a>TLB</h3><p>TLB(Translation Lookaside Buffer)是用来加速查询的内存管理单元。是一个很小的缓存，每一项都存储着一个PTE。此缓存主要解决多级页表查询带来的时间问题。</p>
+<h1 id="交换"><a href="#交换" class="headerlink" title="交换"></a>交换</h1><p>上面说到操作系统为每个进程分配的地址空间大小可以远大于实际物理内存。对于多进程的操作系统来讲，这会对物理内存造成竞争，所以需要交换(Paging)技术来将实际物理内存的部分内容转移到其他的存储设备。交换之后，PTE中的Present位变成0。</p>
+<p>交换在两种情况下发生，一是物理内存的使用达到了上限；二是CPU的使用达到了下限，此时各个进程可能处在不怎么工作的状态。操作系统力求交换对于各进程的影响最小。</p>
+<p>为了确立交换的页，操作系统主要查看PTE中的Access位和Dirty位。查看Access位是为了根据LRU算法来得出要交换的页；查看Dirty位是为了得出不用对硬盘执行写入的页，此种页优先被交换。另外，<strong>持有内核状态的页一定不能被交换。</strong></p>
+<p>当访问某个页时，MMU发现其PTE中的Present位为0，则发起一个错误，此错误被操作系统来处理。操作系统根据之前是否发生过交换来决定是否从硬盘中取出内容，如果是，则在DRAM中重新分配一个页框，更新页表与程序计数器，刚才对于此页访问指令重新执行。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/07/操作系统排程器/" rel="next" title="操作系统调度算法和排程器">
+                <i class="fa fa-chevron-left"></i> 操作系统调度算法和排程器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/12/VirtualBox为CentOS配置网络并与主机通信/" rel="prev" title="VirtualBox为CentOS7配置网络并与主机通信">
+                VirtualBox为CentOS7配置网络并与主机通信 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Stephen Zhang" />
+          <p class="site-author-name" itemprop="name">Stephen Zhang</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#逻辑地址和物理地址"><span class="nav-number">1.</span> <span class="nav-text">逻辑地址和物理地址</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#地址空间"><span class="nav-number">1.1.</span> <span class="nav-text">地址空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#物理地址"><span class="nav-number">1.2.</span> <span class="nav-text">物理地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑地址"><span class="nav-number">1.3.</span> <span class="nav-text">逻辑地址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#页式管理"><span class="nav-number">2.</span> <span class="nav-text">页式管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">2.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页表"><span class="nav-number">2.2.</span> <span class="nav-text">页表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PTE"><span class="nav-number">2.2.1.</span> <span class="nav-text">PTE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分级页表"><span class="nav-number">2.2.2.</span> <span class="nav-text">分级页表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inverted-Page-Table"><span class="nav-number">2.2.3.</span> <span class="nav-text">Inverted Page Table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TLB"><span class="nav-number">2.2.4.</span> <span class="nav-text">TLB</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#交换"><span class="nav-number">3.</span> <span class="nav-text">交换</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Stephen Zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

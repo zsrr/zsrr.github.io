@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,8 +18,12 @@
 
 
 
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
 
 
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
 
 
 
@@ -84,23 +88,17 @@
 
 
 
-<meta name="description" content="Picasso简介Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  
-Github地址： http://square.github.io/picasso/Picasso使用详解： http://www.jianshu.com/p/ae8e6ed18e23  
-Github上">
+<meta name="description" content="第一篇博客，写了一晚上 + 一上午，累">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Picasso源码分析">
-<meta property="og:url" content="http://yoursite.com/2017/01/20/Picasso源码分析/index.html">
-<meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="Picasso简介Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  
-Github地址： http://square.github.io/picasso/Picasso使用详解： http://www.jianshu.com/p/ae8e6ed18e23  
-Github上">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/01/20/Picasso源码分析/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="第一篇博客，写了一晚上 + 一上午，累">
 <meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/picasso_structure.png">
-<meta property="og:updated_time" content="2017-01-21T10:10:26.000Z">
+<meta property="og:updated_time" content="2017-08-04T13:15:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Picasso源码分析">
-<meta name="twitter:description" content="Picasso简介Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  
-Github地址： http://square.github.io/picasso/Picasso使用详解： http://www.jianshu.com/p/ae8e6ed18e23  
-Github上">
+<meta name="twitter:description" content="第一篇博客，写了一晚上 + 一上午，累">
 <meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/picasso_structure.png">
 
 
@@ -109,12 +107,12 @@ Github上">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -129,13 +127,13 @@ Github上">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/01/20/Picasso源码分析/"/>
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/01/20/Picasso源码分析/"/>
 
 
 
 
 
-  <title> Picasso源码分析 | Stephen's blog </title>
+  <title> Picasso源码分析 | Stephen的小本本 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -166,7 +164,7 @@ Github上">
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">Stephen's blog</span>
+      <span class="site-title">Stephen的小本本</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -258,7 +256,7 @@ Github上">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/20/Picasso源码分析/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/01/20/Picasso源码分析/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -267,9 +265,9 @@ Github上">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
+    <meta itemprop="name" content="Stephen的小本本">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
     </span>
   </span>
 
@@ -333,16 +331,6 @@ Github上">
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/20/Picasso源码分析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/20/Picasso源码分析/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -365,7 +353,8 @@ Github上">
       
 
       
-        <h2 id="Picasso简介"><a href="#Picasso简介" class="headerlink" title="Picasso简介"></a>Picasso简介</h2><p>Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  </p>
+        <p>第一篇博客，写了一晚上 + 一上午，累<br><a id="more"></a></p>
+<h2 id="Picasso简介"><a href="#Picasso简介" class="headerlink" title="Picasso简介"></a>Picasso简介</h2><p>Picasso是大名鼎鼎的Square公司推出的安卓图片下载，缓存的第三方库。上手简单，功能强大。在此本文就不介绍它具体是怎么使用的了，给出几个已经讲的很好的博文地址即可：  </p>
 <p>Github地址： <a href="http://square.github.io/picasso/" target="_blank" rel="external">http://square.github.io/picasso/</a><br>Picasso使用详解： <a href="http://www.jianshu.com/p/ae8e6ed18e23" target="_blank" rel="external">http://www.jianshu.com/p/ae8e6ed18e23</a>  </p>
 <p>Github上的源码中的示例代码是个不错的学习资源哦！</p>
 <h2 id="Picasso工作原理"><a href="#Picasso工作原理" class="headerlink" title="Picasso工作原理"></a>Picasso工作原理</h2><p>工作原理如图所示，图中所标记的类下文会一一进行剖析。（笔者的图确实画的不怎么样，见谅）  </p>
@@ -901,10 +890,6 @@ public RequestCreator fit() {
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/01/20/Picasso源码分析/"
-           data-title="Picasso源码分析" data-url="http://yoursite.com/2017/01/20/Picasso源码分析/">
-      </div>
-    
   </div>
 
 
@@ -942,14 +927,14 @@ public RequestCreator fit() {
                src="/uploads/avatar.png"
                alt="Stephen Zhang" />
           <p class="site-author-name" itemprop="name">Stephen Zhang</p>
-          <p class="site-description motion-element" itemprop="description">zsr的小本本</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
         </div>
         <nav class="site-state motion-element">
         
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -958,7 +943,7 @@ public RequestCreator fit() {
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -967,7 +952,7 @@ public RequestCreator fit() {
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1038,7 +1023,7 @@ public RequestCreator fit() {
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -1106,13 +1091,6 @@ public RequestCreator fit() {
   
   
 
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
-
-
-
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
@@ -1128,37 +1106,32 @@ public RequestCreator fit() {
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"zsrcodingme"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
   
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
+
+
+
+
+	
+
+
+
+
+
   
 
 
 
 
 
+  
 
-
-
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
 
 
 
@@ -1171,6 +1144,21 @@ public RequestCreator fit() {
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

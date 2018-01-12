@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,8 +18,12 @@
 
 
 
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
 
 
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
 
 
 
@@ -84,26 +88,17 @@
 
 
 
-<meta name="description" content="注：以下部分文字，图片摘自《Java并发编程的艺术》
-Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要的特点是把一个大任务分割成几块不同的小任务，由不同的线程去执行这一系列的小任务，最终结果合并成大任务的结果。
-其主要原理如图所示：
-工作窃取算法工作窃取算法的意思是每个线程的任务队列执行完毕之后，此线程会将其他线程的任务队列中的任务“窃取”到本线程的任务队列中来。">
+<meta name="description" content="多线程排序算法，有一点分治的思想">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Fork/Join架构进行归并排序">
-<meta property="og:url" content="http://yoursite.com/2017/03/14/使用Fork-Join架构进行归并排序/index.html">
-<meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="注：以下部分文字，图片摘自《Java并发编程的艺术》
-Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要的特点是把一个大任务分割成几块不同的小任务，由不同的线程去执行这一系列的小任务，最终结果合并成大任务的结果。
-其主要原理如图所示：
-工作窃取算法工作窃取算法的意思是每个线程的任务队列执行完毕之后，此线程会将其他线程的任务队列中的任务“窃取”到本线程的任务队列中来。">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/03/14/使用Fork-Join架构进行归并排序/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="多线程排序算法，有一点分治的思想">
 <meta property="og:image" content="http://cdn.infoqstatic.com/statics_s1_20170314-0434/resource/articles/fork-join-introduction/zh/resources/21.png">
-<meta property="og:updated_time" content="2017-06-12T07:59:52.000Z">
+<meta property="og:updated_time" content="2017-08-04T13:16:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Fork/Join架构进行归并排序">
-<meta name="twitter:description" content="注：以下部分文字，图片摘自《Java并发编程的艺术》
-Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要的特点是把一个大任务分割成几块不同的小任务，由不同的线程去执行这一系列的小任务，最终结果合并成大任务的结果。
-其主要原理如图所示：
-工作窃取算法工作窃取算法的意思是每个线程的任务队列执行完毕之后，此线程会将其他线程的任务队列中的任务“窃取”到本线程的任务队列中来。">
+<meta name="twitter:description" content="多线程排序算法，有一点分治的思想">
 <meta name="twitter:image" content="http://cdn.infoqstatic.com/statics_s1_20170314-0434/resource/articles/fork-join-introduction/zh/resources/21.png">
 
 
@@ -112,12 +107,12 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -132,13 +127,13 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/03/14/使用Fork-Join架构进行归并排序/"/>
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/03/14/使用Fork-Join架构进行归并排序/"/>
 
 
 
 
 
-  <title> 使用Fork/Join架构进行归并排序 | Stephen's blog </title>
+  <title> 使用Fork/Join架构进行归并排序 | Stephen的小本本 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -169,7 +164,7 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">Stephen's blog</span>
+      <span class="site-title">Stephen的小本本</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -261,7 +256,7 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/14/使用Fork-Join架构进行归并排序/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/03/14/使用Fork-Join架构进行归并排序/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -270,9 +265,9 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
+    <meta itemprop="name" content="Stephen的小本本">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
     </span>
   </span>
 
@@ -336,16 +331,6 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/03/14/使用Fork-Join架构进行归并排序/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/14/使用Fork-Join架构进行归并排序/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -368,7 +353,8 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
       
 
       
-        <p><strong>注：</strong>以下部分文字，图片摘自《Java并发编程的艺术》</p>
+        <p>多线程排序算法，有一点分治的思想<br><a id="more"></a></p>
+<p><strong>注：</strong>以下部分文字，图片摘自《Java并发编程的艺术》</p>
 <h1 id="Fork-Join框架简介"><a href="#Fork-Join框架简介" class="headerlink" title="Fork/Join框架简介"></a>Fork/Join框架简介</h1><p>Fork/Join框架是jdk7中提供的并行框架，其主要的特点是把一个大任务分割成几块不同的小任务，由不同的线程去执行这一系列的小任务，最终结果合并成大任务的结果。</p>
 <p>其主要原理如图所示：<br><img src="http://cdn.infoqstatic.com/statics_s1_20170314-0434/resource/articles/fork-join-introduction/zh/resources/21.png" alt=""></p>
 <h1 id="工作窃取算法"><a href="#工作窃取算法" class="headerlink" title="工作窃取算法"></a>工作窃取算法</h1><p>工作窃取算法的意思是每个线程的任务队列执行完毕之后，此线程会将其他线程的任务队列中的任务“窃取”到本线程的任务队列中来。使用窃取算法的好处就是充分利用了线程的并行计算，有关工作窃取算法的更多内容，请看：<a href="https://en.wikipedia.org/wiki/Work_stealing" target="_blank" rel="external">Work Stealing</a></p>
@@ -551,10 +537,6 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/03/14/使用Fork-Join架构进行归并排序/"
-           data-title="使用Fork/Join架构进行归并排序" data-url="http://yoursite.com/2017/03/14/使用Fork-Join架构进行归并排序/">
-      </div>
-    
   </div>
 
 
@@ -592,14 +574,14 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
                src="/uploads/avatar.png"
                alt="Stephen Zhang" />
           <p class="site-author-name" itemprop="name">Stephen Zhang</p>
-          <p class="site-description motion-element" itemprop="description">zsr的小本本</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
         </div>
         <nav class="site-state motion-element">
         
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -608,7 +590,7 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -617,7 +599,7 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -688,7 +670,7 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -756,13 +738,6 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
   
   
 
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
-
-
-
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
@@ -778,37 +753,32 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"zsrcodingme"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
   
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
+
+
+
+
+	
+
+
+
+
+
   
 
 
 
 
 
+  
 
-
-
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
 
 
 
@@ -821,6 +791,21 @@ Fork/Join框架简介Fork/Join框架是jdk7中提供的并行框架，其主要�
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

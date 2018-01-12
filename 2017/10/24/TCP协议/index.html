@@ -1,0 +1,807 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
+
+
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="TCP,计算机网络,网络协议," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本篇记录计算机网络中最为重要的协议——TCP协议。由于协议的内容比较多，本篇博客不定时更新。主要参考书籍《TCP/IP详解 卷一》。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP协议">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/10/24/TCP协议/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="本篇记录计算机网络中最为重要的协议——TCP协议。由于协议的内容比较多，本篇博客不定时更新。主要参考书籍《TCP/IP详解 卷一》。">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/TCP%E5%A4%B4%E9%83%A8.png">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E4%B8%89%E6%8F%A1%E5%9B%9B%E6%8C%A5.png">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86.png">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2.png">
+<meta property="og:updated_time" content="2017-10-25T05:48:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP协议">
+<meta name="twitter:description" content="本篇记录计算机网络中最为重要的协议——TCP协议。由于协议的内容比较多，本篇博客不定时更新。主要参考书籍《TCP/IP详解 卷一》。">
+<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/TCP%E5%A4%B4%E9%83%A8.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/10/24/TCP协议/"/>
+
+
+
+
+
+  <title> TCP协议 | Stephen的小本本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Stephen的小本本</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/10/24/TCP协议/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                TCP协议
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-24T23:19:52+08:00">
+                2017-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇记录计算机网络中最为重要的协议——TCP协议。由于协议的内容比较多，本篇博客不定时更新。主要参考书籍《TCP/IP详解 卷一》。</p>
+<a id="more"></a>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>TCP(Transmission Control Protocol)协议是面向连接的、可靠的、基于字节流的传输协议。与用户数据报协议(UDP)一同处在OSI七层模型的传输层。</p>
+<h2 id="TCP粘包、拆包问题"><a href="#TCP粘包、拆包问题" class="headerlink" title="TCP粘包、拆包问题"></a>TCP粘包、拆包问题</h2><p>采用字节流的设计方式，意味着TCP不提供消息保护边界，这一点与UDP不同，因此可能发生TCP粘包，TCP拆包的问题。举个具体的例子，如发送端发送三次消息，第一次消息为2k，第二次为13k，第三次为5k，那么对于UDP来说，总共要发送三次IP数据包，接收端接收到的是三个完整的数据包(不考虑异常的情况)；对于TCP来说，情况则不相同，加入说socket缓冲区的大小为20k，则三次发送的消息累积起来发送一次，这就造成了粘包的问题。</p>
+<h2 id="TCP头部"><a href="#TCP头部" class="headerlink" title="TCP头部"></a>TCP头部</h2><p>一个TCP头部如下所示：<br><img src="http://ok34fi9ya.bkt.clouddn.com/TCP%E5%A4%B4%E9%83%A8.png" alt=""></p>
+<p>源端口号和目的端口号，还有IP报文中的源IP地址和目的IP地址组成的四元组能够唯一标识一个连接。</p>
+<p>序列号(Sequence Number)标识了从发送端到接收端的数据流的一个字节，它是一个32位的无符号数，从0到2^32 - 1，之后再循环到0，这有可能造成<strong>回绕序列号(Project Against Wrapped Sequence number, PAWS)</strong>，就是说在很短的时间内接收端收到序列号相同的数据，但是这两份数据不是同一份数据。此问题需要时间戳选项来解决，下文会谈到。</p>
+<p>确认号字段(Acknowledgement)包含的是Ack报文的发送方期待接收的下一个序列号，是最后成功收到的数据字节的序列号加一。</p>
+<p>上图中标出了TCP报文的8个字段，其解释如下：</p>
+<ul>
+<li>CWR: 让发送方降低发送的速率，用于TCP的拥塞控制。</li>
+<li>ECE: ECN回显。</li>
+<li>URG: 紧急指针，很少被使用。</li>
+<li>ACK: 确认号字段是有效的，一般连接建立之后会一直开启。</li>
+<li>PSH: 接收方收到数据应该尽快发送给上层应用处理，没被很好的实现。</li>
+<li>RST: 重置连接，一般是用于异常的情况。</li>
+<li>SYN: 初始化连接。</li>
+<li>FIN: 终止连接。</li>
+</ul>
+<p>窗口大小用于TCP流量控制，16的字段限制了窗口的大小为65535个字节，可以根据窗口缩放选项对这个值进行缩放。</p>
+<p>TCP校验和用于检验数据的有效性，不再详谈。</p>
+<p>比较常见的TCP选项包括MSS选项，窗口缩放选项，SACK和TSOPT，下文会说明这些选项的作用。</p>
+<h1 id="连接管理"><a href="#连接管理" class="headerlink" title="连接管理"></a>连接管理</h1><h2 id="三握四挥"><a href="#三握四挥" class="headerlink" title="三握四挥"></a>三握四挥</h2><p>TCP的连接就是我们老生常谈的“三握四挥”，如图所示：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E4%B8%89%E6%8F%A1%E5%9B%9B%E6%8C%A5.png" alt=""><br>三次握手的过程：</p>
+<ul>
+<li>发送端置SYN位，初始化序列号ISN = J, 确认号为0。</li>
+<li>接收端收到请求，置SYN和ACK位，初始化序列号ISN = K, ACK = J + 1。</li>
+<li>发送端收到请求，置ACK位，序列号位J + 1，确认号为K + 1。</li>
+</ul>
+<p>由上述过程可以看到SYN位是占一个序列号的，占用序列号意味着可以被有效的重传。一般建立连接的重传次数比一般数据重传次数更多。</p>
+<p>四次挥手的过程：</p>
+<ul>
+<li>主动选择关闭的一端置FIN位和ACK位(对最后一次发送数据的确认)，序列号为K, 确认号为L。</li>
+<li>被动关闭者先发送ACK报文，表明已收到发送端的关闭请求，此关闭请求会通知上层的应用程序，接着被动关闭的一端发送FIN报文。</li>
+<li>主动关闭的一方发送ACK来告知被动关闭的一方已收到FIN。如果FIN丢失的话，那么发送方重新传输直到收到ACK为止。</li>
+</ul>
+<h2 id="状态管理"><a href="#状态管理" class="headerlink" title="状态管理"></a>状态管理</h2><p>接下来探讨TCP的状态管理，如图所示：</p>
+<p><img src="http://ok34fi9ya.bkt.clouddn.com/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86.png" alt=""></p>
+<p>为了便于理解，下面是两端连接对应的状态改变图：</p>
+<p><img src="http://ok34fi9ya.bkt.clouddn.com/%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2.png" alt=""></p>
+<p>图已经说的很明显了，不想再展开对应的讨论，有关TCP状态转换的讨论，参见：<a href="http://blog.csdn.net/wenqian1991/article/details/40110703" target="_blank" rel="external">TCP状态转换图详解</a></p>
+<h2 id="TIME-WAIT状态存在的必要性"><a href="#TIME-WAIT状态存在的必要性" class="headerlink" title="TIME_WAIT状态存在的必要性"></a>TIME_WAIT状态存在的必要性</h2><p>由上图可以看到，当主动关闭的一方最后发送确认接收端发来的FIN的ACK时，会等待一段时间然后才进入CLOSED状态，等待的状态称为TIME_WAIT状态，此状态的时长通常为2MSL(Maximum Segment Lifetime)，MSL是指报文段在网络中的最长的生存时间。这样接收端迟迟收不到发送端的ACK时，会重新发送FIN，若此时发送端已经处于CLOSED状态的话，那么就会发送一个RST报文，接收端就会解释成一个错误。所以等待2个最大段生存期是有必要的。</p>
+<h2 id="重置报文段"><a href="#重置报文段" class="headerlink" title="重置报文段"></a>重置报文段</h2><p>重置报文段即RST报文段，通常用来处理异常的情况：</p>
+<h3 id="请求一个未打开的端口"><a href="#请求一个未打开的端口" class="headerlink" title="请求一个未打开的端口"></a>请求一个未打开的端口</h3><p>如果向服务器请求一个未打开的端口，会收到如下错误信息：</p>
+<pre><code>$ telnet localhost 10000
+Trying ::1...
+telnet: connect to address ::1: Connection refused
+</code></pre><p>此时接收端会发送一个RST报文。</p>
+<h3 id="请求超时"><a href="#请求超时" class="headerlink" title="请求超时"></a>请求超时</h3><p>发送端发送SYN请求连接到发送端接收到接收端发送的SYN这段时间的时长若超出指定范围，那么发送端就会发送RST报文终止连接。</p>
+<h3 id="终止连接"><a href="#终止连接" class="headerlink" title="终止连接"></a>终止连接</h3><p>在正常的情况下，用FIN来终止连接，FIN是在排队数据都已经发送后才被发送出去，不会出现丢失数据的情况，任何时刻，可以用RST来代替FIN来终止一条连接，此时：</p>
+<ul>
+<li>任何排队的数据都将被丢弃，RST被立即发送出去。</li>
+<li>接收方说明另一端采用了非正确的方式关闭连接。</li>
+</ul>
+<p>当然发生RST的情况肯定不止上面几种，随时更新~</p>
+<h2 id="连接队列"><a href="#连接队列" class="headerlink" title="连接队列"></a>连接队列</h2><p>在并发服务器当中，连接被应用到应用程序之前通常处在两种状态，一是连接尚未完成但是已经收到了SYN；二是连接已经完成，此时处于ESTABLISHED状态。通常操作系统会用两个队列来处理上述不同的情况。</p>
+<p>在伯克利套接字API中可以通过设置backlog的大小来限制这两个队列的总和。在Linux中，将会有下面的规则：</p>
+<ul>
+<li>当一个新的请求到来时，将会检查系统范围内的参数<strong>net.ipv4.tcp_max_syn_backlog</strong>，其默认值为1000，如果处于SYN_RCVD状态的连接数目超出了这一个值，新来的请求将会被拒绝。</li>
+<li>每一个侦听的应用程序都维护一个连接队列，此队列存放的是已经进入ESTABLISHED状态但是未被应用程序所接受。应用程序会对这个队列的大小进行限制，默认为128。</li>
+<li>如果侦听节点的连接队列还有剩余空间的话，TCP才会对到来的SYN发送应答完成连接。客户端完成连接之后，服务器侦听节点可能还未知道有次连接，此时后续客户端传送的数据被放到队列之中。</li>
+<li>如果侦听节点连接队列没有足够的空间的话，那么TCP将会选择延迟对SYN做出响应。如果系统控制变量<strong>net.ipv4.tcp_abort<em>on</em></strong>被设定，则会发送RST报文。</li>
+</ul>
+<h2 id="TCP的路径MTU发现"><a href="#TCP的路径MTU发现" class="headerlink" title="TCP的路径MTU发现"></a>TCP的路径MTU发现</h2><p>先来看一下TCP的MSS选项和路径MTU的含义：</p>
+<p>MSS(Maximum Segment Size)最大段大小为所允许从对方接收到的最大报文段，只包含TCP的数据不包含头部的大小。当建立一条连接的时候，通信双方需要在SYN报文指定MSS选项来说明自己能接收的最大段的大小，最大段的默认大小为536字节，典型的为1460个字节。最大段大小不是双方协商的结果，而是一个限定的数值。</p>
+<p>路径MTU即路由路径中所有网络报文段最大传输单元(Maximum  Transmission Unit)的最小值，TCP应该根据此值来设定发送段的大小，以此来避免分片。传统的路径MTU的测量是通过ICMP传送PTB消息来实现的，TCP协议可以采取分组层路径最大传输单元发现来避免对ICMP的使用。</p>
+<p>传统的TCP路径MTU发现过程如下：TCP使用对外接口(原版书当中为outgoing interface，我不懂是什么意思)所声明的最大传输单元的最小值，或者根据对方所规定的MSS来决定自己所要发送段的最大大小(SMSS)。如果对方没有指明MSS，则采用默认的536字节，但是这种情况很少。</p>
+<p>一旦SMSS选定了初始值，那么就会置IPv4数据报的DF位(Don’t Fragment，不要进行IP分片)。如果接收到了PTB(Packet Too Big)消息，则会调整发送段的大小进行重传。如果PTB中存在推荐的PMTU，发送方则会据此进行设置。如果不存在的话，则发送方会尝试多个数值(可以根据二分搜索来进行选择)。</p>
+<h1 id="超时重传"><a href="#超时重传" class="headerlink" title="超时重传"></a>超时重传</h1><p>如前所述，TCP是一种可靠的传输协议。因此TCP提供了一系列机制来面对各种异常的情况。为了保证数据传输的正确性，TCP会重传已经丢失的包。重传可以基于两种机制：一是基于时间；而是基于确认信息的构成。</p>
+<h2 id="基于计时器的重传机制"><a href="#基于计时器的重传机制" class="headerlink" title="基于计时器的重传机制"></a>基于计时器的重传机制</h2><p>TCP在发送数据时会维护一个计时器，如果在指定时间内没有收到发送数据的ACK的话，则重新发送。计时器的超时时间称为RTO(Retransmission Timeout)。</p>
+<p>TCP拥有两个值来决定如何重传一个报文段。R1表示重传的次数，R2表示何时应该放弃此连接。R1和R2应该至少分别为3次和100秒。连接的建立过程和传输过程不太相同，针对SYN报文的R2值为3分钟。</p>
+<p>RTO应该根据RTT来进行设置，RTT为发送一个数据报到接到此数据报ACK所需的时间。关于其中的复杂的算法不再展开讨论(我鶸)，有关如何通过RTT来确定RTO，参见：<a href="http://blog.csdn.net/yusiguyuan/article/details/39997575" target="_blank" rel="external">TCP中RTT和RTO的计算方法</a></p>
+<h2 id="快速重传"><a href="#快速重传" class="headerlink" title="快速重传"></a>快速重传</h2><p>快速重传多用于失序包。当接收端得到一个失序包时，立即返回重复ACK(普通情况下会有延迟)，此ACK是最近一次使接收端窗口移动的数据段的确认号。</p>
+<p>当收到期盼序列号的后续分组时，意味着两种情况，一是之前期待的数据包已经丢失，二是仅仅是延迟到达，一般我们不能辨别这两种情况，所以发送端需要等待一定数目的重复ACK，当达到阈值的时候开始重发丢失的数据。</p>
+<h2 id="基于选择确认的重传"><a href="#基于选择确认的重传" class="headerlink" title="基于选择确认的重传"></a>基于选择确认的重传</h2><p>首先要介绍一下SACK选项：</p>
+<p>因为有可能接收到失序的数据，所以接收端的窗口可能存在漏洞，为了告知发送端这些漏洞，TCP报文提供了SACK选项, 来告知发送端丢失了哪些数据，来让发送端在一个RTT内填补多个空缺。</p>
+<p>SACK选项是否开启是在三次握手阶段确立的，需要两方同时开启此选项才会生效。SACK信息包含了接收端成功接收的序列号范围，每一个范围称作一个SACK块，由于TCP数据大小是有限的，所以一般只包含3个SACK块。</p>
+<p>上面所提到的快速重传，接收端在发送重复ACK时，可以发送SACK来告知发送端丢失了哪些数据。当不开启SACK时，快速重传只能重传一个报文段；开启SACK之后可以填补多个空缺。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/TCP/" rel="tag"># TCP</a>
+          
+            <a href="/tags/计算机网络/" rel="tag"># 计算机网络</a>
+          
+            <a href="/tags/网络协议/" rel="tag"># 网络协议</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/12/VirtualBox为CentOS配置网络并与主机通信/" rel="next" title="VirtualBox为CentOS7配置网络并与主机通信">
+                <i class="fa fa-chevron-left"></i> VirtualBox为CentOS7配置网络并与主机通信
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/03/Java泛型/" rel="prev" title="Java泛型">
+                Java泛型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Stephen Zhang" />
+          <p class="site-author-name" itemprop="name">Stephen Zhang</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP粘包、拆包问题"><span class="nav-number">1.1.</span> <span class="nav-text">TCP粘包、拆包问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP头部"><span class="nav-number">1.2.</span> <span class="nav-text">TCP头部</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接管理"><span class="nav-number">2.</span> <span class="nav-text">连接管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#三握四挥"><span class="nav-number">2.1.</span> <span class="nav-text">三握四挥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#状态管理"><span class="nav-number">2.2.</span> <span class="nav-text">状态管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TIME-WAIT状态存在的必要性"><span class="nav-number">2.3.</span> <span class="nav-text">TIME_WAIT状态存在的必要性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重置报文段"><span class="nav-number">2.4.</span> <span class="nav-text">重置报文段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#请求一个未打开的端口"><span class="nav-number">2.4.1.</span> <span class="nav-text">请求一个未打开的端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求超时"><span class="nav-number">2.4.2.</span> <span class="nav-text">请求超时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#终止连接"><span class="nav-number">2.4.3.</span> <span class="nav-text">终止连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接队列"><span class="nav-number">2.5.</span> <span class="nav-text">连接队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP的路径MTU发现"><span class="nav-number">2.6.</span> <span class="nav-text">TCP的路径MTU发现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#超时重传"><span class="nav-number">3.</span> <span class="nav-text">超时重传</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于计时器的重传机制"><span class="nav-number">3.1.</span> <span class="nav-text">基于计时器的重传机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速重传"><span class="nav-number">3.2.</span> <span class="nav-text">快速重传</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于选择确认的重传"><span class="nav-number">3.3.</span> <span class="nav-text">基于选择确认的重传</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Stephen Zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

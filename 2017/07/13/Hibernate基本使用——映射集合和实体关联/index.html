@@ -1,0 +1,1020 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
+
+
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据库,ORM,Hibernate,Java Web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本篇主要讲集合类的映射。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate基本使用——映射集合">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/07/13/Hibernate基本使用——映射集合和实体关联/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="本篇主要讲集合类的映射。">
+<meta property="og:updated_time" content="2017-08-04T13:25:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate基本使用——映射集合">
+<meta name="twitter:description" content="本篇主要讲集合类的映射。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/07/13/Hibernate基本使用——映射集合和实体关联/"/>
+
+
+
+
+
+  <title> Hibernate基本使用——映射集合 | Stephen的小本本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Stephen的小本本</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/07/13/Hibernate基本使用——映射集合和实体关联/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Hibernate基本使用——映射集合
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-13T11:50:42+08:00">
+                2017-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ORM/" itemprop="url" rel="index">
+                    <span itemprop="name">ORM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇主要讲集合类的映射。<br><a id="more"></a></p>
+<h1 id="基本类型集合映射"><a href="#基本类型集合映射" class="headerlink" title="基本类型集合映射"></a>基本类型集合映射</h1><h2 id="选择集合的接口"><a href="#选择集合的接口" class="headerlink" title="选择集合的接口"></a>选择集合的接口</h2><p>Java域模型当中集合属性的声明形式如下：</p>
+<pre><code>&lt;Interface&gt; collection = new &lt;Implementation&gt;();
+</code></pre><p>每个JDK接口都有Hibernate所支持的一个匹配实现，Hibernate会包装已在字段声明上初始化过的集合，并在它不正确时替代它，以达到对集合元素的延迟加载和脏检查。</p>
+<p>如果不对Hibernate进行扩展，可以从以下集合中选择：</p>
+<ul>
+<li><strong>java.util.Set</strong>: 使用java.util.HashSet初始化，不保存元素的顺序，不允许重复的元素，所有的JPA都支持此类型。</li>
+<li><strong>java.util.SortedSet</strong>: 使用java.util.TreeSet来进行初始化，这个集合支持元素的固定顺序，数据项的排列发生在内存之中，在Hibernate加载数据后进行排列，仅用于Hibernate的扩展。</li>
+<li><strong>java.util.List</strong>: 使用java.util.ArrayList初始化。Hibernate会在表中使用额外的列保存每个元素的位置。</li>
+<li><strong>java.util.Collection</strong>: 使用java.util.ArrayList属性进行初始化，不保存元素的顺序，但是允许重复元素。</li>
+<li><strong>java.util.Map</strong>: 使用java.util.HashMap进行初始化，不保存元素的顺序。</li>
+<li><strong>java.util.SortedMap</strong>: 使用java.util.TreeMap进行初始化，可以保存元素的顺序，排列在内存当中进行，在Hibernate记载数据之后进行排列。</li>
+</ul>
+<p>下面通过演示来看几种基本类型集合的映射。</p>
+<h2 id="映射集"><a href="#映射集" class="headerlink" title="映射集"></a>映射集</h2><p>映射Set接口，要采用HashSet进行实现。</p>
+<pre><code>@Entity
+public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Long id;
+
+    @Column
+    protected String name;
+
+    @ElementCollection
+    @CollectionTable(name = &quot;IMAGES&quot;)
+    @Column(name = &quot;FILE_NAME&quot;)
+    protected Set&lt;String&gt; images = new HashSet&lt;&gt;();
+
+    ...
+}
+</code></pre><p>生成的sql语句：</p>
+<pre><code>create table IMAGES (
+   Item_id bigint not null,
+    FILE_NAME varchar(255)
+) engine=MyISAM
+</code></pre><p>其中Item_id就是外层Item的id，这样通过Set集合就保证了无重复元素，因此IMAGES实质上的主键是Item_id和FILE_NAME的组合键，即便Hibernate没有指定。</p>
+<h2 id="映射包"><a href="#映射包" class="headerlink" title="映射包"></a>映射包</h2><p>包是允许重复元素的未排序集合，采用Collection作为接口，ArrayList进行实现。</p>
+<pre><code>@Entity
+public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Long id;
+
+    @Column
+    protected String name;
+
+    @ElementCollection
+    @CollectionTable(name = &quot;IMAGES&quot;)
+    @org.hibernate.annotations.CollectionId(columns = @Column(
+            name = &quot;IMAGE_ID&quot;),
+            type = @org.hibernate.annotations.Type(type = &quot;long&quot;),
+            generator = Constants.CUSTOM_GENERATOR)
+    @Column(name = &quot;FILE_NAME&quot;)
+    protected Collection&lt;String&gt; images = new ArrayList&lt;&gt;();
+
+    ...
+}
+</code></pre><p>生成的sql语句：</p>
+<pre><code>create table IMAGES (
+   Item_id bigint not null,
+    FILE_NAME varchar(255),
+    IMAGE_ID bigint not null,
+    primary key (IMAGE_ID)
+) engine=MyISAM
+
+alter table IMAGES 
+   add constraint FK6yom4y18w9wytd67sme4nu2q7 
+   foreign key (Item_id) 
+   references Item (id)
+</code></pre><p>因为允许重复的元素，因此为了满足第一范式，应该为此表创建一个代理主键，通过Hibernate的CollectionId来创建。</p>
+<h2 id="映射列表"><a href="#映射列表" class="headerlink" title="映射列表"></a>映射列表</h2><p><strong>List</strong>接口允许保存元素的位置，因此若要按照用户存储的顺序显示元素，可以采用这个接口并将ArrayList作为实现：</p>
+<pre><code>@Entity
+public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Long id;
+
+    @Column
+    protected String name;
+
+    @ElementCollection
+    @CollectionTable(name = &quot;IMAGES&quot;)
+    @OrderColumn
+    @Column(name = &quot;FILE_NAME&quot;)
+    protected List&lt;String&gt; images = new ArrayList&lt;&gt;();
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+</code></pre><p>生成的sql语句：</p>
+<pre><code>create table IMAGES (
+   Item_id bigint not null,
+    FILE_NAME varchar(255),
+    images_ORDER integer not null,
+    primary key (Item_id, images_ORDER)
+) engine=MyISAM
+</code></pre><p>Item_id和images_ORDER作为复合主键，保证了重复元素和顺序。</p>
+<p>需要注意的是，假如表中原来有三个元素A, B, C按照顺序存储，删除A记录，则Hibernate将为B, C执行Update语句使它们向左移动来填充间隔。</p>
+<h2 id="映射键／值对"><a href="#映射键／值对" class="headerlink" title="映射键／值对"></a>映射键／值对</h2><p>可以通过Map接口来映射键值对，这里Map中的键值和Item的主键作为复合主键存到集合对应的表：</p>
+<pre><code>@Entity
+public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Long id;
+
+    @Column
+    protected String name;
+
+    @ElementCollection
+    @CollectionTable(name = &quot;IMAGES&quot;)
+    @MapKeyColumn(name = &quot;FILENAME&quot;)
+    @Column(name = &quot;IMAGENAME&quot;)
+    protected Map&lt;String, String&gt; images = new HashMap&lt;&gt;();
+
+    ...
+}
+</code></pre><p>生成的sql语句：</p>
+<pre><code>create table IMAGES (
+   Item_id bigint not null,
+    IMAGENAME varchar(255),
+    FILENAME varchar(255) not null,
+    primary key (Item_id, FILENAME)
+) engine=MyISAM
+</code></pre><h2 id="排序集合"><a href="#排序集合" class="headerlink" title="排序集合"></a>排序集合</h2><p>要相对集合进行排序可以采取两种方式，一种是使用Java比较器对结果在内存中进行排列，另一种是直接利用数据库的ORDER BY子句来使结果变得有序。</p>
+<h3 id="使用SortedSet"><a href="#使用SortedSet" class="headerlink" title="使用SortedSet"></a>使用SortedSet</h3><pre><code>@Entity
+public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Long id;
+
+    @Column
+    protected String name;
+
+    @ElementCollection
+    @CollectionTable(name = &quot;IMAGES&quot;)
+    @Column(name = &quot;IMAGENAME&quot;)
+    @org.hibernate.annotations.SortComparator(ReverseStringComparator.class)
+    protected SortedSet&lt;String&gt; images = new TreeSet&lt;&gt;();
+
+    ...
+}
+</code></pre><p>此时从数据库当中读取数据，Hibernate加载完毕之后会在内存当中对其进行排序处理。</p>
+<p><strong>注意：</strong>此种操作不是双向的，也就是说，只能保证读取的数据是有序的，不能保证写入的数据是有序的。</p>
+<h3 id="使用ORDER-BY子句"><a href="#使用ORDER-BY子句" class="headerlink" title="使用ORDER BY子句"></a>使用ORDER BY子句</h3><p>可以使用<strong>@org.hibernate.annotations.OrderBy</strong>注释来从数据库中得到数据的有序集合，此时排序在数据库当中执行：</p>
+<pre><code>@Entity
+public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Long id;
+
+    @Column
+    protected String name;
+
+    @ElementCollection
+    @CollectionTable(name = &quot;IMAGES&quot;)
+    @Column(name = &quot;IMAGENAME&quot;)
+    @org.hibernate.annotations.OrderBy(clause = &quot;IMAGENAME desc&quot;)
+    protected List&lt;String&gt; images = new ArrayList&lt;&gt;();
+
+    ...
+}
+</code></pre><p>clause为order by子句当中的后面一部分，甚至可以调用SQL函数。</p>
+<h1 id="映射组件集合"><a href="#映射组件集合" class="headerlink" title="映射组件集合"></a>映射组件集合</h1><p>对于前面一个Item对应于多个String类型的image而言，将Image作为一个嵌入类通常是更加优雅的做法：</p>
+<pre><code>@Embeddable
+public class Image {
+    @Column(nullable = false)
+    protected String title;
+
+    @Column(nullable = false)
+    protected String filename;
+
+    protected int width;
+
+    protected int height;
+
+    public Image(String title, String filename, int width, int height) {
+        this.title = title;
+        this.filename = filename;
+        this.width = width;
+        this.height = height;
+    }
+
+    public Image() {
+
+    }
+
+    ...
+}
+</code></pre><h2 id="定义组件的相等性"><a href="#定义组件的相等性" class="headerlink" title="定义组件的相等性"></a>定义组件的相等性</h2><p>若要将组件放在Map作为键的话，需要重写组件的<strong>equals()</strong>和<strong>hashCode()</strong>方法，还需要在可以唯一标识对象实例的属性上指定<strong>@Column(nullable = false)</strong>。如上面可以指定title和filename作为嵌入类的超键，重写两个方法：</p>
+<pre><code>// 由IntelliJ自动生成
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Image image = (Image) o;
+
+    if (!title.equals(image.title)) return false;
+    return filename.equals(image.filename);
+}
+
+@Override
+public int hashCode() {
+    int result = title.hashCode();
+    result = 31 * result + filename.hashCode();
+    return result;
+}
+</code></pre><p>值得注意的是，指定嵌入类超键时，如果超键的类型是字符串类型，那就尽量在<strong>@Column</strong>注解里面指定位长，否则生成主键时可能因为复合主键太长而发生错误。</p>
+<h2 id="组件集"><a href="#组件集" class="headerlink" title="组件集"></a>组件集</h2><p>映射组件的Set集合：</p>
+<pre><code>@ElementCollection
+@CollectionTable(name = &quot;IMAGES&quot;)
+protected Set&lt;Image&gt; images = new HashSet&lt;&gt;();
+</code></pre><p>生成的sql语句：</p>
+<pre><code>create table IMAGES (
+   Item_id bigint not null,
+    filename varchar(30) not null,
+    height integer,
+    title varchar(50) not null,
+    width integer,
+    primary key (Item_id, filename, title)
+) engine=MyISAM
+</code></pre><h2 id="组件包"><a href="#组件包" class="headerlink" title="组件包"></a>组件包</h2><p>映射组件的Collection集合：</p>
+<pre><code>@ElementCollection
+@CollectionTable(name = &quot;IMAGES&quot;)
+@org.hibernate.annotations.CollectionId(columns = @Column(name = &quot;IMAGE_ID&quot;),
+        type = @org.hibernate.annotations.Type(type = &quot;long&quot;),
+        generator = Constants.CUSTOM_GENERATOR)
+protected Collection&lt;Image&gt; images = new ArrayList&lt;&gt;();
+</code></pre><p>生成的sql语句：</p>
+<pre><code>create table IMAGES (
+   Item_id bigint not null,
+    filename varchar(30) not null,
+    height integer,
+    title varchar(50) not null,
+    width integer,
+    IMAGE_ID bigint not null,
+    primary key (IMAGE_ID)
+) engine=MyISAM
+</code></pre><p>此时嵌入类的超键不作为主键的一部分。</p>
+<h2 id="作为映射键的部分"><a href="#作为映射键的部分" class="headerlink" title="作为映射键的部分"></a>作为映射键的部分</h2><p>要作为HashMap的键部分进行映射，则需要把嵌入类的超键作为主键：</p>
+<pre><code>@Embeddable
+public class Filename {
+    @Column(nullable = false, length = 30)
+    protected String name;
+
+    @Column(nullable = false, length = 30)
+    protected String extension;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Filename filename = (Filename) o;
+
+        if (!name.equals(filename.name)) return false;
+        return extension.equals(filename.extension);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + extension.hashCode();
+        return result;
+    }
+}
+
+@ElementCollection
+@CollectionTable(name = &quot;IMAGES&quot;)
+protected Map&lt;Filename, Image&gt; images = new HashMap&lt;&gt;();
+</code></pre><p>生成的sql语句：</p>
+<pre><code>create table IMAGES (
+   Item_id bigint not null,
+    filename varchar(30) not null,
+    height integer,
+    title varchar(50) not null,
+    width integer,
+    extension varchar(30) not null,
+    name varchar(30) not null,
+    primary key (Item_id, extension, name)
+) engine=MyISAM
+</code></pre><p>作为键的嵌入类的超键为生成表的复合主键，注意要指定每个不为null的属性的长度，否则可能会发生(笔者是MySQL环境)：</p>
+<pre><code>Specified key was too long; max key length is 1000 bytes
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/ORM/" rel="tag"># ORM</a>
+          
+            <a href="/tags/Hibernate/" rel="tag"># Hibernate</a>
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/06/hexo-阿里云ECS-CentOS7-搭建个人博客/" rel="next" title="hexo + 阿里云ECS(CentOS7)搭建个人博客">
+                <i class="fa fa-chevron-left"></i> hexo + 阿里云ECS(CentOS7)搭建个人博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/13/Hibernate基本使用——实体关联映射/" rel="prev" title="Hibernate基本使用——实体关联映射">
+                Hibernate基本使用——实体关联映射 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Stephen Zhang" />
+          <p class="site-author-name" itemprop="name">Stephen Zhang</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本类型集合映射"><span class="nav-number">1.</span> <span class="nav-text">基本类型集合映射</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择集合的接口"><span class="nav-number">1.1.</span> <span class="nav-text">选择集合的接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射集"><span class="nav-number">1.2.</span> <span class="nav-text">映射集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射包"><span class="nav-number">1.3.</span> <span class="nav-text">映射包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射列表"><span class="nav-number">1.4.</span> <span class="nav-text">映射列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射键／值对"><span class="nav-number">1.5.</span> <span class="nav-text">映射键／值对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序集合"><span class="nav-number">1.6.</span> <span class="nav-text">排序集合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用SortedSet"><span class="nav-number">1.6.1.</span> <span class="nav-text">使用SortedSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用ORDER-BY子句"><span class="nav-number">1.6.2.</span> <span class="nav-text">使用ORDER BY子句</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#映射组件集合"><span class="nav-number">2.</span> <span class="nav-text">映射组件集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义组件的相等性"><span class="nav-number">2.1.</span> <span class="nav-text">定义组件的相等性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件集"><span class="nav-number">2.2.</span> <span class="nav-text">组件集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件包"><span class="nav-number">2.3.</span> <span class="nav-text">组件包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作为映射键的部分"><span class="nav-number">2.4.</span> <span class="nav-text">作为映射键的部分</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Stephen Zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

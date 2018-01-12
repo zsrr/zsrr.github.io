@@ -1,0 +1,1168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/11/20/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%92%8C%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/</loc>
+    <lastmod>2017-11-21T08:07:59.000Z</lastmod>
+    <data>
+        <display>
+        <title>JVM垃圾回收</title>
+        <pubTime>2017-11-20T14:14:26.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>JVM</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/10/07/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%8E%92%E7%A8%8B%E5%99%A8/</loc>
+    <lastmod>2017-11-21T02:41:42.000Z</lastmod>
+    <data>
+        <display>
+        <title>操作系统调度算法和排程器</title>
+        <pubTime>2017-10-07T15:06:47.000Z</pubTime>
+        
+        <tag>操作系统</tag>
+         
+         
+           
+             
+              <breadCrumb title="操作系统" url="http://www.stephenzhang.me/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/11/15/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%A4%A7%E8%87%B4%E7%BB%93%E6%9E%84/</loc>
+    <lastmod>2017-11-15T11:36:36.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java虚拟机大致结构</title>
+        <pubTime>2017-11-15T10:33:00.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>JVM</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/11/04/Java%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AA%E8%83%BD%E8%AE%BF%E9%97%AEfinal%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/</loc>
+    <lastmod>2017-11-04T11:30:46.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java匿名内部类为什么只能访问final局部变量</title>
+        <pubTime>2017-11-04T11:08:55.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/11/03/Java%E6%B3%9B%E5%9E%8B/</loc>
+    <lastmod>2017-11-03T16:21:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java泛型</title>
+        <pubTime>2017-11-03T14:52:02.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>泛型</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/10/24/TCP%E5%8D%8F%E8%AE%AE/</loc>
+    <lastmod>2017-10-25T05:48:55.000Z</lastmod>
+    <data>
+        <display>
+        <title>TCP协议</title>
+        <pubTime>2017-10-24T15:19:52.000Z</pubTime>
+        
+        <tag>TCP</tag>
+         
+        <tag>计算机网络</tag>
+         
+        <tag>网络协议</tag>
+         
+         
+           
+             
+              <breadCrumb title="计算机网络" url="http://www.stephenzhang.me/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/09/09/Spring-MVC%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2017-10-25T04:34:55.000Z</lastmod>
+    <data>
+        <display>
+        <title>Spring MVC源码解析</title>
+        <pubTime>2017-09-09T02:28:19.000Z</pubTime>
+        
+        <tag>Java Web</tag>
+         
+        <tag>Spring</tag>
+         
+        <tag>源码解析</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spring" url="http://www.stephenzhang.me/categories/Spring/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/10/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2017-10-13T08:34:34.000Z</lastmod>
+    <data>
+        <display>
+        <title>操作系统内存管理</title>
+        <pubTime>2017-10-09T08:30:41.000Z</pubTime>
+        
+        <tag>操作系统</tag>
+         
+         
+           
+             
+              <breadCrumb title="操作系统" url="http://www.stephenzhang.me/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/10/12/VirtualBox%E4%B8%BACentOS%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C%E5%B9%B6%E4%B8%8E%E4%B8%BB%E6%9C%BA%E9%80%9A%E4%BF%A1/</loc>
+    <lastmod>2017-10-12T14:44:06.000Z</lastmod>
+    <data>
+        <display>
+        <title>VirtualBox为CentOS7配置网络并与主机通信</title>
+        <pubTime>2017-10-12T14:04:47.000Z</pubTime>
+        
+        <tag>VirtualBox</tag>
+         
+        <tag>CentOS</tag>
+         
+         
+           
+             
+              <breadCrumb title="虚拟机" url="http://www.stephenzhang.me/categories/%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/10/07/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/</loc>
+    <lastmod>2017-10-07T13:45:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>进程和线程</title>
+        <pubTime>2017-10-07T12:01:31.000Z</pubTime>
+        
+        <tag>操作系统</tag>
+         
+         
+           
+             
+              <breadCrumb title="操作系统" url="http://www.stephenzhang.me/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/09/27/Redis%E9%9B%86%E7%BE%A4/</loc>
+    <lastmod>2017-09-28T09:03:24.000Z</lastmod>
+    <data>
+        <display>
+        <title>Redis集群解决方案</title>
+        <pubTime>2017-09-27T08:01:52.000Z</pubTime>
+        
+        <tag>Redis</tag>
+         
+        <tag>分布式</tag>
+         
+         
+           
+             
+              <breadCrumb title="Redis" url="http://www.stephenzhang.me/categories/Redis/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/09/23/Redis%E5%BA%94%E7%94%A8%E2%80%94%E2%80%94%E4%BC%9A%E8%AF%9D%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2017-09-27T16:11:12.000Z</lastmod>
+    <data>
+        <display>
+        <title>Redis会话管理</title>
+        <pubTime>2017-09-23T08:15:46.000Z</pubTime>
+        
+        <tag>Redis</tag>
+         
+        <tag>NoSQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Redis" url="http://www.stephenzhang.me/categories/Redis/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/09/27/Redis%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D/</loc>
+    <lastmod>2017-09-27T11:12:22.000Z</lastmod>
+    <data>
+        <display>
+        <title>Redis故障恢复</title>
+        <pubTime>2017-09-27T07:50:54.000Z</pubTime>
+        
+        <tag>Redis</tag>
+         
+         
+           
+             
+              <breadCrumb title="Redis" url="http://www.stephenzhang.me/categories/Redis/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/09/27/Jedis-Pipeline%E6%AD%A3%E7%A1%AE%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/</loc>
+    <lastmod>2017-09-27T07:39:55.000Z</lastmod>
+    <data>
+        <display>
+        <title>Jedis Pipeline正确使用方式</title>
+        <pubTime>2017-09-27T03:35:10.000Z</pubTime>
+        
+        <tag>Redis</tag>
+         
+        <tag>Jedis</tag>
+         
+        <tag>Pipeline</tag>
+         
+         
+           
+             
+              <breadCrumb title="Redis" url="http://www.stephenzhang.me/categories/Redis/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/09/25/Redis%E5%AE%9E%E7%8E%B0%E8%AE%A1%E6%95%B0%E5%99%A8/</loc>
+    <lastmod>2017-09-27T07:20:41.000Z</lastmod>
+    <data>
+        <display>
+        <title>Redis实现计数器</title>
+        <pubTime>2017-09-25T07:30:13.000Z</pubTime>
+        
+        <tag>Redis</tag>
+         
+        <tag>NoSQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Redis" url="http://www.stephenzhang.me/categories/Redis/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/09/25/Redis%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</loc>
+    <lastmod>2017-09-26T10:30:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>Redis实现分布式锁</title>
+        <pubTime>2017-09-25T12:00:12.000Z</pubTime>
+        
+        <tag>Redis</tag>
+         
+        <tag>分布式</tag>
+         
+         
+           
+             
+              <breadCrumb title="Redis" url="http://www.stephenzhang.me/categories/Redis/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/09/16/Elasticsearch%E5%9F%BA%E7%A1%80/</loc>
+    <lastmod>2017-09-17T02:40:25.000Z</lastmod>
+    <data>
+        <display>
+        <title>Elasticsearch基础</title>
+        <pubTime>2017-09-16T13:41:08.000Z</pubTime>
+        
+        <tag>搜索引擎</tag>
+         
+         
+           
+             
+              <breadCrumb title="Elasticsearch" url="http://www.stephenzhang.me/categories/Elasticsearch/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/08/15/Spring-IoC%E5%AE%B9%E5%99%A8/</loc>
+    <lastmod>2017-09-09T02:29:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>Spring IoC容器学习笔记</title>
+        <pubTime>2017-08-15T13:23:29.000Z</pubTime>
+        
+        <tag>Java Web</tag>
+         
+        <tag>源码分析</tag>
+         
+        <tag>Spring</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spring" url="http://www.stephenzhang.me/categories/Spring/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/08/30/Maven%E8%BF%9C%E7%A8%8B%E9%83%A8%E7%BD%B2Tomcat8/</loc>
+    <lastmod>2017-08-30T04:40:38.000Z</lastmod>
+    <data>
+        <display>
+        <title>Maven远程部署Tomcat8</title>
+        <pubTime>2017-08-30T04:03:51.000Z</pubTime>
+        
+        <tag>Maven</tag>
+         
+        <tag>Tomcat</tag>
+         
+         
+           
+             
+              <breadCrumb title="Tomcat" url="http://www.stephenzhang.me/categories/Tomcat/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/08/07/Spring4%E9%9B%86%E6%88%90Hibernate5/</loc>
+    <lastmod>2017-08-07T13:28:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>Spring4集成Hibernate5</title>
+        <pubTime>2017-08-07T10:47:05.000Z</pubTime>
+        
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+        <tag>Spring</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spring" url="http://www.stephenzhang.me/categories/Spring/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/03/14/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BA%8C/</loc>
+    <lastmod>2017-08-04T13:28:07.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java并发编程(二)</title>
+        <pubTime>2017-03-14T12:20:52.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>MutiThread</tag>
+         
+         
+           
+             
+              <breadCrumb title="多线程" url="http://www.stephenzhang.me/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/04/14/Java-ORM%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</loc>
+    <lastmod>2017-08-04T13:27:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java ORM解决方案</title>
+        <pubTime>2017-04-14T07:31:14.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/07/20/Hibernate%E6%8A%93%E5%8F%96%E6%95%B0%E6%8D%AE/</loc>
+    <lastmod>2017-08-04T13:26:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hibernate抓取数据</title>
+        <pubTime>2017-07-20T04:39:26.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/06/21/Hibernate%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E2%80%94%E2%80%94%E5%80%BC%E7%B1%BB%E5%9E%8B%E6%98%A0%E5%B0%84/</loc>
+    <lastmod>2017-08-04T13:26:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hibernate基本使用——值类型映射</title>
+        <pubTime>2017-06-21T01:11:03.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/06/28/Hibernate%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E2%80%94%E2%80%94%E6%98%A0%E5%B0%84%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB/</loc>
+    <lastmod>2017-08-04T13:26:30.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hibernate基本使用——映射继承关系</title>
+        <pubTime>2017-06-28T12:46:58.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/07/13/Hibernate%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E2%80%94%E2%80%94%E6%98%A0%E5%B0%84%E9%9B%86%E5%90%88%E5%92%8C%E5%AE%9E%E4%BD%93%E5%85%B3%E8%81%94/</loc>
+    <lastmod>2017-08-04T13:25:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hibernate基本使用——映射集合</title>
+        <pubTime>2017-07-13T03:50:42.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/06/19/Hibernate%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E2%80%94%E2%80%94%E5%AE%9E%E4%BD%93%E6%98%A0%E5%B0%84/</loc>
+    <lastmod>2017-08-04T13:25:37.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hibernate基本使用——实体映射</title>
+        <pubTime>2017-06-19T11:44:51.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/07/13/Hibernate%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E2%80%94%E2%80%94%E5%AE%9E%E4%BD%93%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84/</loc>
+    <lastmod>2017-08-04T13:25:23.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hibernate基本使用——实体关联映射</title>
+        <pubTime>2017-07-13T13:19:37.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/07/18/Hibernate%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%92%8C%E7%8A%B6%E6%80%81/</loc>
+    <lastmod>2017-08-04T13:25:12.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hibernate对象生命周期和状态</title>
+        <pubTime>2017-07-18T02:41:30.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/07/29/Hibernate%E6%9F%A5%E8%AF%A2/</loc>
+    <lastmod>2017-08-04T13:24:58.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hibernate查询</title>
+        <pubTime>2017-07-29T02:15:58.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/07/17/Hibernate-insertable-false-updatable-false%E5%90%AB%E4%B9%89/</loc>
+    <lastmod>2017-08-04T13:24:50.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hibernate insertable = false, updatable = false含义</title>
+        <pubTime>2017-07-17T06:06:21.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/07/06/hexo-%E9%98%BF%E9%87%8C%E4%BA%91ECS-CentOS7-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
+    <lastmod>2017-08-04T13:24:27.000Z</lastmod>
+    <data>
+        <display>
+        <title>hexo + 阿里云ECS(CentOS7)搭建个人博客</title>
+        <pubTime>2017-07-06T08:50:56.000Z</pubTime>
+        
+        <tag>配置</tag>
+         
+         
+           
+             
+              <breadCrumb title="环境搭建" url="http://www.stephenzhang.me/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/07/19/BTM2-with-Hibernate5/</loc>
+    <lastmod>2017-08-04T13:22:51.000Z</lastmod>
+    <data>
+        <display>
+        <title>Bitronix with Hibernate5</title>
+        <pubTime>2017-07-19T09:15:19.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+        <tag>ORM</tag>
+         
+        <tag>Hibernate</tag>
+         
+        <tag>Java Web</tag>
+         
+        <tag>配置</tag>
+         
+         
+           
+             
+              <breadCrumb title="ORM" url="http://www.stephenzhang.me/categories/ORM/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/04/24/Android-Proguard/</loc>
+    <lastmod>2017-08-04T13:21:03.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android ProGuard</title>
+        <pubTime>2017-04-24T03:06:25.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="安卓开发" url="http://www.stephenzhang.me/categories/%E5%AE%89%E5%8D%93%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/02/16/Mac-OS-Sierra%E4%B8%8B%E7%BC%96%E8%AF%91Android-7-1-1/</loc>
+    <lastmod>2017-08-04T13:19:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>Mac OS Sierra下编译Android 7.1.1</title>
+        <pubTime>2017-02-16T11:46:37.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+         
+           
+             
+              <breadCrumb title="安卓开发" url="http://www.stephenzhang.me/categories/%E5%AE%89%E5%8D%93%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/04/08/%E7%94%A8PopupWindow%E5%AE%9E%E7%8E%B0%E9%94%AE%E7%9B%98%E4%B9%8B%E4%B8%8A%E7%9A%84%E6%82%AC%E6%B5%AE%E7%AA%97/</loc>
+    <lastmod>2017-08-04T13:19:15.000Z</lastmod>
+    <data>
+        <display>
+        <title>用PopupWindow实现键盘之上的悬浮窗</title>
+        <pubTime>2017-04-08T12:22:23.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+         
+           
+             
+              <breadCrumb title="安卓开发" url="http://www.stephenzhang.me/categories/%E5%AE%89%E5%8D%93%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/02/26/Android%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</loc>
+    <lastmod>2017-08-04T13:18:25.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android自定义字体解决方案</title>
+        <pubTime>2017-02-26T08:04:26.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+         
+           
+             
+              <breadCrumb title="安卓开发" url="http://www.stephenzhang.me/categories/%E5%AE%89%E5%8D%93%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/05/15/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/</loc>
+    <lastmod>2017-08-04T13:17:09.000Z</lastmod>
+    <data>
+        <display>
+        <title>数据库事务</title>
+        <pubTime>2017-05-15T11:14:29.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据库" url="http://www.stephenzhang.me/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/03/14/%E4%BD%BF%E7%94%A8Fork-Join%E6%9E%B6%E6%9E%84%E8%BF%9B%E8%A1%8C%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/</loc>
+    <lastmod>2017-08-04T13:16:39.000Z</lastmod>
+    <data>
+        <display>
+        <title>使用Fork/Join架构进行归并排序</title>
+        <pubTime>2017-03-14T15:37:51.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>MutiThread</tag>
+         
+         
+           
+             
+              <breadCrumb title="多线程" url="http://www.stephenzhang.me/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/01/20/Picasso%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
+    <lastmod>2017-08-04T13:15:40.000Z</lastmod>
+    <data>
+        <display>
+        <title>Picasso源码分析</title>
+        <pubTime>2017-01-20T11:03:32.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>源码分析</tag>
+         
+         
+           
+             
+              <breadCrumb title="安卓开发" url="http://www.stephenzhang.me/categories/%E5%AE%89%E5%8D%93%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/01/22/Java-ReferenceQueue%E5%AE%9E%E6%88%98/</loc>
+    <lastmod>2017-08-04T13:14:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java ReferenceQueue实战</title>
+        <pubTime>2017-01-22T14:28:09.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/02/01/iOS-ViewController/</loc>
+    <lastmod>2017-08-04T13:13:43.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS ViewController</title>
+        <pubTime>2017-02-01T10:56:10.000Z</pubTime>
+        
+        <tag>iOS</tag>
+         
+         
+           
+             
+              <breadCrumb title="iOS开发" url="http://www.stephenzhang.me/categories/iOS%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/02/01/iOS-UIView/</loc>
+    <lastmod>2017-08-04T13:12:51.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS UIView</title>
+        <pubTime>2017-02-01T12:37:56.000Z</pubTime>
+        
+        <tag>iOS</tag>
+         
+         
+           
+             
+              <breadCrumb title="iOS开发" url="http://www.stephenzhang.me/categories/iOS%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/02/14/Android-DataBinding%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2017-08-04T13:12:05.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android DataBinding（一）：基本使用</title>
+        <pubTime>2017-02-14T13:42:57.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+         
+           
+             
+              <breadCrumb title="安卓开发" url="http://www.stephenzhang.me/categories/%E5%AE%89%E5%8D%93%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/06/22/Java%E9%9D%9E%E9%98%BB%E5%A1%9E%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2017-06-22T10:00:22.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java非阻塞算法</title>
+        <pubTime>2017-06-22T08:18:13.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/03/13/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%B8%80/</loc>
+    <lastmod>2017-06-12T07:59:14.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java并发编程(一)</title>
+        <pubTime>2017-03-13T10:46:34.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>MutiThread</tag>
+         
+         
+           
+             
+              <breadCrumb title="多线程" url="http://www.stephenzhang.me/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/06/10/MySQL%E9%94%81%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2017-06-11T08:54:23.000Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL锁机制</title>
+        <pubTime>2017-06-10T09:55:11.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据库" url="http://www.stephenzhang.me/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/06/09/SQL%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2017-06-10T03:13:22.000Z</lastmod>
+    <data>
+        <display>
+        <title>SQL优化</title>
+        <pubTime>2017-06-09T06:41:57.000Z</pubTime>
+        
+        <tag>数据库</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据库" url="http://www.stephenzhang.me/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/03/13/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B-%E4%B8%89/</loc>
+    <lastmod>2017-03-27T11:17:51.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java内存模型(三)</title>
+        <pubTime>2017-03-13T10:44:31.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>MutiThread</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/03/11/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B-%E4%BA%8C/</loc>
+    <lastmod>2017-03-27T11:17:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java内存模型(二)</title>
+        <pubTime>2017-03-11T03:08:01.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>MutiThread</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/03/10/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B-%E4%B8%80/</loc>
+    <lastmod>2017-03-27T11:17:37.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java内存模型(一)</title>
+        <pubTime>2017-03-10T12:06:10.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>MutiThread</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://www.stephenzhang.me/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.stephenzhang.me/2017/02/15/Android-DataBinding%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2017-02-20T07:06:13.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android DataBinding（二）：源码解析</title>
+        <pubTime>2017-02-15T07:27:19.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Java</tag>
+         
+        <tag>源码分析</tag>
+         
+         
+           
+             
+              <breadCrumb title="安卓开发" url="http://www.stephenzhang.me/categories/%E5%AE%89%E5%8D%93%E5%BC%80%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+</urlset>

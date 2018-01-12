@@ -1,0 +1,1130 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
+
+
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Redis,NoSQL," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本篇概述Redis的使用场景及其代码实现，参考书籍Redis实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis实现计数器">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/09/25/Redis实现计数器/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="本篇概述Redis的使用场景及其代码实现，参考书籍Redis实战">
+<meta property="og:updated_time" content="2017-09-27T07:20:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis实现计数器">
+<meta name="twitter:description" content="本篇概述Redis的使用场景及其代码实现，参考书籍Redis实战">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/09/25/Redis实现计数器/"/>
+
+
+
+
+
+  <title> Redis实现计数器 | Stephen的小本本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Stephen的小本本</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/09/25/Redis实现计数器/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redis实现计数器
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-25T15:30:13+08:00">
+                2017-09-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇概述Redis的使用场景及其代码实现，参考书籍<a href="https://item.jd.com/11791607.html" target="_blank" rel="external">Redis实战</a></p>
+<a id="more"></a>
+<h1 id="计数器设计"><a href="#计数器设计" class="headerlink" title="计数器设计"></a>计数器设计</h1><p>有时可能要检测一段时间内后台的访问量，并根据趋势进行预测，若后台的访问频率非常高，例如20秒内有5000+次访问，那么采用Redis来做计数器是非常合适的(Redis高速读写特性令此时关系数据库显得笨拙)。</p>
+<p>要达到之前的需求，实现对网站访问量的监控和预测，可以定义好多不同的频率的技术器，并在技术器的名称当中进行标注，例如分别记录5秒内访问量，1分钟内访问量……</p>
+<p>计数器可以采用散列来实现，键值为Unix时间戳，值为在该时间片之内网站/后台的访问量。为了清理过期的数据，可以采用一个有序集合来保存计数器的信息，键值为计数器的名称，权值都设置成0，这样Redis在返回的时候便会按照计数器的名称来对返回结果进行排序。</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>下面来看一下对上述功能的Java实现：</p>
+<h2 id="更新及得到计数器"><a href="#更新及得到计数器" class="headerlink" title="更新及得到计数器"></a>更新及得到计数器</h2><pre><code>private static final int[] PRECISIONS = new int[]{ 5, 60, 300, 3600, 18000, 86400 };
+
+public void updateCounter() {
+    long now = System.currentTimeMillis() / 1000;
+    // 减少和服务器的直接通信，这里使用非事务型流水线来进行通信
+    Pipeline pipeline = jedis.pipelined();
+
+    for(int precision : PRECISIONS) {
+        int pnow = ((int) now / precision) * precision;
+        String hashKey = precision + &quot;:hits&quot;;
+        pipeline.zadd(&quot;known:&quot;, 0.0, hashKey);
+        pipeline.hincrBy(&quot;count:&quot; + hashKey, pnow + &quot;&quot;, 1);
+    }
+
+    pipeline.sync();
+}
+
+public Map&lt;Long, Long&gt; getCounter(int precision) {
+    // 检查参数的合法性
+    checkPrecision(precision);
+    Map&lt;String, String&gt; data = jedis.hgetAll(&quot;count:&quot; + precision + &quot;:hits&quot;);
+    return transformData(data);
+}
+
+private static Map&lt;Long, Long&gt; transformData(Map&lt;String, String&gt; data) {
+    // 排序方式，默认为升序
+    Map&lt;Long, Long&gt; result = new TreeMap&lt;&gt;(Long::compareTo);
+    for (Map.Entry&lt;String, String&gt; entry : data.entrySet()) {
+        result.put(Long.parseLong(entry.getKey()), Long.parseLong(entry.getValue()));
+    }
+    return result;
+}
+
+// 检验参数的有效性
+private static void checkPrecision(int precision) {
+    for (int p : PRECISIONS) {
+        if (p == precision)
+            return;
+    }
+    throw new IllegalArgumentException();
+}
+</code></pre><h2 id="清理过期数据"><a href="#清理过期数据" class="headerlink" title="清理过期数据"></a>清理过期数据</h2><p>为了防止数据过大而导致内存吃紧，定期清理过期数据是十分有必要的，在这里需要思考几个问题：</p>
+<ul>
+<li>不能使用EXPIRE特性，因为此特性只能应用于整个键值，并不能对内部数据应用。</li>
+<li>任何时候有可能有新的计数器被添加进来。</li>
+<li>在同一个时间内可能有多个清理操作同时运行。</li>
+<li>对于更新频率为一天的计数器执行一分钟一次清理为垃圾操作。</li>
+<li>如果一个计数器不包含任何数据，那么不应该对其执行清理。</li>
+</ul>
+<p>可以采用守护进程来进行过期数据清理，对于一分钟更新一次的计数器一分钟清理一次，5分钟的5分钟清理一次……清理之后每个计数器最多维持120个有效信息：</p>
+<pre><code>// 要保存的记录数量
+private static final int COUNT = 120;
+
+private volatile boolean quit = false;
+
+public void stopCleaning() {
+    quit = true;
+}
+
+public void clean() {
+    Pipeline pipeline = jedis.pipelined();
+    int passes = 0;
+    // 外层循环 一分钟一次
+    while (!quit) {
+        long start = System.currentTimeMillis() / 1000;
+        int index = 0;
+        // 遍历整个&quot;known:&quot;有序列表
+        while (index &lt; jedis.zcard(&quot;known:&quot;) &amp;&amp; !quit) {
+            Set&lt;String&gt; hashes = jedis.zrange(&quot;known&quot;, index, index);
+            index += 1;
+            // 此时没有计数器
+            if (hashes == null || hashes.isEmpty()) {
+                break;
+            }
+            String hash = (String) hashes.toArray()[0];
+            // 获取精度
+            int prec = Integer.parseInt(hash.split(&quot;:&quot;)[0]);
+            // 看此时是否需要进行清理
+            int bprec = prec / 60 == 0 ? 1 : prec / 60;
+            // 此时不需要进行清理，遍历下一个
+            if (passes % bprec != 0) {
+                continue;
+            }
+
+            // 用来看哪些数据需要删除，在此时间之前的统统删除，最多保留COUNT个记录
+            long cutoff = System.currentTimeMillis() / 1000 - COUNT * prec;
+            String hkey = &quot;count:&quot; + hash;
+            Set&lt;String&gt; keys = jedis.hkeys(hkey);
+            Set&lt;Long&gt; times = transformToLong(keys);
+            // 需要删除的
+            Set&lt;Long&gt; removals = ((SortedSet&lt;Long&gt;) times).headSet(cutoff);
+
+            if (!removals.isEmpty()) {
+                for (Long removal : removals) {
+                    pipeline.hdel(hkey, removal.toString());
+                }
+                pipeline.sync();
+            }
+        }
+        passes += 1;
+        // 计算一共用了多长时间
+        long duration = System.currentTimeMillis() / 1000 - start + 1;
+        try {
+            // 超过一分钟则只休眠一秒，否则休眠剩下的时间
+            Thread.sleep(duration &gt; 60 ? 1000 : (60 - duration) * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre><p>最后，附上完整代码：</p>
+<pre><code>public class Counter {
+
+    private Jedis jedis;
+    private volatile boolean quit = false;
+
+    public Counter() {
+        jedis = new Jedis(&quot;127.0.0.1&quot;, 6379);
+    }
+
+    // 精度
+    private static final int[] PRECISIONS = new int[]{5, 60, 300, 3600, 18000, 86400};
+    // 要保存的记录数量
+    private static final int COUNT = 120;
+
+    public void updateCounter() {
+        long now = System.currentTimeMillis() / 1000;
+        // 减少和服务器的直接通信，这里使用非事务型流水线来进行通信
+        Pipeline pipeline = jedis.pipelined();
+
+        for (int precision : PRECISIONS) {
+            int pnow = ((int) now / precision) * precision;
+            String hashKey = precision + &quot;:hits&quot;;
+            pipeline.zadd(&quot;known:&quot;, 0.0, hashKey);
+            pipeline.hincrBy(&quot;count:&quot; + hashKey, pnow + &quot;&quot;, 1);
+        }
+
+        pipeline.sync();
+    }
+
+    public Map&lt;Long, Long&gt; getCounter(int precision) {
+        // 检查参数的合法性
+        checkPrecision(precision);
+        Map&lt;String, String&gt; data = jedis.hgetAll(&quot;count:&quot; + precision + &quot;:hits&quot;);
+        return transformData(data);
+    }
+
+    private static Map&lt;Long, Long&gt; transformData(Map&lt;String, String&gt; data) {
+        Map&lt;Long, Long&gt; result = new TreeMap&lt;&gt;(Long::compareTo);
+        for (Map.Entry&lt;String, String&gt; entry : data.entrySet()) {
+            result.put(Long.parseLong(entry.getKey()), Long.parseLong(entry.getValue()));
+        }
+        return result;
+    }
+
+    private static void checkPrecision(int precision) {
+        for (int p : PRECISIONS) {
+            if (p == precision)
+                return;
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public void stopCleaning() {
+        quit = true;
+    }
+
+    public void clean() {
+        Pipeline pipeline = jedis.pipelined();
+        int passes = 0;
+        while (!quit) {
+            long start = System.currentTimeMillis() / 1000;
+            int index = 0;
+            while (index &lt; jedis.zcard(&quot;known:&quot;) &amp;&amp; !quit) {
+                Set&lt;String&gt; hashes = jedis.zrange(&quot;known&quot;, index, index);
+                index += 1;
+                // 此时没有计数器
+                if (hashes == null || hashes.isEmpty()) {
+                    break;
+                }
+                String hash = (String) hashes.toArray()[0];
+                // 获取精度
+                int prec = Integer.parseInt(hash.split(&quot;:&quot;)[0]);
+                // 看此时是否需要进行清理
+                int bprec = prec / 60 == 0 ? 1 : prec / 60;
+                // 此时不需要进行清理，遍历下一个
+                if (passes % bprec != 0) {
+                    continue;
+                }
+
+                // 用来看哪些数据需要删除，在此时间之前的统统删除，最多保留COUNT个记录
+                long cutoff = System.currentTimeMillis() / 1000 - COUNT * prec;
+                String hkey = &quot;count:&quot; + hash;
+                Set&lt;String&gt; keys = jedis.hkeys(hkey);
+                Set&lt;Long&gt; times = transformToLong(keys);
+                // 需要删除的
+                Set&lt;Long&gt; removals = ((SortedSet&lt;Long&gt;) times).headSet(cutoff);
+
+                if (!removals.isEmpty()) {
+                    for (Long removal : removals) {
+                        pipeline.hdel(hkey, removal.toString());
+                    }
+                    pipeline.sync();
+                }
+            }
+            passes += 1;
+            long duration = System.currentTimeMillis() / 1000 - start + 1;
+            try {
+                Thread.sleep(duration &gt; 60 ? 1000 : (60 - duration) * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static Set&lt;Long&gt; transformToLong(Set&lt;String&gt; keys) {
+        Set&lt;Long&gt; result = new TreeSet&lt;&gt;(Long::compareTo);
+        for (String key : keys) {
+            result.add(Long.parseLong(key));
+        }
+
+        return result;
+    }
+
+    public void close() {
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
+
+}
+</code></pre><h2 id="与Java-Web项目集成"><a href="#与Java-Web项目集成" class="headerlink" title="与Java Web项目集成"></a>与Java Web项目集成</h2><p>下面来看一下怎么和刚才的计数器怎么和Java Web项目进行集成，首先将刚才的代码稍作修改：</p>
+<pre><code>public class RedisAccessCounter implements Runnable {
+    private Jedis jedis;
+    private volatile boolean quit = false;
+    private Thread cleanThread;
+
+    public RedisAccessCounter(String host, int port) {
+        jedis = new Jedis(host, port);
+    }
+
+    // 精度
+    private static final int[] PRECISIONS = new int[]{5, 60, 300, 3600, 18000, 86400};
+    // 要保存的记录数量
+    private static final int COUNT = 120;
+
+    public void updateCounter() {
+        long now = System.currentTimeMillis() / 1000;
+        // 减少和服务器的直接通信，这里使用非事务型流水线来进行通信
+        Pipeline pipeline = jedis.pipelined();
+
+        for (int precision : PRECISIONS) {
+            int pnow = ((int) now / precision) * precision;
+            String hashKey = precision + &quot;:hits&quot;;
+            pipeline.zadd(&quot;known:&quot;, 0.0, hashKey);
+            pipeline.hincrBy(&quot;count:&quot; + hashKey, pnow + &quot;&quot;, 1);
+        }
+
+        pipeline.sync();
+    }
+
+    public Map&lt;Long, Long&gt; getCounter(int precision) {
+        // 检查参数的合法性
+        checkPrecision(precision);
+        Map&lt;String, String&gt; data = jedis.hgetAll(&quot;count:&quot; + precision + &quot;:hits&quot;);
+        return transformData(data);
+    }
+
+    private static Map&lt;Long, Long&gt; transformData(Map&lt;String, String&gt; data) {
+        Map&lt;Long, Long&gt; result = new TreeMap&lt;&gt;(Long::compareTo);
+        for (Map.Entry&lt;String, String&gt; entry : data.entrySet()) {
+            result.put(Long.parseLong(entry.getKey()), Long.parseLong(entry.getValue()));
+        }
+        return result;
+    }
+
+    private static void checkPrecision(int precision) {
+        for (int p : PRECISIONS) {
+            if (p == precision)
+                return;
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public void stopCleaning() {
+        quit = true;
+    }
+
+    public void clean() {
+        cleanThread = new Thread(this);
+        cleanThread.setDaemon(true);
+        cleanThread.start();
+    }
+
+    private static Set&lt;Long&gt; transformToLong(Set&lt;String&gt; keys) {
+        Set&lt;Long&gt; result = new TreeSet&lt;&gt;(Long::compareTo);
+        for (String key : keys) {
+            result.add(Long.parseLong(key));
+        }
+
+        return result;
+    }
+
+    public void close() {
+        stopCleaning();
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
+
+    @Override
+    public void run() {
+        Pipeline pipeline = jedis.pipelined();
+        int passes = 0;
+        while (!quit) {
+            long start = System.currentTimeMillis() / 1000;
+            int index = 0;
+            while (index &lt; jedis.zcard(&quot;known:&quot;) &amp;&amp; !quit) {
+                Set&lt;String&gt; hashes = jedis.zrange(&quot;known&quot;, index, index);
+                index += 1;
+                // 此时没有计数器
+                if (hashes == null || hashes.isEmpty()) {
+                    break;
+                }
+                String hash = (String) hashes.toArray()[0];
+                // 获取精度
+                int prec = Integer.parseInt(hash.split(&quot;:&quot;)[0]);
+                // 看此时是否需要进行清理
+                int bprec = prec / 60 == 0 ? 1 : prec / 60;
+                // 此时不需要进行清理，遍历下一个
+                if (passes % bprec != 0) {
+                    continue;
+                }
+
+                // 用来看哪些数据需要删除，在此时间之前的统统删除，最多保留COUNT个记录
+                long cutoff = System.currentTimeMillis() / 1000 - COUNT * prec;
+                String hkey = &quot;count:&quot; + hash;
+                Set&lt;String&gt; keys = jedis.hkeys(hkey);
+                Set&lt;Long&gt; times = transformToLong(keys);
+                // 需要删除的
+                Set&lt;Long&gt; removals = ((SortedSet&lt;Long&gt;) times).headSet(cutoff);
+
+                if (!removals.isEmpty()) {
+                    for (Long removal : removals) {
+                        pipeline.hdel(hkey, removal.toString());
+                    }
+                    pipeline.sync();
+                }
+            }
+            passes += 1;
+            long duration = System.currentTimeMillis() / 1000 - start + 1;
+            try {
+                Thread.sleep(duration &gt; 60 ? 1000 : (60 - duration) * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+</code></pre><p>最好的方法是定义一个Filter，然后每当访问指定页面的时候更新计数器：</p>
+<pre><code>public class AccessCounterFilter implements Filter {
+
+    private RedisAccessCounter counter;
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        String host = filterConfig.getInitParameter(&quot;jedis.host&quot;);
+        String port = filterConfig.getInitParameter(&quot;jedis.port&quot;);
+        counter = new RedisAccessCounter(host, Integer.parseInt(port));
+        counter.clean();
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        counter.updateCounter();
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    @Override
+    public void destroy() {
+        counter.close();
+    }
+}
+</code></pre><p>web.xml:</p>
+<pre><code>&lt;filter&gt;
+    &lt;filter-name&gt;access-counter-filter&lt;/filter-name&gt;
+    &lt;filter-class&gt;com.stephen.zhihu.base.AccessCounterFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;jedis.host&lt;/param-name&gt;
+        &lt;param-value&gt;127.0.0.1&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;jedis.port&lt;/param-name&gt;
+        &lt;param-value&gt;6379&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/filter&gt;
+
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;access-counter-filter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+            <a href="/tags/NoSQL/" rel="tag"># NoSQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/23/Redis应用——会话管理/" rel="next" title="Redis会话管理">
+                <i class="fa fa-chevron-left"></i> Redis会话管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/25/Redis实现分布式锁/" rel="prev" title="Redis实现分布式锁">
+                Redis实现分布式锁 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Stephen Zhang" />
+          <p class="site-author-name" itemprop="name">Stephen Zhang</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#计数器设计"><span class="nav-number">1.</span> <span class="nav-text">计数器设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#更新及得到计数器"><span class="nav-number">2.1.</span> <span class="nav-text">更新及得到计数器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#清理过期数据"><span class="nav-number">2.2.</span> <span class="nav-text">清理过期数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与Java-Web项目集成"><span class="nav-number">2.3.</span> <span class="nav-text">与Java Web项目集成</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Stephen Zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

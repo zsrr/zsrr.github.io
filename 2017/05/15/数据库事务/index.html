@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,8 +18,12 @@
 
 
 
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
 
 
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
 
 
 
@@ -84,25 +88,16 @@
 
 
 
-<meta name="description" content="数据库事务的基本概念一个数据库事务包含了一系列对数据库的读／写操作。事务的回滚提供了从失败状态中恢复到正常状态的方法，同时隔离方法为并发访问数据库提供了可能。
-ACID性质
-原子性(Atomicity)：事务作为一个整体被提交，要么全部执行，要么全部不执行。
-一致性(Consistency)：事务的提交确保数据库从一个一致状态转移到另外一个一致状态，一致状态是指数据库中的数据应该满足完整性约束。">
+<meta name="description" content="数据库事务基础概念，应该经常回来翻阅">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库事务">
-<meta property="og:url" content="http://yoursite.com/2017/05/15/数据库事务/index.html">
-<meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="数据库事务的基本概念一个数据库事务包含了一系列对数据库的读／写操作。事务的回滚提供了从失败状态中恢复到正常状态的方法，同时隔离方法为并发访问数据库提供了可能。
-ACID性质
-原子性(Atomicity)：事务作为一个整体被提交，要么全部执行，要么全部不执行。
-一致性(Consistency)：事务的提交确保数据库从一个一致状态转移到另外一个一致状态，一致状态是指数据库中的数据应该满足完整性约束。">
-<meta property="og:updated_time" content="2017-05-15T13:37:13.000Z">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/05/15/数据库事务/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="数据库事务基础概念，应该经常回来翻阅">
+<meta property="og:updated_time" content="2017-08-04T13:17:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库事务">
-<meta name="twitter:description" content="数据库事务的基本概念一个数据库事务包含了一系列对数据库的读／写操作。事务的回滚提供了从失败状态中恢复到正常状态的方法，同时隔离方法为并发访问数据库提供了可能。
-ACID性质
-原子性(Atomicity)：事务作为一个整体被提交，要么全部执行，要么全部不执行。
-一致性(Consistency)：事务的提交确保数据库从一个一致状态转移到另外一个一致状态，一致状态是指数据库中的数据应该满足完整性约束。">
+<meta name="twitter:description" content="数据库事务基础概念，应该经常回来翻阅">
 
 
 
@@ -110,12 +105,12 @@ ACID性质
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -130,13 +125,13 @@ ACID性质
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/15/数据库事务/"/>
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/05/15/数据库事务/"/>
 
 
 
 
 
-  <title> 数据库事务 | Stephen's blog </title>
+  <title> 数据库事务 | Stephen的小本本 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -167,7 +162,7 @@ ACID性质
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">Stephen's blog</span>
+      <span class="site-title">Stephen的小本本</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -259,7 +254,7 @@ ACID性质
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/数据库事务/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/05/15/数据库事务/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -268,9 +263,9 @@ ACID性质
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
+    <meta itemprop="name" content="Stephen的小本本">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
     </span>
   </span>
 
@@ -334,16 +329,6 @@ ACID性质
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/05/15/数据库事务/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/15/数据库事务/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -366,7 +351,8 @@ ACID性质
       
 
       
-        <h1 id="数据库事务的基本概念"><a href="#数据库事务的基本概念" class="headerlink" title="数据库事务的基本概念"></a>数据库事务的基本概念</h1><p>一个数据库事务包含了一系列对数据库的读／写操作。事务的回滚提供了从失败状态中恢复到正常状态的方法，同时隔离方法为并发访问数据库提供了可能。</p>
+        <p>数据库事务基础概念，应该经常回来翻阅<br><a id="more"></a></p>
+<h1 id="数据库事务的基本概念"><a href="#数据库事务的基本概念" class="headerlink" title="数据库事务的基本概念"></a>数据库事务的基本概念</h1><p>一个数据库事务包含了一系列对数据库的读／写操作。事务的回滚提供了从失败状态中恢复到正常状态的方法，同时隔离方法为并发访问数据库提供了可能。</p>
 <h1 id="ACID性质"><a href="#ACID性质" class="headerlink" title="ACID性质"></a>ACID性质</h1><ul>
 <li>原子性(Atomicity)：事务作为一个整体被提交，要么全部执行，要么全部不执行。</li>
 <li>一致性(Consistency)：事务的提交确保数据库从一个一致状态转移到另外一个一致状态，一致状态是指数据库中的数据应该满足完整性约束。</li>
@@ -610,10 +596,6 @@ commit; #3
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/05/15/数据库事务/"
-           data-title="数据库事务" data-url="http://yoursite.com/2017/05/15/数据库事务/">
-      </div>
-    
   </div>
 
 
@@ -651,14 +633,14 @@ commit; #3
                src="/uploads/avatar.png"
                alt="Stephen Zhang" />
           <p class="site-author-name" itemprop="name">Stephen Zhang</p>
-          <p class="site-description motion-element" itemprop="description">zsr的小本本</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
         </div>
         <nav class="site-state motion-element">
         
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -667,7 +649,7 @@ commit; #3
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -676,7 +658,7 @@ commit; #3
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -747,7 +729,7 @@ commit; #3
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -815,13 +797,6 @@ commit; #3
   
   
 
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
-
-
-
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
@@ -837,37 +812,32 @@ commit; #3
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"zsrcodingme"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
   
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
+
+
+
+
+	
+
+
+
+
+
   
 
 
 
 
 
+  
 
-
-
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
 
 
 
@@ -880,6 +850,21 @@ commit; #3
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

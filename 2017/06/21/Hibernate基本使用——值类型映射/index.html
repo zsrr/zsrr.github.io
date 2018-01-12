@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,8 +18,12 @@
 
 
 
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
 
 
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
 
 
 
@@ -84,28 +88,16 @@
 
 
 
-<meta name="description" content="上一篇讲了实体映射及主键生成策略，这一篇主要讲持久化类属性的映射策略。
-映射基本属性基本类型映射基本类型的映射规则如下：
-
-如果属性是基元或者基元包装器，如String, BigInteger, BigDecimal, Date, Calendar, byte[], char[]，则它们会被自动持久化。
-如果属性所属的类标记为@Embeddable，那么Hibernate会将其映射为多列，稍后再说">
+<meta name="description" content="上一篇讲了实体映射及主键生成策略，这一篇主要讲持久化类属性的映射策略。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hibernate基本使用——值类型映射">
-<meta property="og:url" content="http://yoursite.com/2017/06/21/Hibernate基本使用——值类型映射/index.html">
-<meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="上一篇讲了实体映射及主键生成策略，这一篇主要讲持久化类属性的映射策略。
-映射基本属性基本类型映射基本类型的映射规则如下：
-
-如果属性是基元或者基元包装器，如String, BigInteger, BigDecimal, Date, Calendar, byte[], char[]，则它们会被自动持久化。
-如果属性所属的类标记为@Embeddable，那么Hibernate会将其映射为多列，稍后再说">
-<meta property="og:updated_time" content="2017-06-21T17:12:14.000Z">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/06/21/Hibernate基本使用——值类型映射/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="上一篇讲了实体映射及主键生成策略，这一篇主要讲持久化类属性的映射策略。">
+<meta property="og:updated_time" content="2017-08-04T13:26:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hibernate基本使用——值类型映射">
-<meta name="twitter:description" content="上一篇讲了实体映射及主键生成策略，这一篇主要讲持久化类属性的映射策略。
-映射基本属性基本类型映射基本类型的映射规则如下：
-
-如果属性是基元或者基元包装器，如String, BigInteger, BigDecimal, Date, Calendar, byte[], char[]，则它们会被自动持久化。
-如果属性所属的类标记为@Embeddable，那么Hibernate会将其映射为多列，稍后再说">
+<meta name="twitter:description" content="上一篇讲了实体映射及主键生成策略，这一篇主要讲持久化类属性的映射策略。">
 
 
 
@@ -113,12 +105,12 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -133,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/21/Hibernate基本使用——值类型映射/"/>
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/06/21/Hibernate基本使用——值类型映射/"/>
 
 
 
 
 
-  <title> Hibernate基本使用——值类型映射 | Stephen's blog </title>
+  <title> Hibernate基本使用——值类型映射 | Stephen的小本本 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -170,7 +162,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">Stephen's blog</span>
+      <span class="site-title">Stephen的小本本</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -262,7 +254,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/21/Hibernate基本使用——值类型映射/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/06/21/Hibernate基本使用——值类型映射/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -271,9 +263,9 @@
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
+    <meta itemprop="name" content="Stephen的小本本">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
     </span>
   </span>
 
@@ -337,16 +329,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/06/21/Hibernate基本使用——值类型映射/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/21/Hibernate基本使用——值类型映射/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -369,7 +351,7 @@
       
 
       
-        <p>上一篇讲了实体映射及主键生成策略，这一篇主要讲持久化类属性的映射策略。</p>
+        <p>上一篇讲了实体映射及主键生成策略，这一篇主要讲持久化类属性的映射策略。<br><a id="more"></a></p>
 <h1 id="映射基本属性"><a href="#映射基本属性" class="headerlink" title="映射基本属性"></a>映射基本属性</h1><h2 id="基本类型映射"><a href="#基本类型映射" class="headerlink" title="基本类型映射"></a>基本类型映射</h2><p>基本类型的映射规则如下：</p>
 <ul>
 <li>如果属性是基元或者基元包装器，如String, BigInteger, BigDecimal, Date, Calendar, byte[], char[]，则它们会被自动持久化。</li>
@@ -918,10 +900,6 @@ protected MonetaryAmount monetaryAmount;
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/06/21/Hibernate基本使用——值类型映射/"
-           data-title="Hibernate基本使用——值类型映射" data-url="http://yoursite.com/2017/06/21/Hibernate基本使用——值类型映射/">
-      </div>
-    
   </div>
 
 
@@ -959,14 +937,14 @@ protected MonetaryAmount monetaryAmount;
                src="/uploads/avatar.png"
                alt="Stephen Zhang" />
           <p class="site-author-name" itemprop="name">Stephen Zhang</p>
-          <p class="site-description motion-element" itemprop="description">zsr的小本本</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
         </div>
         <nav class="site-state motion-element">
         
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -975,7 +953,7 @@ protected MonetaryAmount monetaryAmount;
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -984,7 +962,7 @@ protected MonetaryAmount monetaryAmount;
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1055,7 +1033,7 @@ protected MonetaryAmount monetaryAmount;
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -1123,13 +1101,6 @@ protected MonetaryAmount monetaryAmount;
   
   
 
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
-
-
-
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
@@ -1145,37 +1116,32 @@ protected MonetaryAmount monetaryAmount;
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"zsrcodingme"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
   
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
+
+
+
+
+	
+
+
+
+
+
   
 
 
 
 
 
+  
 
-
-
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
 
 
 
@@ -1188,6 +1154,21 @@ protected MonetaryAmount monetaryAmount;
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

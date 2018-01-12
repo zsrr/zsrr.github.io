@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,8 +18,12 @@
 
 
 
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
 
 
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
 
 
 
@@ -84,21 +88,18 @@
 
 
 
-<meta name="description" content="为什么要编译源码安卓进阶的最好方式就是Read the fucking source code!不去研究源码的程序员不是好程序员，呵呵呵……好吧，其实笔者要编译源码的原因是因为想研究DataBinding源码结果发现自带的sdk看不到核心逻辑，而笔者却是一个处女座……
-流程配置reporepo是google为了方便Android源代码的管理，用一系列Python脚本封装git命令做成的工具，具体的">
+<meta name="description" content="网速不好就找个网速好的地方，破网速太tm恶心了">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mac OS Sierra下编译Android 7.1.1">
-<meta property="og:url" content="http://yoursite.com/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/index.html">
-<meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="为什么要编译源码安卓进阶的最好方式就是Read the fucking source code!不去研究源码的程序员不是好程序员，呵呵呵……好吧，其实笔者要编译源码的原因是因为想研究DataBinding源码结果发现自带的sdk看不到核心逻辑，而笔者却是一个处女座……
-流程配置reporepo是google为了方便Android源代码的管理，用一系列Python脚本封装git命令做成的工具，具体的">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="网速不好就找个网速好的地方，破网速太tm恶心了">
 <meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-16%20%E4%B8%8B%E5%8D%889.38.12.png">
 <meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-16%20%E4%B8%8B%E5%8D%889.40.01.png">
-<meta property="og:updated_time" content="2017-02-16T13:49:05.000Z">
+<meta property="og:updated_time" content="2017-08-04T13:19:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac OS Sierra下编译Android 7.1.1">
-<meta name="twitter:description" content="为什么要编译源码安卓进阶的最好方式就是Read the fucking source code!不去研究源码的程序员不是好程序员，呵呵呵……好吧，其实笔者要编译源码的原因是因为想研究DataBinding源码结果发现自带的sdk看不到核心逻辑，而笔者却是一个处女座……
-流程配置reporepo是google为了方便Android源代码的管理，用一系列Python脚本封装git命令做成的工具，具体的">
+<meta name="twitter:description" content="网速不好就找个网速好的地方，破网速太tm恶心了">
 <meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-16%20%E4%B8%8B%E5%8D%889.38.12.png">
 
 
@@ -107,12 +108,12 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -127,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/"/>
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/"/>
 
 
 
 
 
-  <title> Mac OS Sierra下编译Android 7.1.1 | Stephen's blog </title>
+  <title> Mac OS Sierra下编译Android 7.1.1 | Stephen的小本本 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -164,7 +165,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">Stephen's blog</span>
+      <span class="site-title">Stephen的小本本</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -256,7 +257,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -265,9 +266,9 @@
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
+    <meta itemprop="name" content="Stephen的小本本">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
     </span>
   </span>
 
@@ -331,16 +332,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -363,7 +354,8 @@
       
 
       
-        <h1 id="为什么要编译源码"><a href="#为什么要编译源码" class="headerlink" title="为什么要编译源码"></a>为什么要编译源码</h1><p>安卓进阶的最好方式就是Read the fucking source code!不去研究源码的程序员不是好程序员，呵呵呵……好吧，其实笔者要编译源码的原因是因为想研究DataBinding源码结果发现自带的sdk看不到核心逻辑，而笔者却是一个处女座……</p>
+        <p>网速不好就找个网速好的地方，破网速太tm恶心了<br><a id="more"></a></p>
+<h1 id="为什么要编译源码"><a href="#为什么要编译源码" class="headerlink" title="为什么要编译源码"></a>为什么要编译源码</h1><p>安卓进阶的最好方式就是Read the fucking source code!不去研究源码的程序员不是好程序员，呵呵呵……好吧，其实笔者要编译源码的原因是因为想研究DataBinding源码结果发现自带的sdk看不到核心逻辑，而笔者却是一个处女座……</p>
 <h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><h2 id="配置repo"><a href="#配置repo" class="headerlink" title="配置repo"></a>配置repo</h2><p>repo是google为了方便Android源代码的管理，用一系列Python脚本封装git命令做成的工具，具体的请看：<a href="http://ticktick.blog.51cto.com/823160/1653304" target="_blank" rel="external">Repo的使用</a>  </p>
 <p>安装代码两行：</p>
 <pre><code>$ curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo
@@ -500,10 +492,6 @@ $ development/tools/idegen/idegen.sh
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/"
-           data-title="Mac OS Sierra下编译Android 7.1.1" data-url="http://yoursite.com/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/">
-      </div>
-    
   </div>
 
 
@@ -541,14 +529,14 @@ $ development/tools/idegen/idegen.sh
                src="/uploads/avatar.png"
                alt="Stephen Zhang" />
           <p class="site-author-name" itemprop="name">Stephen Zhang</p>
-          <p class="site-description motion-element" itemprop="description">zsr的小本本</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
         </div>
         <nav class="site-state motion-element">
         
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -557,7 +545,7 @@ $ development/tools/idegen/idegen.sh
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -566,7 +554,7 @@ $ development/tools/idegen/idegen.sh
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -637,7 +625,7 @@ $ development/tools/idegen/idegen.sh
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -705,13 +693,6 @@ $ development/tools/idegen/idegen.sh
   
   
 
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
-
-
-
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
@@ -727,37 +708,32 @@ $ development/tools/idegen/idegen.sh
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"zsrcodingme"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
   
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
+
+
+
+
+	
+
+
+
+
+
   
 
 
 
 
 
+  
 
-
-
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
 
 
 
@@ -770,6 +746,21 @@ $ development/tools/idegen/idegen.sh
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

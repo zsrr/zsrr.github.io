@@ -1,0 +1,875 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
+
+
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据库,ORM,Hibernate,Java Web,配置," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="记录一下开源JTA事务管理器Bitronix与Hibernate的集成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bitronix with Hibernate5">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/07/19/BTM2-with-Hibernate5/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="记录一下开源JTA事务管理器Bitronix与Hibernate的集成">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-07-19%20%E4%B8%8B%E5%8D%885.30.51.png">
+<meta property="og:updated_time" content="2017-08-04T13:22:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bitronix with Hibernate5">
+<meta name="twitter:description" content="记录一下开源JTA事务管理器Bitronix与Hibernate的集成">
+<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-07-19%20%E4%B8%8B%E5%8D%885.30.51.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/07/19/BTM2-with-Hibernate5/"/>
+
+
+
+
+
+  <title> Bitronix with Hibernate5 | Stephen的小本本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Stephen的小本本</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/07/19/BTM2-with-Hibernate5/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Bitronix with Hibernate5
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-19T17:15:19+08:00">
+                2017-07-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ORM/" itemprop="url" rel="index">
+                    <span itemprop="name">ORM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>记录一下开源JTA事务管理器Bitronix与Hibernate的集成<br><a id="more"></a></p>
+<p>一般情况下，JTA是和J2EE容器绑定起来的。要想在独立的Java环境下使用JTA，则要用第三方库。笔者采用Bitronix(BTM2)。本篇讲述如何整合BTM2 + Hibernate5开发环境。</p>
+<h1 id="创建jndi-properties文件"><a href="#创建jndi-properties文件" class="headerlink" title="创建jndi.properties文件"></a>创建jndi.properties文件</h1><p>第一步，是要在classpath下建立名为jndi.properties的文件，最好放在<strong>resource</strong>文件目录下，整个项目结构如图所示：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-07-19%20%E4%B8%8B%E5%8D%885.30.51.png" alt=""><br>在jndi.properties文件里面写入：</p>
+<pre><code>java.naming.factory.initial=bitronix.tm.jndi.BitronixInitialContextFactory
+</code></pre><h1 id="创建数据源"><a href="#创建数据源" class="headerlink" title="创建数据源"></a>创建数据源</h1><p>需要用PoolingDataSource建立数据源，并在persistence.xml文件当中引用它。</p>
+<p>main函数：</p>
+<pre><code>public static void main(String[] args) throws SystemException,
+        NotSupportedException,
+        HeuristicRollbackException,
+        HeuristicMixedException,
+        RollbackException {
+    PoolingDataSource ds = new PoolingDataSource();
+    ds.setMinPoolSize(1);
+    ds.setMaxPoolSize(10);
+    ds.setPreparedStatementCacheSize(10);
+    // 此处设置的名称应该和persistence.xml文件中&lt;jta-data-source&gt;节点一致
+    ds.setUniqueName(&quot;MySQLDataSource&quot;);
+
+    ds.setIsolationLevel(&quot;READ_COMMITTED&quot;);
+    ds.setAllowLocalTransactions(true);
+
+    ds.setClassName(&quot;bitronix.tm.resource.jdbc.lrc.LrcXADataSource&quot;);
+    ds.getDriverProperties().put(&quot;url&quot;, &quot;jdbc:mysql://localhost:3306/hibernate_test&quot;);
+    ds.getDriverProperties().put(&quot;driverClassName&quot;, &quot;com.mysql.jdbc.Driver&quot;);
+    ds.getDriverProperties().put(&quot;user&quot;, &quot;root&quot;);
+    ds.getDriverProperties().put(&quot;password&quot;, &quot;xxxxxxx&quot;);
+
+    ds.init();
+
+    ...
+}
+</code></pre><p>persistence.xml:</p>
+<pre><code>&lt;persistence-unit name=&quot;Hibernate&quot;&gt;
+    &lt;provider&gt;org.hibernate.jpa.HibernatePersistenceProvider&lt;/provider&gt;
+    &lt;jta-data-source&gt;MySQLDataSource&lt;/jta-data-source&gt;
+    &lt;class&gt;com.stephen.hibernatelearning.Item&lt;/class&gt;
+    &lt;properties&gt;
+        &lt;property name=&quot;hibernate.show_sql&quot; value=&quot;true&quot;/&gt;
+        &lt;property name=&quot;hibernate.format_sql&quot; value=&quot;true&quot;/&gt;
+        &lt;property name=&quot;hbm2ddl.auto&quot; value=&quot;create&quot;/&gt;
+        &lt;property name=&quot;hibernate.transaction.jta.platform&quot; 
+                  value=&quot;org.hibernate.service.jta.platform.internal.BitronixJtaPlatform&quot; /&gt;
+    &lt;/properties&gt;
+&lt;/persistence-unit&gt;
+</code></pre><p>注意persistence.xml中最后的属性<strong>hibernate.transaction.jta.platform</strong>，以及<strong>&lt;jta-data-source&gt;</strong>节点中的值应该和刚才<strong>PoolingDataSource#setUniqueName()</strong>中设置的值对应起来。</p>
+<h1 id="JNDI查找UserTransaction"><a href="#JNDI查找UserTransaction" class="headerlink" title="JNDI查找UserTransaction"></a>JNDI查找UserTransaction</h1><p><strong>UserTransaction</strong>是JTA的核心，需要通过jndi找到它。可以采用<strong>InitialContext</strong>类寻找：</p>
+<pre><code>public static void main(String[] args) throws SystemException,
+        NotSupportedException,
+        HeuristicRollbackException,
+        HeuristicMixedException,
+        RollbackException, NamingException {
+    ...
+
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory(&quot;Hibernate&quot;);
+
+    Context context = new InitialContext();
+    UserTransaction tx = (UserTransaction) context.lookup(&quot;java:comp/UserTransaction&quot;);
+
+    ...
+}
+</code></pre><p>接下来就能愉快的使用了：</p>
+<pre><code>public static void main(String[] args) throws SystemException,
+        NotSupportedException,
+        HeuristicRollbackException,
+        HeuristicMixedException,
+        RollbackException, NamingException {
+    ...
+
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory(&quot;Hibernate&quot;);
+
+    Context context = new InitialContext();
+    UserTransaction tx = (UserTransaction) context.lookup(&quot;java:comp/UserTransaction&quot;);
+
+    tx.begin();
+    EntityManager em = emf.createEntityManager();
+    em.persist(new Item(&quot;T&quot;));
+    tx.commit();
+    em.close();
+    emf.close();
+    ds.close();
+    TransactionManagerServices.getTransactionManager().shutdown();
+}
+</code></pre><p>可以进行一定的封装，这里我就简单的封装一下(参考<strong>《Hibernate实战》</strong>示例代码)：</p>
+<pre><code>public class TransactionManagerSetUp {
+    private static final String DATASOURCE_NAME = &quot;MySQLDataSource&quot;;
+
+    private PoolingDataSource ds;
+    private Context context;
+
+    public TransactionManagerSetUp(String url) {
+        ds = new PoolingDataSource();
+        ds.setMinPoolSize(1);
+        ds.setMaxPoolSize(10);
+        ds.setPreparedStatementCacheSize(10);
+        ds.setUniqueName(DATASOURCE_NAME);
+
+        ds.setIsolationLevel(&quot;READ_COMMITTED&quot;);
+        ds.setAllowLocalTransactions(true);
+
+        ds.setClassName(&quot;bitronix.tm.resource.jdbc.lrc.LrcXADataSource&quot;);
+        ds.getDriverProperties().put(&quot;url&quot;, url);
+        ds.getDriverProperties().put(&quot;driverClassName&quot;, &quot;com.mysql.jdbc.Driver&quot;);
+        ds.getDriverProperties().put(&quot;user&quot;, &quot;root&quot;);
+        ds.getDriverProperties().put(&quot;password&quot;, &quot;xxxxxx&quot;);
+
+        ds.init();
+    }
+
+    public Context getNamingContext() {
+        if (context == null)
+            try {
+                context = new InitialContext();
+            } catch (NamingException e) {
+                e.printStackTrace();
+            }
+        return context;
+    }
+
+    public UserTransaction getTransaction() {
+        try {
+            return (UserTransaction) (getNamingContext().lookup(&quot;java:comp/UserTransaction&quot;));
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void rollback() {
+        UserTransaction tx = getTransaction();
+        try {
+            if (tx.getStatus() == Status.STATUS_ACTIVE
+                    || tx.getStatus() == Status.STATUS_MARKED_ROLLBACK) {
+                tx.rollback();
+            }
+        } catch (SystemException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stop() {
+        ds.close();
+        TransactionManagerServices.getTransactionManager().shutdown();
+    }
+
+}
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/ORM/" rel="tag"># ORM</a>
+          
+            <a href="/tags/Hibernate/" rel="tag"># Hibernate</a>
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
+          
+            <a href="/tags/配置/" rel="tag"># 配置</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/18/Hibernate对象生命周期和状态/" rel="next" title="Hibernate对象生命周期和状态">
+                <i class="fa fa-chevron-left"></i> Hibernate对象生命周期和状态
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/20/Hibernate抓取数据/" rel="prev" title="Hibernate抓取数据">
+                Hibernate抓取数据 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Stephen Zhang" />
+          <p class="site-author-name" itemprop="name">Stephen Zhang</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建jndi-properties文件"><span class="nav-number">1.</span> <span class="nav-text">创建jndi.properties文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建数据源"><span class="nav-number">2.</span> <span class="nav-text">创建数据源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JNDI查找UserTransaction"><span class="nav-number">3.</span> <span class="nav-text">JNDI查找UserTransaction</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Stephen Zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

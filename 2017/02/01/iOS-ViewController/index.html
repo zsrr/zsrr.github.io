@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,8 +18,12 @@
 
 
 
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
 
 
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
 
 
 
@@ -84,24 +88,18 @@
 
 
 
-<meta name="description" content="UIViewController简介官方文档：  
-
-The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s">
+<meta name="description" content="本篇主要记录iOS中的Controller，简记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS ViewController">
-<meta property="og:url" content="http://yoursite.com/2017/02/01/iOS-ViewController/index.html">
-<meta property="og:site_name" content="Stephen's blog">
-<meta property="og:description" content="UIViewController简介官方文档：  
-
-The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/02/01/iOS-ViewController/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="本篇主要记录iOS中的Controller，简记">
 <meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/ViewController1.png">
 <meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/ViewController2.png">
-<meta property="og:updated_time" content="2017-02-01T12:28:21.000Z">
+<meta property="og:updated_time" content="2017-08-04T13:13:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS ViewController">
-<meta name="twitter:description" content="UIViewController简介官方文档：  
-
-The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s">
+<meta name="twitter:description" content="本篇主要记录iOS中的Controller，简记">
 <meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/ViewController1.png">
 
 
@@ -110,12 +108,12 @@ The UIViewController class provides the infrastructure for managing the views of
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -130,13 +128,13 @@ The UIViewController class provides the infrastructure for managing the views of
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/02/01/iOS-ViewController/"/>
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/02/01/iOS-ViewController/"/>
 
 
 
 
 
-  <title> iOS ViewController | Stephen's blog </title>
+  <title> iOS ViewController | Stephen的小本本 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -167,7 +165,7 @@ The UIViewController class provides the infrastructure for managing the views of
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">Stephen's blog</span>
+      <span class="site-title">Stephen的小本本</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -259,7 +257,7 @@ The UIViewController class provides the infrastructure for managing the views of
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/01/iOS-ViewController/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/02/01/iOS-ViewController/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -268,9 +266,9 @@ The UIViewController class provides the infrastructure for managing the views of
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen's blog">
+    <meta itemprop="name" content="Stephen的小本本">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen's blog" src="">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
     </span>
   </span>
 
@@ -334,16 +332,6 @@ The UIViewController class provides the infrastructure for managing the views of
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/02/01/iOS-ViewController/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/01/iOS-ViewController/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -366,7 +354,8 @@ The UIViewController class provides the infrastructure for managing the views of
       
 
       
-        <h2 id="UIViewController简介"><a href="#UIViewController简介" class="headerlink" title="UIViewController简介"></a>UIViewController简介</h2><p>官方文档：  </p>
+        <p>本篇主要记录iOS中的Controller，简记<br><a id="more"></a></p>
+<h2 id="UIViewController简介"><a href="#UIViewController简介" class="headerlink" title="UIViewController简介"></a>UIViewController简介</h2><p>官方文档：  </p>
 <blockquote>
 <p>The UIViewController class provides the infrastructure for managing the views of your iOS apps. A view controller manages a set of views that make up a portion of your app’s user interface. It is responsible for loading and disposing of those views, for managing interactions with those views, and for coordinating responses with any appropriate data objects. View controllers also coordinate their efforts with other controller objects—including other view controllers—and help manage your app’s overall interface.</p>
 </blockquote>
@@ -494,10 +483,6 @@ The UIViewController class provides the infrastructure for managing the views of
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/02/01/iOS-ViewController/"
-           data-title="iOS ViewController" data-url="http://yoursite.com/2017/02/01/iOS-ViewController/">
-      </div>
-    
   </div>
 
 
@@ -535,14 +520,14 @@ The UIViewController class provides the infrastructure for managing the views of
                src="/uploads/avatar.png"
                alt="Stephen Zhang" />
           <p class="site-author-name" itemprop="name">Stephen Zhang</p>
-          <p class="site-description motion-element" itemprop="description">zsr的小本本</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
         </div>
         <nav class="site-state motion-element">
         
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -551,7 +536,7 @@ The UIViewController class provides the infrastructure for managing the views of
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -560,7 +545,7 @@ The UIViewController class provides the infrastructure for managing the views of
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -631,7 +616,7 @@ The UIViewController class provides the infrastructure for managing the views of
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -699,13 +684,6 @@ The UIViewController class provides the infrastructure for managing the views of
   
   
 
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
-
-
-
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
@@ -721,37 +699,32 @@ The UIViewController class provides the infrastructure for managing the views of
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"zsrcodingme"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
   
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
+
+
+
+
+	
+
+
+
+
+
   
 
 
 
 
 
+  
 
-
-
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
 
 
 
@@ -764,6 +737,21 @@ The UIViewController class provides the infrastructure for managing the views of
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 
