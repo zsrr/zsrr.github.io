@@ -1,0 +1,1006 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="8OYvD8bSBXPN0nqkEA3YoLXTlwUGZmqTR6FfrPmc9cY" />
+
+
+
+
+  <meta name="baidu-site-verification" content="C2fNg3O37K" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="发现iOS开发的一个很蛋疼的地方就是资料很难搜全，不是过时就是讲不到重点，很难有令我满意的，只能自己动手，丰衣足食喽。本篇主要介绍关于iOS开发中关于屏幕旋转的部分，包括：
+
+应对一般的情况。如默认只有竖屏，不支持横屏。
+某些特殊情况。包括只有某些是横屏且不随设备旋转而旋转，其他是竖屏。包括通过模态跳转和UINavigationController的pushViewController方法跳转到需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS屏幕旋转终极攻略">
+<meta property="og:url" content="http://www.stephenzhang.me/2018/02/22/iOS屏幕旋转终极攻略/index.html">
+<meta property="og:site_name" content="Stephen的小本本">
+<meta property="og:description" content="发现iOS开发的一个很蛋疼的地方就是资料很难搜全，不是过时就是讲不到重点，很难有令我满意的，只能自己动手，丰衣足食喽。本篇主要介绍关于iOS开发中关于屏幕旋转的部分，包括：
+
+应对一般的情况。如默认只有竖屏，不支持横屏。
+某些特殊情况。包括只有某些是横屏且不随设备旋转而旋转，其他是竖屏。包括通过模态跳转和UINavigationController的pushViewController方法跳转到需">
+<meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-02-22%20%E4%B8%8B%E5%8D%887.45.05.png">
+<meta property="og:updated_time" content="2018-02-22T15:44:10.809Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS屏幕旋转终极攻略">
+<meta name="twitter:description" content="发现iOS开发的一个很蛋疼的地方就是资料很难搜全，不是过时就是讲不到重点，很难有令我满意的，只能自己动手，丰衣足食喽。本篇主要介绍关于iOS开发中关于屏幕旋转的部分，包括：
+
+应对一般的情况。如默认只有竖屏，不支持横屏。
+某些特殊情况。包括只有某些是横屏且不随设备旋转而旋转，其他是竖屏。包括通过模态跳转和UINavigationController的pushViewController方法跳转到需">
+<meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-02-22%20%E4%B8%8B%E5%8D%887.45.05.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.stephenzhang.me/2018/02/22/iOS屏幕旋转终极攻略/"/>
+
+
+
+
+
+  <title> iOS屏幕旋转终极攻略 | Stephen的小本本 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Stephen的小本本</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2018/02/22/iOS屏幕旋转终极攻略/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS屏幕旋转终极攻略
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-22T18:44:24+08:00">
+                2018-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>发现iOS开发的一个很蛋疼的地方就是资料很难搜全，不是过时就是讲不到重点，很难有令我满意的，只能自己动手，丰衣足食喽。本篇主要介绍关于iOS开发中关于屏幕旋转的部分，包括：</p>
+<ul>
+<li>应对一般的情况。如默认只有竖屏，不支持横屏。</li>
+<li>某些特殊情况。包括只有某些是横屏且不随设备旋转而旋转，其他是竖屏。包括通过模态跳转和UINavigationController的pushViewController方法跳转到需要强制横屏的界面。</li>
+<li>界面的自旋转。包括在关闭屏幕旋转(在手机上叫做竖排方向锁定)的情况下监听屏幕方向并让界面随之旋转。</li>
+</ul>
+<p>笔者测试的环境是iOS 10.3</p>
+<a id="more"></a>
+<h1 id="关于横竖屏相关的设置"><a href="#关于横竖屏相关的设置" class="headerlink" title="关于横竖屏相关的设置"></a>关于横竖屏相关的设置</h1><h2 id="全局设置App支持的方向"><a href="#全局设置App支持的方向" class="headerlink" title="全局设置App支持的方向"></a>全局设置App支持的方向</h2><p>首先要告诉系统自己的App所支持的方向，可以在以下三个地方设置：</p>
+<h3 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h3><p>在项目的<code>General -&gt; Deployment Info</code>当中可以设置支持的方向：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-02-22%20%E4%B8%8B%E5%8D%887.45.05.png" alt=""></p>
+<h3 id="info-plist"><a href="#info-plist" class="headerlink" title="info.plist"></a>info.plist</h3><p>上面介绍的方法和在info.plist里面修改实质上一样的，修改的是名为<code>Supported interface orientations</code>的Array。</p>
+<h3 id="UIApplicationDelegate"><a href="#UIApplicationDelegate" class="headerlink" title="UIApplicationDelegate"></a>UIApplicationDelegate</h3><p>上面所讲的两种方法都是静态配置，有时需要动态地修改App所支持的方向，这时可以实现AppDelegate中的<code>- (UIInterfaceOrientationMask)application:(UIApplication *)application 
+  supportedInterfaceOrientationsForWindow:(UIWindow *)window;</code>方法，该方法返回的是App所支持的方向。关于UIInterfaceOrientationMask、UIInterfaceOrientation等等，这种枚举变量的说明网上还是有很多的，而且很靠谱。</p>
+<p>  该方法一般使用模式是这样的：</p>
+<pre><code>  - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    if (xxx) {
+        return 要返回的方向;
+    } else {
+        return 要返回的方向;
+    }
+}
+</code></pre><p>xxx是可以通过外界动态更改的条件。</p>
+<h2 id="具体ViewController的设置"><a href="#具体ViewController的设置" class="headerlink" title="具体ViewController的设置"></a>具体ViewController的设置</h2><p>主要实现的是三个方法：</p>
+<h3 id="shouldAutorotate"><a href="#shouldAutorotate" class="headerlink" title="shouldAutorotate"></a>shouldAutorotate</h3><p>当前的UIDevice的UIDeviceOrientation发生改变时，是否要随之旋转。当前Device的UIDeviceOrientation可以通过函数动态地改变，而忽略竖排方向锁定的开启。动态更改方向的代码如下：</p>
+<pre><code>// 先用UIInterfaceOrientationUnknown进行重置
+NSNumber *orientationUnknown = [NSNumber numberWithInt:UIInterfaceOrientationUnknown];
+[[UIDevice currentDevice] setValue:orientationUnknown forKey:@&quot;orientation&quot;];
+
+// 此时设置的是自己想要的设备方向, 笔者选的是UIInterfaceOrientationLandscapeLeft
+NSNumber *orientationTarget = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
+[[UIDevice currentDevice] setValue:orientationTarget forKey:@&quot;orientation&quot;];
+</code></pre><p>关于为什么要用UIInterfaceOrientationUnknown进行重置，参见<a href="https://www.jianshu.com/p/6c45fa2bb970" target="_blank" rel="external">iOS强制改变物理设备方向的进阶方法</a>。</p>
+<p>上述做法的主要目的是调用内部API，应避免直接调用内部API(此处指的是setOrientation方法)。</p>
+<p>网上还有一段比较流行的代码：</p>
+<pre><code>if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+    SEL selector  = NSSelectorFromString(@&quot;setOrientation:&quot;);
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+    [invocation setSelector:selector];
+    [invocation setTarget:[UIDevice currentDevice]];
+    // 从2开始是因为前两个参数已经被selector和target占用
+    [invocation setArgument:&amp;orientation atIndex:2];
+    [invocation invoke];
+}
+</code></pre><p>这段代码可能在某些情况下是运行正常的，但不正常的情况恰好被我遇到了。情况是这样：我想通过UINavigationController的pushViewController方法跳转到需要强制横屏的界面，第一次是正常的。但是pop掉横屏界面之后，再次push之前需要强制横屏的ViewController就不能横屏了，至于原因，我也不知道……要怪就怪苹果不开源吧。</p>
+<h3 id="supportedInterfaceOrientations"><a href="#supportedInterfaceOrientations" class="headerlink" title="supportedInterfaceOrientations"></a>supportedInterfaceOrientations</h3><p>此方法返回的是此ViewController所支持的界面方向。值得一提的是UINavigationController(UITabBarController与之同理)，它可以与其他的ViewController构成一个层次结构。此时外部UINavigationController所支持的方向取决于其内部顶层的ViewController所支持的方向，所以应该重写UINavigationController的三个方法，让其与内部顶层ViewController保持一致：</p>
+<pre><code>- (BOOL)shouldAutorotate {
+    return [[self.viewControllers lastObject] shouldAutorotate];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return [[self.viewControllers lastObject] supportedInterfaceOrientations];
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return [[self.viewControllers lastObject] preferredInterfaceOrientationForPresentation];
+}
+</code></pre><h3 id="preferredInterfaceOrientationForPresentation"><a href="#preferredInterfaceOrientationForPresentation" class="headerlink" title="preferredInterfaceOrientationForPresentation"></a>preferredInterfaceOrientationForPresentation</h3><p>通过模态进入时默认的方向。</p>
+<h1 id="一般情况"><a href="#一般情况" class="headerlink" title="一般情况"></a>一般情况</h1><p>若应用只支持竖屏或者横屏，当然可以在项目配置中只勾选一种方向，但谁也保证不了App之后一定没有横屏需求，所以还是不要更改项目的配置，可以在BaseViewController当中写下面的代码：</p>
+<pre><code>- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
+</code></pre><p>之后若需要有横屏的ViewController，重写三个方法即可。</p>
+<h1 id="强制横屏"><a href="#强制横屏" class="headerlink" title="强制横屏"></a>强制横屏</h1><p>下面分成两种情况加以讨论，下面讨论的两种情况均可忽略竖排方向锁定设置：</p>
+<h2 id="模态跳转"><a href="#模态跳转" class="headerlink" title="模态跳转"></a>模态跳转</h2><p>此种情况是通过模态跳转到需要强制横屏的ViewController，此时重写强制横屏的ViewController的三个方法即可：</p>
+<pre><code>- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskLandscapeLeft;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationLandscapeLeft;
+}
+</code></pre><p>运行正常的前提条件是App支持横屏所需的方向。</p>
+<h2 id="pushViewController"><a href="#pushViewController" class="headerlink" title="pushViewController"></a>pushViewController</h2><p>若是通过UINavigationController的pushViewController方法来进入到一个需要强制横屏的ViewController，除了上述所说需要重写UINavigationController的三个方法让其与顶部ViewController保持一致之外，还需要在需要强制横屏的ViewController当中添加如下代码：</p>
+<pre><code>// 必须为YES
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskLandscapeLeft;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationLandscapeLeft;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    NSNumber *orientationUnknown = [NSNumber numberWithInt:UIInterfaceOrientationUnknown];
+    [[UIDevice currentDevice] setValue:orientationUnknown forKey:@&quot;orientation&quot;];
+
+    NSNumber *orientationTarget = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
+    [[UIDevice currentDevice] setValue:orientationTarget forKey:@&quot;orientation&quot;];
+}
+</code></pre><p>利用API来使UIDevice的方向改变上面已经提到了，此时因为是手动改变，所以即便是设置了竖排方向锁定也是无所谓的。shouldAutorotate必须设置为YES，这样才能在Device的方向改变之后随之旋转。</p>
+<h1 id="监听屏幕方向"><a href="#监听屏幕方向" class="headerlink" title="监听屏幕方向"></a>监听屏幕方向</h1><p>以上所讲的，已经能解决绝大部分问题了。下面所说的是为了应对某些蛋疼的需求。如何监听屏幕方向的改变？很容易想到通过UIDevice提供的API来获得方向，但是在竖排方向锁定打开的情况下是行不通的，因此我不打算介绍UIDevice所提供的API，我要介绍一种通用的方法来获得屏幕的方向，这需要用到传感器来实现，原文地址(不容易搜到):<a href="http://blog.csdn.net/sunflowerinrain/article/details/78847740" target="_blank" rel="external">iOS中检测当前设备的旋转方向（关闭屏幕旋转)</a>。下面我通过这篇文章所带来的基本想法封装一个OrientationManager:</p>
+<p>头文件：</p>
+<pre><code>#import &lt;DOSingleton/DOSingleton.h&gt;
+#import &lt;UIKit/UIKit.h&gt;
+
+extern NSString *const OrientationManagerOrientationChangedKey;
+
+@interface OrientationManager : DOSingleton
+
+// 当前的方向
+@property (atomic, assign, readonly) UIDeviceOrientation orientation;
+
+- (void)startMonitoring;
+
+@end
+</code></pre><p>所用到的DOSingleton是为了简化单例模式的步骤引入的第三方库，感兴趣的可以看github主页。</p>
+<p>实现：</p>
+<pre><code>#import &quot;OrientationManager.h&quot;
+#import &lt;ReactiveCocoa/ReactiveCocoa.h&gt;
+
+@import CoreMotion;
+
+NSString *const OrientationManagerOrientationChangedKey = @&quot;OrientationChanged&quot;;
+
+@interface OrientationManager()
+
+@property (nonatomic, strong) CMMotionManager *manager;
+
+@property (atomic, assign, readwrite) UIDeviceOrientation orientation;
+
+@property (nonatomic, assign, getter=isStarted) BOOL started;
+
+@end
+
+@implementation OrientationManager
+
+- (instancetype)init {
+    if (!self.isInitialized) {
+        self = [super init];
+        self.orientation = UIDeviceOrientationUnknown;
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [_manager stopDeviceMotionUpdates];
+}
+
+- (void)startMonitoring {
+    if (!self.isStarted) {
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        self.manager = [[CMMotionManager alloc] init];
+        // 1s中取样15次，可自行设定
+        _manager.accelerometerUpdateInterval = 1.0 / 15.0;
+        if ([_manager isDeviceMotionAvailable]) {
+            @weakify(self);
+            [_manager startDeviceMotionUpdatesToQueue:queue withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
+                if (!error &amp;&amp; motion) {
+                    @strongify(self);
+                    [self handleWithDeviceMotion:motion];
+                }
+            }];
+            self.started = YES;
+        }
+    }
+}
+
+- (void)handleWithDeviceMotion:(CMDeviceMotion *)motion {
+    UIDeviceOrientation newOrientation;
+
+    double x = motion.gravity.x;
+    double y = motion.gravity.y;
+    double z = motion.gravity.z;
+
+    if (fabs(z) &gt;= 0.75) {
+        // 认为是平置的，因为只考虑横竖屏，所以只考虑x, y轴，忽略z轴
+        return;
+    }
+
+
+    if (fabs(y) &gt;= fabs(x)) {
+        if (y &gt;= 0){
+            newOrientation = UIDeviceOrientationPortraitUpsideDown;
+        } else {
+            newOrientation = UIDeviceOrientationPortrait;
+        }
+    } else {
+        if (x &gt;= 0) {
+            newOrientation = UIDeviceOrientationLandscapeRight;
+        } else {
+            newOrientation = UIDeviceOrientationLandscapeLeft;
+        }
+    }
+
+    if (self.orientation == newOrientation) {
+        return;
+    } else {
+        // 更新，并且发送通知
+        self.orientation = newOrientation;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // 放在主线程发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:OrientationManagerOrientationChangedKey object:nil];
+        });
+    }
+}
+
+@end
+</code></pre><p>在ViewController里面简单使用一下：</p>
+<pre><code>- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[OrientationManager sharedInstance] startMonitoring];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onOrientationChanged) name:OrientationManagerOrientationChangedKey object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)onOrientationChanged {
+    switch ([OrientationManager sharedInstance].orientation) {
+        case UIDeviceOrientationLandscapeLeft:
+            NSLog(@&quot;Landscape left&quot;);
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            NSLog(@&quot;Landscape right&quot;);
+            break;
+        case UIDeviceOrientationPortrait:
+            NSLog(@&quot;Portrait&quot;);
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            NSLog(@&quot;Portrait upside down&quot;);
+            break;
+        default:
+            NSLog(@&quot;Unknown&quot;);
+            break;
+    }
+}
+</code></pre><p>看一下运行情况：</p>
+<pre><code>2018-02-22 23:32:36.976260+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:32:41.594187+0800 Demo[6183:1150263] Landscape left
+2018-02-22 23:32:50.197738+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:32:51.828630+0800 Demo[6183:1150263] Landscape right
+2018-02-22 23:32:53.507366+0800 Demo[6183:1150263] Portrait upside down
+2018-02-22 23:32:57.110077+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:32:58.152403+0800 Demo[6183:1150263] Landscape left
+2018-02-22 23:32:58.902556+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:33:03.097224+0800 Demo[6183:1150263] Landscape left
+2018-02-22 23:33:03.847134+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:33:04.206700+0800 Demo[6183:1150263] Landscape right
+2018-02-22 23:33:04.821790+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:33:21.216680+0800 Demo[6183:1150263] Landscape right
+2018-02-22 23:33:23.231701+0800 Demo[6183:1150263] Landscape left
+2018-02-22 23:33:24.158209+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:33:25.599591+0800 Demo[6183:1150263] Portrait upside down
+2018-02-22 23:33:26.815896+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:35:06.726776+0800 Demo[6183:1150263] Landscape right
+2018-02-22 23:35:08.311154+0800 Demo[6183:1150263] Landscape left
+2018-02-22 23:35:09.626317+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:35:23.933861+0800 Demo[6183:1150263] Portrait upside down
+2018-02-22 23:35:25.501846+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:35:28.884317+0800 Demo[6183:1150263] Landscape right
+2018-02-22 23:35:36.545293+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:35:36.545943+0800 Demo[6183:1150263] Landscape left
+2018-02-22 23:35:37.145841+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:35:38.886784+0800 Demo[6183:1150263] Landscape left
+2018-02-22 23:35:39.608811+0800 Demo[6183:1150263] Portrait
+2018-02-22 23:35:39.609253+0800 Demo[6183:1150263] Landscape right
+2018-02-22 23:35:40.293250+0800 Demo[6183:1150263] Portrait
+</code></pre><p>嗯，完美！</p>
+<p>这时如果要旋转界面的话，一种做法是利用UIView的transform属性，这种方法比较灵活，可以选择性的旋转想要旋转的View；另一种是上面提到的强制横屏的做法，就是发现改变之后利用API更改UIDevice的方向，这样可以忽略竖排方向锁定带来的影响。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/06/MacOS下CLion配置OpenGL开发环境/" rel="next" title="MacOS下CLion配置OpenGL开发环境">
+                <i class="fa fa-chevron-left"></i> MacOS下CLion配置OpenGL开发环境
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Stephen Zhang" />
+          <p class="site-author-name" itemprop="name">Stephen Zhang</p>
+          <p class="site-description motion-element" itemprop="description">前进的路上充满着幸福</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于横竖屏相关的设置"><span class="nav-number">1.</span> <span class="nav-text">关于横竖屏相关的设置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#全局设置App支持的方向"><span class="nav-number">1.1.</span> <span class="nav-text">全局设置App支持的方向</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目配置"><span class="nav-number">1.1.1.</span> <span class="nav-text">项目配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#info-plist"><span class="nav-number">1.1.2.</span> <span class="nav-text">info.plist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UIApplicationDelegate"><span class="nav-number">1.1.3.</span> <span class="nav-text">UIApplicationDelegate</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体ViewController的设置"><span class="nav-number">1.2.</span> <span class="nav-text">具体ViewController的设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shouldAutorotate"><span class="nav-number">1.2.1.</span> <span class="nav-text">shouldAutorotate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#supportedInterfaceOrientations"><span class="nav-number">1.2.2.</span> <span class="nav-text">supportedInterfaceOrientations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#preferredInterfaceOrientationForPresentation"><span class="nav-number">1.2.3.</span> <span class="nav-text">preferredInterfaceOrientationForPresentation</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一般情况"><span class="nav-number">2.</span> <span class="nav-text">一般情况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#强制横屏"><span class="nav-number">3.</span> <span class="nav-text">强制横屏</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模态跳转"><span class="nav-number">3.1.</span> <span class="nav-text">模态跳转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pushViewController"><span class="nav-number">3.2.</span> <span class="nav-text">pushViewController</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#监听屏幕方向"><span class="nav-number">4.</span> <span class="nav-text">监听屏幕方向</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Stephen Zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>
