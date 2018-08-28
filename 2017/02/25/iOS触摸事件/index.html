@@ -88,50 +88,41 @@
 
 
 
-<meta name="description" content="本篇开始进行iOS的进阶学习，大致分成四部曲：
-
-基础API的使用，包括UIKit和CoreAnimation等等，主要看一下文档，总结即可。
-OC进阶。
-iOS系统进阶。
-几个主要的库的源代码看一下。
-
+<meta name="description" content="本篇介绍iOS中响应链，为一篇简短的学习记录。
 以下内容参考：
 
 iOS事件响应链中Hit-Test View的应用
 Using Responders and the Responder Chain to Handle Events
-iOS手">
+iOS手势识别详解-GestureRecognizer部分
+
+Responder Chain首先要介绍一下UIResponder Chain
+UIResponder这">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS触摸事件">
-<meta property="og:url" content="http://www.stephenzhang.me/2018/06/25/iOS触摸事件/index.html">
+<meta property="og:url" content="http://www.stephenzhang.me/2017/02/25/iOS触摸事件/index.html">
 <meta property="og:site_name" content="Stephen的小本本">
-<meta property="og:description" content="本篇开始进行iOS的进阶学习，大致分成四部曲：
-
-基础API的使用，包括UIKit和CoreAnimation等等，主要看一下文档，总结即可。
-OC进阶。
-iOS系统进阶。
-几个主要的库的源代码看一下。
-
+<meta property="og:description" content="本篇介绍iOS中响应链，为一篇简短的学习记录。
 以下内容参考：
 
 iOS事件响应链中Hit-Test View的应用
 Using Responders and the Responder Chain to Handle Events
-iOS手">
+iOS手势识别详解-GestureRecognizer部分
+
+Responder Chain首先要介绍一下UIResponder Chain
+UIResponder这">
 <meta property="og:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-06-25%20%E4%B8%8B%E5%8D%8810.17.23.png">
-<meta property="og:updated_time" content="2018-06-30T12:16:02.415Z">
+<meta property="og:updated_time" content="2018-08-28T14:25:15.889Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS触摸事件">
-<meta name="twitter:description" content="本篇开始进行iOS的进阶学习，大致分成四部曲：
-
-基础API的使用，包括UIKit和CoreAnimation等等，主要看一下文档，总结即可。
-OC进阶。
-iOS系统进阶。
-几个主要的库的源代码看一下。
-
+<meta name="twitter:description" content="本篇介绍iOS中响应链，为一篇简短的学习记录。
 以下内容参考：
 
 iOS事件响应链中Hit-Test View的应用
 Using Responders and the Responder Chain to Handle Events
-iOS手">
+iOS手势识别详解-GestureRecognizer部分
+
+Responder Chain首先要介绍一下UIResponder Chain
+UIResponder这">
 <meta name="twitter:image" content="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-06-25%20%E4%B8%8B%E5%8D%8810.17.23.png">
 
 
@@ -160,7 +151,7 @@ iOS手">
 
 
 
-  <link rel="canonical" href="http://www.stephenzhang.me/2018/06/25/iOS触摸事件/"/>
+  <link rel="canonical" href="http://www.stephenzhang.me/2017/02/25/iOS触摸事件/"/>
 
 
 
@@ -289,7 +280,7 @@ iOS手">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2018/06/25/iOS触摸事件/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/02/25/iOS触摸事件/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -328,8 +319,8 @@ iOS手">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-25T21:01:38+08:00">
-                2018-06-25
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-25T21:01:38+08:00">
+                2017-02-25
               </time>
             
 
@@ -386,13 +377,7 @@ iOS手">
       
 
       
-        <p>本篇开始进行iOS的进阶学习，大致分成四部曲：</p>
-<ul>
-<li>基础API的使用，包括UIKit和CoreAnimation等等，主要看一下文档，总结即可。</li>
-<li>OC进阶。</li>
-<li>iOS系统进阶。</li>
-<li>几个主要的库的源代码看一下。</li>
-</ul>
+        <p>本篇介绍iOS中响应链，为一篇简短的学习记录。</p>
 <p>以下内容参考：</p>
 <ul>
 <li><a href="https://www.jianshu.com/p/d8512dff2b3e" target="_blank" rel="external">iOS事件响应链中Hit-Test View的应用</a></li>
@@ -441,6 +426,22 @@ CGRect HitTestingBounds(CGRect bounds, CGFloat minimumHitTestWidth, CGFloat mini
         hitTestingBounds.origin.y -= (hitTestingBounds.size.height - bounds.size.height)/2;
     }
     return hitTestingBounds;
+}
+</code></pre><h3 id="处理子View超出父View的点击响应问题"><a href="#处理子View超出父View的点击响应问题" class="headerlink" title="处理子View超出父View的点击响应问题"></a>处理子View超出父View的点击响应问题</h3><p>有一种很常见的场景就是子View超出了父View但是需要响应事件，比如自定义TabBar有可能中间的那个按钮比前两个和后两个都要大，这个时候需要在这个View的父View中重写响应的hitTest方法：</p>
+<pre><code>-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    UIView *view = [super hitTest:point withEvent:event];
+
+    if (view == nil) {
+        for (UIView *subView in self.subviews) {
+            CGPoint myPoint = [subView convertPoint:point fromView:self];
+            if (CGRectContainsPoint(subView.bounds, myPoint)) {
+
+                return subView;
+            }
+        }
+    }
+
+    return view;
 }
 </code></pre><h2 id="Next-Responder"><a href="#Next-Responder" class="headerlink" title="Next Responder"></a>Next Responder</h2><p>当选中的First Responder选择不响应当前触摸事件的时候，此时会把事件传到nextResponder，nextResponder的寻找规则为(下方摘自官方文档)：</p>
 <ul>
@@ -496,8 +497,8 @@ CGRect HitTestingBounds(CGRect bounds, CGFloat minimumHitTestWidth, CGFloat mini
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/22/iOS屏幕旋转终极攻略/" rel="next" title="iOS屏幕旋转终极攻略">
-                <i class="fa fa-chevron-left"></i> iOS屏幕旋转终极攻略
+              <a href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" rel="next" title="Mac OS Sierra下编译Android 7.1.1">
+                <i class="fa fa-chevron-left"></i> Mac OS Sierra下编译Android 7.1.1
               </a>
             
           </div>
@@ -506,8 +507,8 @@ CGRect HitTestingBounds(CGRect bounds, CGFloat minimumHitTestWidth, CGFloat mini
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/17/iOS面试基础知识整理/" rel="prev" title="iOS面试基础知识整理">
-                iOS面试基础知识整理 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/02/26/Android自定义字体解决方案/" rel="prev" title="Android自定义字体解决方案">
+                Android自定义字体解决方案 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -601,7 +602,7 @@ CGRect HitTestingBounds(CGRect bounds, CGFloat minimumHitTestWidth, CGFloat mini
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -654,7 +655,7 @@ CGRect HitTestingBounds(CGRect bounds, CGFloat minimumHitTestWidth, CGFloat mini
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Responder-Chain"><span class="nav-number">1.</span> <span class="nav-text">Responder Chain</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UIResponder"><span class="nav-number">1.1.</span> <span class="nav-text">UIResponder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#First-Responder"><span class="nav-number">1.2.</span> <span class="nav-text">First Responder</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增大UIButton热响应区域"><span class="nav-number">1.2.1.</span> <span class="nav-text">增大UIButton热响应区域</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Next-Responder"><span class="nav-number">1.3.</span> <span class="nav-text">Next Responder</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gesture-Recognizer"><span class="nav-number">2.</span> <span class="nav-text">Gesture Recognizer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自己处理触摸事件"><span class="nav-number">3.</span> <span class="nav-text">自己处理触摸事件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Responder-Chain"><span class="nav-number">1.</span> <span class="nav-text">Responder Chain</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UIResponder"><span class="nav-number">1.1.</span> <span class="nav-text">UIResponder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#First-Responder"><span class="nav-number">1.2.</span> <span class="nav-text">First Responder</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增大UIButton热响应区域"><span class="nav-number">1.2.1.</span> <span class="nav-text">增大UIButton热响应区域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理子View超出父View的点击响应问题"><span class="nav-number">1.2.2.</span> <span class="nav-text">处理子View超出父View的点击响应问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Next-Responder"><span class="nav-number">1.3.</span> <span class="nav-text">Next Responder</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gesture-Recognizer"><span class="nav-number">2.</span> <span class="nav-text">Gesture Recognizer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自己处理触摸事件"><span class="nav-number">3.</span> <span class="nav-text">自己处理触摸事件</span></a></li></ol></div>
             
 
           </div>

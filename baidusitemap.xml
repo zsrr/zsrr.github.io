@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://www.stephenzhang.me/2017/02/25/iOS%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6/</loc>
+    <lastmod>2018-08-28T14:25:15.889Z</lastmod>
+    <data>
+        <display>
+        <title>iOS触摸事件</title>
+        <pubTime>2017-02-25T13:01:38.000Z</pubTime>
+        
+        <tag>iOS</tag>
+         
+        <tag>UIKit</tag>
+         
+         
+           
+             
+              <breadCrumb title="iOS" url="http://www.stephenzhang.me/categories/iOS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.stephenzhang.me/2018/08/28/2019%E7%BD%91%E6%98%93%E7%A7%8B%E6%8B%9B%E5%86%85%E6%8E%A8%E9%9D%A2%E7%BB%8F%EF%BC%88%E4%BA%8C%E9%9D%A2%E5%B7%B2%E8%B7%AA%EF%BC%89/</loc>
     <lastmod>2018-08-28T10:55:49.991Z</lastmod>
     <data>
@@ -17,50 +39,6 @@
            
              
               <breadCrumb title="面试" url="http://www.stephenzhang.me/categories/%E9%9D%A2%E8%AF%95/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.stephenzhang.me/2018/08/17/iOS%E9%9D%A2%E8%AF%95%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</loc>
-    <lastmod>2018-08-17T14:19:27.705Z</lastmod>
-    <data>
-        <display>
-        <title>iOS面试基础知识整理</title>
-        <pubTime>2018-08-17T14:18:05.000Z</pubTime>
-        
-        <tag>面试</tag>
-         
-        <tag>iOS</tag>
-         
-         
-           
-             
-              <breadCrumb title="iOS" url="http://www.stephenzhang.me/categories/iOS/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.stephenzhang.me/2018/06/25/iOS%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6/</loc>
-    <lastmod>2018-06-30T12:16:02.415Z</lastmod>
-    <data>
-        <display>
-        <title>iOS触摸事件</title>
-        <pubTime>2018-06-25T13:01:38.000Z</pubTime>
-        
-        <tag>iOS</tag>
-         
-        <tag>UIKit</tag>
-         
-         
-           
-             
-              <breadCrumb title="iOS" url="http://www.stephenzhang.me/categories/iOS/"/>
           
         </display>
     </data>
@@ -543,9 +521,9 @@
         <title>Spring IoC容器学习笔记</title>
         <pubTime>2017-08-15T13:23:29.000Z</pubTime>
         
-        <tag>Java Web</tag>
-         
         <tag>源码分析</tag>
+         
+        <tag>Java Web</tag>
          
         <tag>Spring</tag>
          
