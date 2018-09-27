@@ -255,7 +255,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/02/25/iOS触摸事件/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/03/13/Java并发编程-一/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -280,8 +280,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/02/25/iOS触摸事件/" itemprop="url">
-                  iOS触摸事件
+                <a class="post-title-link" href="/2017/03/13/Java并发编程-一/" itemprop="url">
+                  Java并发编程(一)
                 </a>
               
             
@@ -297,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-25T21:01:38+08:00">
-                2017-02-25
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-13T18:46:34+08:00">
+                2017-03-13
               </time>
             
 
@@ -320,8 +320,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS</span>
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
                   </a>
                 </span>
 
@@ -357,1007 +357,284 @@
       
         
           
-            <p>本篇介绍iOS中响应链，为一篇简短的学习记录。</p>
-<p>以下内容参考：</p>
+            <p><strong>注：</strong>一下部分文字图片来自《Java并发编程的艺术》</p>
+<h1 id="多线程简介"><a href="#多线程简介" class="headerlink" title="多线程简介"></a>多线程简介</h1><p>线程是现代操作系统调度的最小单元，一个进程可以包含很多线程。在Java的内存区域里面，每一个线程都有自己的程序计数器和虚拟机栈。处理器通过时间切片的方法在各个线程之间来回切换，可以用下面的代码查看JVM运行时各个线程的信息：</p>
+<pre><code>public class ThreadTest {
+    public static void main(String[] args) {
+        ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
+        ThreadInfo[] threadInfoArray = mxBean.dumpAllThreads(false, false);
+
+        for (ThreadInfo info : threadInfoArray) {
+            System.out.println(&quot;Thread id: &quot; + info.getThreadId() + &quot; Thread name: &quot; +
+                    info.getThreadName() + &quot; Thread state: &quot; + info.getThreadState());
+        }
+    }
+}
+</code></pre><p>运行结果如下：</p>
+<pre><code>Thread id: 9 Thread name: Monitor Ctrl-Break Thread state: RUNNABLE
+Thread id: 4 Thread name: Signal Dispatcher Thread state: RUNNABLE
+Thread id: 3 Thread name: Finalizer Thread state: WAITING
+Thread id: 2 Thread name: Reference Handler Thread state: WAITING
+Thread id: 1 Thread name: main Thread state: RUNNABLE
+</code></pre><p>也就是说，运行main函数时，不只是main线程在运行，Java天生就是多线程的。</p>
+<h1 id="线程的优先级"><a href="#线程的优先级" class="headerlink" title="线程的优先级"></a>线程的优先级</h1><p>在Java程序里面，线程的优先级通过<strong>setPriority(int priority)</strong>来设置，<strong>priority</strong>的取值范围为1-10，默认为5，线程的优先级越高，处理器对此线程所切的时间片越长，但是不同的操作系统的表现不同，有些会忽略掉线程的优先级，因此，设置优先级不会保证多线程程序的正确性，在实际编程过程中不应该使用。</p>
+<h1 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h1><p>线程的状态分为以下几种：</p>
 <ul>
-<li><a href="https://www.jianshu.com/p/d8512dff2b3e" target="_blank" rel="external">iOS事件响应链中Hit-Test View的应用</a></li>
-<li><a href="https://developer.apple.com/documentation/uikit/touches_presses_and_gestures/using_responders_and_the_responder_chain_to_handle_events?language=objc" target="_blank" rel="external">Using Responders and the Responder Chain to Handle Events</a></li>
-<li><a href="https://www.jianshu.com/p/0da1761abb03" target="_blank" rel="external">iOS手势识别详解-GestureRecognizer部分</a></li>
+<li><strong>NEW</strong> 被创建成功，还没有调用<strong>start()</strong>方法。</li>
+<li><strong>RUNNABLE</strong> 正在运行中。</li>
+<li><strong>BLOCKED</strong> 正在处于阻塞状态。</li>
+<li><strong>WAITING</strong> 等待状态，此线程在等待其他线程做出特定的动作。</li>
+<li><strong>TIME_WAITING</strong> 超时等待状态。</li>
+<li><strong>TERMINATED</strong> 终止，线程结束。</li>
 </ul>
-<h1 id="Responder-Chain"><a href="#Responder-Chain" class="headerlink" title="Responder Chain"></a>Responder Chain</h1><p>首先要介绍一下UIResponder Chain</p>
-<h2 id="UIResponder"><a href="#UIResponder" class="headerlink" title="UIResponder"></a>UIResponder</h2><p>这个不必多说，UIView, UIViewController, UIApplication都是UIResponder的子类，都可以响应交互事件。</p>
-<p>下面的这幅图，摘自官方文档，这些类实例组成一个树形结构，构成了一个完整的Responder Chain。</p>
-<p><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-06-25%20%E4%B8%8B%E5%8D%8810.17.23.png" alt=""></p>
-<h2 id="First-Responder"><a href="#First-Responder" class="headerlink" title="First Responder"></a>First Responder</h2><p>关于如何找到第一响应者，这里有一个关键的函数：</p>
-<pre><code>- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
-</code></pre><p>当用户点击屏幕(不管是点击还是什么动作，能产生UITouch即可)时，找到当前点击区域内在Responder Chain中最顶层的UIView，这个View就是hit-test view。找到hit-test view之后，这个View将会选择是否处理此Event，如果不想处理的话将会交给父级UIView进行处理。</p>
-<p>在执行hitTest方法时，会先判断此event是否在自己的bounds之内(默认实现)，如果是再进行递归调用，不是的话则返回nil，判断UIEvent是否发生在自己的bounds内部的实现函数为：</p>
-<pre><code>- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event;
-</code></pre><p>hitTest的逻辑大致是这样的:</p>
-<pre><code>- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    if (!self.isUserInteractionEnabled || self.isHidden || self.alpha &lt;= 0.01) {
-        return nil;
-    }
-    if ([self pointInside:point withEvent:event]) {
-        for (UIView *subview in [self.subviews reverseObjectEnumerator]) {
-            CGPoint convertedPoint = [subview convertPoint:point fromView:self];
-            UIView *hitTestView = [subview hitTest:convertedPoint withEvent:event];
-            if (hitTestView) {
-                return hitTestView;
-            }
-        }
-        return self;
-    }
-    return nil;
-}
-</code></pre><h3 id="增大UIButton热响应区域"><a href="#增大UIButton热响应区域" class="headerlink" title="增大UIButton热响应区域"></a>增大UIButton热响应区域</h3><p>下面介绍一个简单的应用。UIButton官方推荐的响应区域大小至少是44x44，但是在实际开发过程中我们会遇到很多小图，这时候需要自己扩展响应区域。解决这个问题很简单，只需要重写UIButton的pointInside:withEvent方法即可：</p>
-<pre><code>- (BOOL)pointInside:(CGPoint)point withEvent:(nullable UIEvent *)event {
-    return CGRectContainsPoint(HitTestingBounds(self.bounds, self.minimumHitTestWidth, self.minimumHitTestHeight), point);
-}
-
-CGRect HitTestingBounds(CGRect bounds, CGFloat minimumHitTestWidth, CGFloat minimumHitTestHeight) {
-    CGRect hitTestingBounds = bounds;
-    if (minimumHitTestWidth &gt; bounds.size.width) {
-        hitTestingBounds.size.width = minimumHitTestWidth;
-        hitTestingBounds.origin.x -= (hitTestingBounds.size.width - bounds.size.width)/2;
-    }
-    if (minimumHitTestHeight &gt; bounds.size.height) {
-        hitTestingBounds.size.height = minimumHitTestHeight;
-        hitTestingBounds.origin.y -= (hitTestingBounds.size.height - bounds.size.height)/2;
-    }
-    return hitTestingBounds;
-}
-</code></pre><h3 id="处理子View超出父View的点击响应问题"><a href="#处理子View超出父View的点击响应问题" class="headerlink" title="处理子View超出父View的点击响应问题"></a>处理子View超出父View的点击响应问题</h3><p>有一种很常见的场景就是子View超出了父View但是需要响应事件，比如自定义TabBar有可能中间的那个按钮比前两个和后两个都要大，这个时候需要在这个View的父View中重写响应的hitTest方法：</p>
-<pre><code>-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    UIView *view = [super hitTest:point withEvent:event];
-
-    if (view == nil) {
-        for (UIView *subView in self.subviews) {
-            CGPoint myPoint = [subView convertPoint:point fromView:self];
-            if (CGRectContainsPoint(subView.bounds, myPoint)) {
-
-                return subView;
-            }
-        }
-    }
-
-    return view;
-}
-</code></pre><h2 id="Next-Responder"><a href="#Next-Responder" class="headerlink" title="Next Responder"></a>Next Responder</h2><p>当选中的First Responder选择不响应当前触摸事件的时候，此时会把事件传到nextResponder，nextResponder的寻找规则为(下方摘自官方文档)：</p>
-<ul>
-<li><p>UIView objects. If the view is the root view of a view controller, the next responder is the view controller; otherwise, the next responder is the view’s superview.</p>
-</li>
-<li><p>UIViewController objects. If the view controller’s view is the root view of a window, the next responder is the window object.If the view controller was presented by another view controller, the next responder is the presenting view controller.</p>
-</li>
-<li><p>UIWindow objects. The window’s next responder is the UIApplication object.</p>
-</li>
-<li><p>UIApplication object. The next responder is the app delegate, but only if the app delegate is an instance of UIResponder and is not a view, view controller, or the app object itself.</p>
-</li>
-</ul>
-<h1 id="Gesture-Recognizer"><a href="#Gesture-Recognizer" class="headerlink" title="Gesture Recognizer"></a>Gesture Recognizer</h1><p>在这里不想多说用法，详情见官方文档，Gesture Recognizer不参与Responder Chain。如果手势识别成功的话，那么会调用View的touchesCancelled:forEvent:，同时其他关联的GestureRecognizer失败。识别失败则后续的UITouch和UIEvent继续传给对应的View，前提条件是View实现了对应的方法。</p>
-<p>这里需要注意的一件事是，无论一个UIView是否是最终响应事件的Responder，如果它有附加的Recognizer，那么这个Recognizer的手势识别过程是一定有的。也就是说如果一个父级View有一个GestureRecognizer，点击子级View，这时候即便子级View是最终实际响应者，手势识别过程也是存在的，这个时候父级的GestureRecognizer识别完成之后，会调用子View的touchesCancelled方法。曾经遇到过一个很苦恼的问题，一个点赞按钮，点击似乎有延迟，最后发现是父层View加了一个双击手势识别的GestureRecognizer，这个还是有一点耗时的。</p>
-<h1 id="自己处理触摸事件"><a href="#自己处理触摸事件" class="headerlink" title="自己处理触摸事件"></a>自己处理触摸事件</h1><p>也可以自己处理相应的触摸事件，需要选择性地重写4个方法：</p>
-<pre><code>- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event;
-- (void)touchesEnded:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event;
-- (void)touchesCancelled:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event;
-- (void)touchesMoved:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event;
-</code></pre><p>上面的几个方法很好理解。UIEvent就是代表着一个完整的触摸流程；UITouch是记录着手指的移动，有可能不止一个手指，这里参数为NSSet类型是因为有可能开启了多点触控。UITouch对象记录着位置，力度大小，半径等等信息。</p>
-<p>四个方法需选择性地重写，对于一个手势，当UIKit发现没有重写对应方法，也没有对应的Recognizer可以识别，那对应的UITouch和UIEvent就会传到nextResponder。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Stephen Zhang">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar.png">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen的小本本">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/" itemprop="url">
-                  Mac OS Sierra下编译Android 7.1.1
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-16T19:46:37+08:00">
-                2017-02-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/安卓开发/" itemprop="url" rel="index">
-                    <span itemprop="name">安卓开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>网速不好就找个网速好的地方，破网速太tm恶心了<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/02/16/Mac-OS-Sierra下编译Android-7-1-1/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/02/15/Android-DataBinding（二）：源码解析/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Stephen Zhang">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar.png">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen的小本本">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/15/Android-DataBinding（二）：源码解析/" itemprop="url">
-                  Android DataBinding（二）：源码解析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-15T15:27:19+08:00">
-                2017-02-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/安卓开发/" itemprop="url" rel="index">
-                    <span itemprop="name">安卓开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>看源码有两种方式可供选择，第一种是直接将整个AOSP下载下来，然后自行编译，这种方法的好处看源码不会遇到爆红，整个代码结构一目了然，缺点就是占用空间大，下载时间长，编译坑比较多……第二种方法是直接用sdk目录之下的。在这里笔者采用第一种方法，下载并编译AOSP请见：<a href="http://zsrr.coding.me/2017/02/16/Mac-OS-Sierra%E4%B8%8B%E7%BC%96%E8%AF%91Android-7-1-1/" target="_blank" rel="external">Mac OS Sierra下编译Android 7.1.1</a>。</p>
-<p>用Android Studio导入安卓源码之后，在Android视图，java包下会看到这几个包：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-17%20%E4%B8%8B%E5%8D%889.24.48.png" alt=""><br>这就是我们要分析的源码了。</p>
-<p>如果要采用第二种方法，platform请升到最新，不然可能出现当前platform找不到databinding的源码的问题，具体步骤如下：    </p>
-<ul>
-<li>随便新建一个Android项目</li>
-<li>找到sdk文件夹，依次进入sources，android-xx（最新的），android文件夹，将里面的databinding文件夹复制到刚才新建的安卓项目当中。</li>
-<li>更改databinding文件夹中所有java文件的包名。</li>
-</ul>
-<p>另外，如果你是Windows用户，那么请用<a href="https://www.sourceinsight.com/download/" target="_blank" rel="external">Source Insight</a>查看安卓源码。</p>
-<h1 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h1><h2 id="DataBindingUtil"><a href="#DataBindingUtil" class="headerlink" title="DataBindingUtil"></a>DataBindingUtil</h2><p>这是数据绑定的入口类，一般用它来创建相应的Binding类，我们由此开始分析。</p>
-<p>先看最常见的用法：</p>
-<pre><code>public static &lt;T extends ViewDataBinding&gt; T inflate(LayoutInflater inflater, int layoutId, ViewGroup parent, boolean attachToParent);
-public static &lt;T extends ViewDataBinding&gt; T setContentView(Activity activity, int layoutId);
-public static &lt;T extends ViewDataBinding&gt; T bind(View root);
-</code></pre><p>第一个方法最终调用的是<strong>bind(DataBindingComponent bindingComponent, View root, int layoutId)</strong>方法（如果attachToParent设置为false的话），这个方法的定义为：</p>
-<pre><code>static &lt;T extends ViewDataBinding&gt; T bind(DataBindingComponent bindingComponent, View root,
-        int layoutId) {
-    return (T) sMapper.getDataBinder(bindingComponent, root, layoutId);
-}
-</code></pre><p>直接交给了sMapper来处理，sMapper是一个类型为DataBinderMapper的静态成员，其getDataBinder方法会根据xml文件生成的ViewDataBinding子类动态改变，这是笔者的getDataBinder源码（源自另一个已经写好的安卓项目）：</p>
-<pre><code>public android.databinding.ViewDataBinding getDataBinder(android.databinding.DataBindingComponent bindingComponent, android.view.View view, int layoutId) {
-    switch(layoutId) {
-            case com.stephen.learning.R.layout.item_view:
-                return com.stephen.learning.databinding.ViewHolderBinding.bind(view, bindingComponent);
-            case com.stephen.learning.R.layout.activity_data_binding:
-                return com.stephen.learning.databinding.ImageViewBinding.bind(view, bindingComponent);
-    }
-    return null;
-}
-</code></pre><p>可以看到，DataBinderMapper类将行为委托给了实际产生的ViewDataBinding的子类上，其具体的bind方法的实现，我们稍后再谈。现在再看<strong>setContentView</strong>方法，此方法的实现：</p>
-<pre><code>public static &lt;T extends ViewDataBinding&gt; T setContentView(Activity activity, int layoutId) {
-    return setContentView(activity, layoutId, sDefaultComponent);
-}
-
-public static &lt;T extends ViewDataBinding&gt; T setContentView(Activity activity, int layoutId,
-        DataBindingComponent bindingComponent) {
-    activity.setContentView(layoutId);
-    View decorView = activity.getWindow().getDecorView();
-    ViewGroup contentView = (ViewGroup) decorView.findViewById(android.R.id.content);
-    return bindToAddedViews(bindingComponent, contentView, 0, layoutId);
-}
-</code></pre><p>bindToAddedViews方法的实现：</p>
-<pre><code>private static &lt;T extends ViewDataBinding&gt; T bindToAddedViews(DataBindingComponent component,
-        ViewGroup parent, int startChildren, int layoutId) {
-    final int endChildren = parent.getChildCount();
-    final int childrenAdded = endChildren - startChildren;
-    if (childrenAdded == 1) {
-        final View childView = parent.getChildAt(endChildren - 1);
-        return bind(component, childView, layoutId);
-    } else {
-        final View[] children = new View[childrenAdded];
-        for (int i = 0; i &lt; childrenAdded; i++) {
-            children[i] = parent.getChildAt(i + startChildren);
-        }
-        return bind(component, children, layoutId);
-    }
-}
-</code></pre><p>由上述代码可以发现，setContentView先获得activity中DecorView中的FrameLayout，再将其作为参数传入<strong>bindToAddedViews</strong>方法，此方法先判断parent当中子视图的数目，一般情况下我们activity的xml文件只有一个RelativeLayout或者LinearLayout的根元素，所以子视图一般只有一个，于是又开始调用bind方法，重新回到上面的流程。</p>
-<p>下面分析<strong>bind(View root)</strong>方法：</p>
-<pre><code>public static &lt;T extends ViewDataBinding&gt; T bind(View root) {
-    return bind(root, sDefaultComponent);
-}
-
-public static &lt;T extends ViewDataBinding&gt; T bind(View root,
-        DataBindingComponent bindingComponent) {
-    T binding = getBinding(root);
-    if (binding != null) {
-        return binding;
-    }
-    Object tagObj = root.getTag();
-    if (!(tagObj instanceof String)) {
-        throw new IllegalArgumentException(&quot;View is not a binding layout&quot;);
-    } else {
-        String tag = (String) tagObj;
-        int layoutId = sMapper.getLayoutId(tag);
-        if (layoutId == 0) {
-            throw new IllegalArgumentException(&quot;View is not a binding layout&quot;);
-        }
-        return (T) sMapper.getDataBinder(bindingComponent, root, layoutId);
-    }
-}
-</code></pre><p>bind方法先调用<strong>getBinding</strong>方法，<strong>getBinding</strong>方法直接调用了ViewDataBinding的静态<strong>getBinding</strong>方法，这个方法之后分析ViewDataBinding的时候再讲。如果得到的binding是空的，那就创建一个binding并且返回，创建过程是先得到view的tag，这个tag是个String类型。例如ListView的item的xml文件名为item<em> view，里面的根元素是layout标签，那么我们用LayoutInflater类inflate出来的view便有一个String类型的Tag，并且值为：”layout/item</em> view_ 0”。好，找到tag之后，便调用DataBinderMapper类的<strong>getLayoutId</strong>方法，这个方法也是根据xml文件的定义自动生成的，笔者的方法定义如下所示：</p>
-<pre><code>int getLayoutId(String tag) {
-    if (tag == null) {
-        return 0;
-    }
-    final int code = tag.hashCode();
-    switch(code) {
-        case -1223782307: {
-            if(tag.equals(&quot;layout/item_view_0&quot;)) {
-                return com.stephen.learning.R.layout.item_view;
-            }
-            break;
-        }
-        case 1514339820: {
-            if(tag.equals(&quot;layout/activity_data_binding_0&quot;)) {
-                return com.stephen.learning.R.layout.activity_data_binding;
-            }
-            break;
-        }
-    }
-    return 0;
-}
-</code></pre><p>嗯……这么拿hashCode做判断再拿tag做判断的写法比较智障啊……<br>拿到layoutId之后，最后调用sMapper的<strong>getDataBinder</strong>，结束。</p>
-<h2 id="DataBinderMapper"><a href="#DataBinderMapper" class="headerlink" title="DataBinderMapper"></a>DataBinderMapper</h2><p>这个类随着我们对xml的定义改变而改变，它的职责其实在上文对DataBindingUtil类的分析中已经展现：  </p>
-<ul>
-<li>作为DataBindingUtil和ViewDataBinding类的中介类</li>
-<li>根据tag得到对应的id</li>
-</ul>
-<p>此外，它的内部还维护一个InnerBrLookUp的静态类，此静态类又维护一个String类型的数组，用来将BR类的id转成对应的String，通常用作打log，这里不再细谈。</p>
-<h2 id="BaseObservable"><a href="#BaseObservable" class="headerlink" title="BaseObservable"></a>BaseObservable</h2><p>把此类放在这个位置是为了之后介绍<strong>ViewDataBinding</strong>类。</p>
-<p>此类的实现相当简单：</p>
-<pre><code>public class BaseObservable implements Observable {
-    private transient PropertyChangeRegistry mCallbacks;
-
-    public BaseObservable() {
-    }
-
-    @Override
-    public synchronized void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-        if (mCallbacks == null) {
-            mCallbacks = new PropertyChangeRegistry();
-        }
-        mCallbacks.add(callback);
-    }
-
-    @Override
-    public synchronized void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-        if (mCallbacks != null) {
-            mCallbacks.remove(callback);
-        }
-    }
-
-
-    public synchronized void notifyChange() {
-        if (mCallbacks != null) {
-            mCallbacks.notifyCallbacks(this, 0, null);
-        }
-    }
-
-    public void notifyPropertyChanged(int fieldId) {
-        if (mCallbacks != null) {
-            mCallbacks.notifyCallbacks(this, fieldId, null);
+<p>拿上面的运行结果的线程名为<strong>Finalizer</strong>的线程来说，运行时处于<strong>WAITING</strong>状态，它在等待有对象进入它内部持有的<strong>ReferenceQueue</strong>，并执行清理动作，有关Finalizer的更多信息，查看：<a href="http://blog.csdn.net/rsljdkt/article/details/12242007" target="_blank" rel="external">GC执行finalize的过程</a></p>
+<p>为了说明各大状态，我先用开几个线程，然后用<a href="http://blog.csdn.net/fenglibing/article/details/6411940" target="_blank" rel="external">jstack</a>指令查看各线程的状态。</p>
+<p>代码如下：</p>
+<pre><code>class SleepUtils {
+    public static void sleep(int millionSeconds) {
+        try {
+            Thread.sleep(millionSeconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
-</code></pre><p>将所有的职责都托付给了内部成员<strong>mCallbacks</strong>身上。</p>
-<h3 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h3><p><strong>BaseObservable</strong>实现了<strong>Observable</strong>接口。先看一下官方文档对此接口的介绍：</p>
-<blockquote>
-<p>Observable classes provide a way in which data bound UI can be notified of changes.</p>
-</blockquote>
-<p>简而言之，这个接口就是为了保证UI元素和数据之间的双向绑定，其内部有两个方法：</p>
-<pre><code>void addOnPropertyChangedCallback(OnPropertyChangedCallback callback);
-void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback);
-</code></pre><p>OnPropertyChangedCallback是一个抽象类，其内部只有一个抽象方法:</p>
-<pre><code>public abstract void onPropertyChanged(Observable sender, int propertyId);
-</code></pre><p>sender就是持有此类的<strong>Observable</strong>类，propertyId是绑定的数据id。当我们用<strong>Bindable</strong>注解标注一个getter时，自动生成的<strong>BR</strong>类会生成此id。</p>
-<h3 id="CallbackRegistry"><a href="#CallbackRegistry" class="headerlink" title="CallbackRegistry"></a>CallbackRegistry</h3><p>上面说到<strong>BaseObservable</strong>将职责托付给了<strong>mCallbacks</strong>，而mCallbacks是一个<strong>PropertyChangeRegistry</strong>类，这个类的超类<strong>CallbackRegistry</strong>。此类是管理callback注册，删除，通知的核心类，通过内部<strong>NotifierCallback</strong>类来通知callbacks，此类的代码虽然不多，但是对于我这种算法弱鸡来说看上去的感觉是这样的：<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1487508874434&amp;di=188c6fb1e6fe4e69bf1cab8c82844595&amp;imgtype=0&amp;src=http%3A%2F%2Fwanzao2.b0.upaiyun.com%2Fsystem%2Fpictures%2F31274020%2Foriginal%2F1449639129_500x500.png" alt=""></p>
-<p>这个牛逼的算法就不由我这个弱鸡去分析了，它实现了通知Callback的可重入性，就是比方说有两个线程，一个线程执行到通知某个Callback时cpu切到了另一个线程，这个线程把刚才的要通知的Callback给删了，这种情况下切换到之前的线程进行通知是没有任何影响的。如果各位实在想知道这个算法是怎么一回事，请看这篇大牛的文章吧：<a href="https://gold.xitu.io/post/5840e2e3ac502e006cc0ef26" target="_blank" rel="external">回调通知管理器 CallbackRegistry 解析</a></p>
-<h3 id="PropertyChangeRegistry"><a href="#PropertyChangeRegistry" class="headerlink" title="PropertyChangeRegistry"></a>PropertyChangeRegistry</h3><p>此类比较简单：</p>
-<pre><code>public class PropertyChangeRegistry extends
-    CallbackRegistry&lt;Observable.OnPropertyChangedCallback, Observable, Void&gt; {
 
-    private static final CallbackRegistry.NotifierCallback&lt;Observable.OnPropertyChangedCallback, Observable, Void&gt; NOTIFIER_CALLBACK = new CallbackRegistry.NotifierCallback&lt;Observable.OnPropertyChangedCallback, Observable, Void&gt;() {
+public class ThreadStateTest {
+
+    static class TimeWaitingThread implements Runnable {
         @Override
-        public void onNotifyCallback(Observable.OnPropertyChangedCallback callback, Observable sender,
-                int arg, Void notUsed) {
-            callback.onPropertyChanged(sender, arg);
-        }
-    };
-
-    public PropertyChangeRegistry() {
-        super(NOTIFIER_CALLBACK);
-    }
-
-    public void notifyChange(Observable observable, int propertyId) {
-        notifyCallbacks(observable, propertyId, null);
-    }
-}
-</code></pre><p>Callback类型是<strong>Observable</strong>的内部类<strong>OnPropertyChangedCallback</strong>，Sender类型是<strong>Observable</strong>。NotifierCallback内部的实现仅仅是调用callback的<strong>onPropertyChanged</strong>方法，arg便是<strong>BR</strong>类里面的资源id。<strong>notifyChange</strong>方法是将外层传来的sender以及资源id传给<strong>notifyCallbacks</strong>方法，以此达到了最终调用每一个callback的<strong>onPropertyChanged</strong>的目的。</p>
-<h2 id="ViewDataBinding"><a href="#ViewDataBinding" class="headerlink" title="ViewDataBinding"></a>ViewDataBinding</h2><p>系统会根据xml的描述生成此类的子类，我们先看一下自动生成的类的代码，一步一步加以分析。</p>
-<p>xml文件：</p>
-<pre><code>&lt;layout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
-    &lt;data class=&quot;BindingForTest&quot;&gt;
-        &lt;variable
-            name=&quot;testData&quot;
-            type=&quot;com.stephen.learning.databinding.Model&quot;/&gt;
-    &lt;/data&gt;
-
-    &lt;LinearLayout
-        xmlns:tools=&quot;http://schemas.android.com/tools&quot;
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;match_parent&quot;
-        tools:context=&quot;com.stephen.learning.databinding.TestActivity&quot;
-        android:orientation=&quot;vertical&quot;&gt;
-
-        &lt;TextView
-            android:id=&quot;@+id/main_text_view&quot;
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot; /&gt;
-        &lt;TextView
-            android:id=&quot;@+id/second_text_view&quot;
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;@{testData.testData}&quot;/&gt;
-        &lt;Button
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;@{testData.testData}&quot; /&gt;
-    &lt;/LinearLayout&gt;
-&lt;/layout&gt;
-</code></pre><p>生成的ViewBinding子类：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-19%20%E4%B8%8B%E5%8D%888.36.08.png" alt=""><br>先看构造函数：</p>
-<pre><code>public BindingForTest(android.databinding.DataBindingComponent bindingComponent, View root) {
-    super(bindingComponent, root, 0);
-    final Object[] bindings = mapBindings(bindingComponent, root, 4, sIncludes, sViewsWithIds);
-    this.mainTextView = (android.widget.TextView) bindings[3];
-    this.mboundView0 = (android.widget.LinearLayout) bindings[0];
-    this.mboundView0.setTag(null);
-    this.mboundView2 = (android.widget.Button) bindings[2];
-    this.mboundView2.setTag(null);
-    this.secondTextView = (android.widget.TextView) bindings[1];
-    this.secondTextView.setTag(null);
-    setRootTag(root);
-    // listeners
-    invalidateAll();
-}
-</code></pre><p>先调用超类的静态<strong>mapBindings</strong>方法得到一个<strong>View</strong>数组，再从数组中初始化View成员，View成员有三种：</p>
-<ul>
-<li>在xml中有id的定义。</li>
-<li>在xml中存在数据的绑定。</li>
-<li>是根View。</li>
-</ul>
-<p>满足以上三个条件任意一个便会生成相应的类成员，下面是笔者的类里面的类成员：</p>
-<pre><code>//存在id，不存在数据绑定
-public final android.widget.TextView mainTextView;
-//根View
-private final android.widget.LinearLayout mboundView0;
-//存在数据绑定，不存在id
-private final android.widget.Button mboundView2;
-//既存在数据绑定，也存在id
-public final android.widget.TextView secondTextView;
-</code></pre><p>再来看一下类的静态初始化：</p>
-<pre><code>static {
-    sIncludes = null;
-    sViewsWithIds = new android.util.SparseIntArray();
-    sViewsWithIds.put(R.id.main_text_view, 3);
-}
-</code></pre><p><strong>sIncludes</strong>只有在xml中存在<strong>&lt;include&gt;</strong>标签且存在数据绑定的时候才不为空，在这里笔者暂时没有用到使用数据绑定的<strong>&lt;include&gt;</strong>的需求（觉得也不可能有），而且源码的实现相对简单，这里不太值得分析，有兴趣自己去看。<strong>sViewsWithIds</strong>是一个<strong>SparseIntArray</strong>，这个成员的作用是存放不存在数据绑定但存在id定义的View成员。键是id，值是对应在上面所提在View数组中的索引值。</p>
-<p>下面来看<strong>mapBindings</strong>方法：</p>
-<pre><code>protected static Object[] mapBindings(DataBindingComponent bindingComponent, View root,
-        int numBindings, IncludedLayouts includes, SparseIntArray viewsWithIds) {
-    Object[] bindings = new Object[numBindings];
-    mapBindings(bindingComponent, root, bindings, includes, viewsWithIds, true);
-    return bindings;
-}
-
-private static void mapBindings(DataBindingComponent bindingComponent, View view,
-        Object[] bindings, IncludedLayouts includes, SparseIntArray viewsWithIds,
-        boolean isRoot) {
-    final int indexInIncludes;
-    final ViewDataBinding existingBinding = getBinding(view);
-    //已经绑定过，返回
-    if (existingBinding != null) {
-        return;
-    }
-
-    Object objTag = view.getTag();
-    final String tag = (objTag instanceof String) ? (String) objTag : null;
-    boolean isBound = false;
-
-    //如果是根View
-    if (isRoot &amp;&amp; tag != null &amp;&amp; tag.startsWith(&quot;layout&quot;)) {
-        final int underscoreIndex = tag.lastIndexOf(&apos;_&apos;);
-        if (underscoreIndex &gt; 0 &amp;&amp; isNumeric(tag, underscoreIndex + 1)) {
-            final int index = parseTagInt(tag, underscoreIndex + 1);
-            if (bindings[index] == null) {
-                bindings[index] = view;
-            }
-            indexInIncludes = includes == null ? -1 : index;
-            isBound = true;
-        } else {
-            indexInIncludes = -1;
-        }
-     //如果不是根View
-    } else if (tag != null &amp;&amp; tag.startsWith(BINDING_TAG_PREFIX)) {
-        int tagIndex = parseTagInt(tag, BINDING_NUMBER_START);
-        if (bindings[tagIndex] == null) {
-            bindings[tagIndex] = view;
-        }
-        isBound = true;
-        indexInIncludes = includes == null ? -1 : tagIndex;
-    } else {
-        // Not a bound view
-        indexInIncludes = -1;
-    }
-    //处理存在id但是不存在数据绑定的view成员
-    if (!isBound) {
-        final int id = view.getId();
-        if (id &gt; 0) {
-            int index;
-            if (viewsWithIds != null &amp;&amp; (index = viewsWithIds.get(id, -1)) &gt;= 0 &amp;&amp;
-                    bindings[index] == null) {
-                bindings[index] = view;
+        public void run() {
+            while (true) {
+                SleepUtils.sleep(100);
             }
         }
     }
 
-    if (view instanceof  ViewGroup) {
-        final ViewGroup viewGroup = (ViewGroup) view;
-        final int count = viewGroup.getChildCount();
-        int minInclude = 0;
-        for (int i = 0; i &lt; count; i++) {
-            final View child = viewGroup.getChildAt(i);
-            boolean isInclude = false;
-            if (indexInIncludes &gt;= 0 &amp;&amp; child.getTag() instanceof String) {
-               ...
-            }
-            //对每一个子View进行递归处理
-            if (!isInclude) {
-                mapBindings(bindingComponent, child, bindings, includes, viewsWithIds, false);
+    static class PauseThread implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                long current = System.currentTimeMillis();
+                while (System.currentTimeMillis() - current &lt;= 3000);
             }
         }
     }
-}
-</code></pre><p>此方法的思想相对简单，先判断是否绑定过，如果已经绑定过，则返回。接下来分成三种情况：</p>
-<ul>
-<li>根视图。</li>
-<li>存在数据绑定的视图。</li>
-<li>不存在数据绑定，但是在xml中有id定义。</li>
-</ul>
-<p>最后如果传入的是一个ViewGroup，则对它的子视图进行递归处理。下面我们来看几个细节：</p>
-<p><strong>视图数组索引的判断</strong>  </p>
-<p>上文中我们说过用<strong>&lt;layout&gt;</strong>做标记的xml文件在用<strong>LayoutInflater</strong>类inflate出来的根View会有一个<strong>tag</strong>，这个<strong>tag</strong>是一个<strong>String</strong>类型，且设置的规则如下：</p>
-<ul>
-<li>根视图设置为<strong>layout/[xml文件名]_[在View数组中的索引]</strong></li>
-<li>不是根视图，但是存在数据的绑定，则设置为<strong>binding_[在View数组中的索引]</strong></li>
-</ul>
-<p>根据tag获得数组索引的代码如下：</p>
-<pre><code>private static int parseTagInt(String str, int startIndex) {
-    final int end = str.length();
-    int val = 0;
-    for (int i = startIndex; i &lt; end; i++) {
-        val *= 10;
-        char c = str.charAt(i);
-        val += (c - &apos;0&apos;);
-    }
-    return val;
-}
-</code></pre><p>这样得出的数组索引便是最后一个”_”后面的数字值。</p>
-<p>还有一种情况是不存在数据绑定，但是存在id定义的view成员。上面提到过如果存在这种情况，<strong>ViewDataBinding</strong>在静态初始化的时候会将对应的id和数组索引值放在一个<strong>SparseIntArray</strong>当中，这时候处理过程是这样的：</p>
-<pre><code>if (!isBound) {
-    final int id = view.getId();
-    if (id &gt; 0) {
-        int index;
-        if (viewsWithIds != null &amp;&amp; (index = viewsWithIds.get(id, -1)) &gt;= 0 &amp;&amp;
-                bindings[index] == null) {
-            bindings[index] = view;
-        }
-    }
-</code></pre><p>好，现在继续往下看<strong>invalidateAll</strong>方法：</p>
-<pre><code>public void invalidateAll() {
-    synchronized(this) {
-            mDirtyFlags = 0x2L;
-    }
-    requestRebind();
-}
-</code></pre><p><strong>requestRebind</strong>:</p>
-<pre><code>protected void requestRebind() {
-    synchronized (this) {
-        if (mPendingRebind) {
-            return;
-        }
-        mPendingRebind = true;
-    }
-    if (USE_CHOREOGRAPHER) {
-        mChoreographer.postFrameCallback(mFrameCallback);
-    } else {
-        mUIThreadHandler.post(mRebindRunnable);
-    }
 
-}
-</code></pre><p>其中<strong>USE_CHOREOGRAPHER</strong>是判断当前的SDK是不是16以上版本来决定是否能用<strong>Choreographer</strong>，如果能则直接设置一个<strong>FrameCallback</strong>，不能则在主线程运行一个<strong>Runnable</strong>，我们来看<strong>mFrameCallback</strong>的定义：</p>
-<pre><code>mFrameCallback = new Choreographer.FrameCallback() {
-            @Override
-            public void doFrame(long frameTimeNanos) {
-                mRebindRunnable.run();
-            }
-        };
-</code></pre><p><strong>mRebindRunnable</strong>:</p>
-<pre><code>private final Runnable mRebindRunnable = new Runnable() {
-    @Override
-    public void run() {
-        synchronized (this) {
-            mPendingRebind = false;
-        }
-        if (VERSION.SDK_INT &gt;= VERSION_CODES.KITKAT) {
-            // Nested so that we don&apos;t get a lint warning in IntelliJ
-            if (!mRoot.isAttachedToWindow()) {
-                // Don&apos;t execute the pending bindings until the View
-                // is attached again.
-                mRoot.removeOnAttachStateChangeListener(ROOT_REATTACHED_LISTENER);
-                mRoot.addOnAttachStateChangeListener(ROOT_REATTACHED_LISTENER);
-                return;
-            }
-        }
-        executePendingBindings();
-    }
-};
-</code></pre><p><strong>ROOT_ REATTACHED_LISTENER</strong>是一个<strong>OnAttachStateChangeListener</strong>，其定义如下：</p>
-<pre><code>ROOT_REATTACHED_LISTENER = new OnAttachStateChangeListener() {
-            @TargetApi(VERSION_CODES.KITKAT)
-            @Override
-            public void onViewAttachedToWindow(View v) {
-                // execute the pending bindings.
-                final ViewDataBinding binding = getBinding(v);
-                binding.mRebindRunnable.run();
-                v.removeOnAttachStateChangeListener(this);
-            }
-
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-            }
-        };
-</code></pre><p>很简单，当根视图还没有attach到window上的时候，<strong>mRebindRunnable</strong>直接设置一个<strong>OnAttachStateChangeListener</strong>并返回，当attach到window上的时候重新运行<strong>mRebindRunnable</strong>，此时将运行<strong>executePendingBindings</strong>，定义如下：</p>
-<pre><code>public void executePendingBindings() {
-    if (mIsExecutingPendingBindings) {
-        requestRebind();
-        return;
-    }
-    if (!hasPendingBindings()) {
-        return;
-    }
-    mIsExecutingPendingBindings = true;
-    mRebindHalted = false;
-    if (mRebindCallbacks != null) {
-        mRebindCallbacks.notifyCallbacks(this, REBIND, null);
-
-        // The onRebindListeners will change mPendingHalted
-        if (mRebindHalted) {
-            mRebindCallbacks.notifyCallbacks(this, HALTED, null);
-        }
-    }
-    if (!mRebindHalted) {
-        executeBindings();
-        if (mRebindCallbacks != null) {
-            mRebindCallbacks.notifyCallbacks(this, REBOUND, null);
-        }
-    }
-    mIsExecutingPendingBindings = false;
-}
-</code></pre><p>其中<strong>hasPendingBindings</strong>方法是一个抽象方法，一般情况下子类通过其<strong>mDirtyFlags</strong>判断是否有未处理的绑定情况，返回相应的布尔值：</p>
-<pre><code>public boolean hasPendingBindings() {
-    synchronized(this) {
-        if (mDirtyFlags != 0) {
-            return true;
-        }
-    }
-    return false;
-}
-</code></pre><p>接下来便要通知相应的mRebindCallbacks，我们来看它的定义：</p>
-<pre><code>private CallbackRegistry&lt;OnRebindCallback, ViewDataBinding, Void&gt; mRebindCallbacks;
-
-public void addOnRebindCallback(OnRebindCallback listener) {
-    if (mRebindCallbacks == null) {
-        mRebindCallbacks = new CallbackRegistry&lt;OnRebindCallback, ViewDataBinding, Void&gt;(REBIND_NOTIFIER);
-    }
-    mRebindCallbacks.add(listener);
-}
-</code></pre><p>它是一个Callback类型是<strong>OnRebindCallback</strong>，Sender类型是<strong>ViewDataBinding</strong>的<strong>CallbackRegistry</strong>类型，下面来看<strong>OnRebindCallback</strong>的定义，它是一个抽象类，里面有三个方法：</p>
-<pre><code>public abstract class OnRebindCallback&lt;T extends ViewDataBinding&gt; {
-    public boolean onPreBind(T binding) {
-        return true;
-    }
-
-    public void onCanceled(T binding) {
-    }
-
-    public void onBound(T binding) {
-    }
-}
-</code></pre><p>泛型的参数T就是上面的Sender，第一个方法<strong>onPreBind</strong>的返回值决定着rebind是否会继续进行。接着再来看<strong>REBIND_NOTIFIER</strong>:</p>
-<pre><code>private static final CallbackRegistry.NotifierCallback&lt;OnRebindCallback, ViewDataBinding, Void&gt;
-    REBIND_NOTIFIER = new NotifierCallback&lt;OnRebindCallback, ViewDataBinding, Void&gt;() {
-    @Override
-    public void onNotifyCallback(OnRebindCallback callback, ViewDataBinding sender, int mode,
-            Void arg2) {
-        switch (mode) {
-            case REBIND:
-                if (!callback.onPreBind(sender)) {
-                    sender.mRebindHalted = true;
+    static class Waiting implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                synchronized (Waiting.class) {
+                    try {
+                        Waiting.class.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-                break;
-            case HALTED:
-                callback.onCanceled(sender);
-                break;
-            case REBOUND:
-                callback.onBound(sender);
-                break;
-        }
-    }
-};
-</code></pre><p>现在再来看<strong>executePendingBindings</strong>方法，先是向<strong>mRebindCallbacks</strong>传入<strong>REBIND</strong>参数，进而调用<strong>OnRebindCallback</strong>的<strong>onPreBind</strong>方法，根据其返回的布尔值来决定<strong>mRebindHalted</strong>的值（是否停止）。接下来判断<strong>mRebindHalted</strong>的值，如果是真值的话，则通过向<strong>mRebindCallbacks</strong>传入<strong>HALTED</strong>参数进而调用<strong>OnRebindCallback</strong>的<strong>onCanceled</strong>方法；如果是假值，则先调用<strong>executeBindings</strong>方法，此方法是抽象方法，再通过向<strong>mRebindCallbacks</strong>传入<strong>REBOUND</strong>参数，进而调用<strong>OnRebindCallback</strong>的<strong>onRebound</strong>方法。</p>
-<p>下面来看<strong>executeBindings</strong>方法的具体实现：</p>
-<pre><code>@Override
-protected void executeBindings() {
-    long dirtyFlags = 0;
-    synchronized(this) {
-        //读取mDirtyFlags
-        dirtyFlags = mDirtyFlags;
-        //重置mDirtyFlags
-        mDirtyFlags = 0;
-    }
-    java.lang.String testDataTestData = null;
-    //读取testData
-    com.stephen.learning.databinding.Model testData = mTestData;
-
-    if ((dirtyFlags &amp; 0x3L) != 0) {
-
-
-
-            if (testData != null) {
-                // read testData.testData
-                testDataTestData = testData.testData;
             }
+        }
     }
-    // batch finished
-    if ((dirtyFlags &amp; 0x3L) != 0) {
-        // api target 1
 
-        android.databinding.adapters.TextViewBindingAdapter.setText(this.mboundView2, testDataTestData);
-        android.databinding.adapters.TextViewBindingAdapter.setText(this.secondTextView, testDataTestData);
+    static class Block implements Runnable {
+        @Override
+        public void run() {
+            synchronized (Block.class) {
+                while (true) {
+                    SleepUtils.sleep(4000);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new Thread(new TimeWaitingThread(), &quot;TimedWaitingThread&quot;).start();
+        new Thread(new PauseThread(), &quot;PauseThread&quot;).start();
+        new Thread(new Waiting(), &quot;WaitingThread&quot;).start();
+        new Thread(new Block(), &quot;Block1&quot;).start();
+        new Thread(new Block(), &quot;Block2&quot;).start();
     }
 }
-</code></pre><p>方法的最后通过<strong>TextViewBindingAdapter</strong>来实际设置<strong>TextView</strong>的值（<strong>Button</strong>继承于<strong>TextView</strong>），除了<strong>TextViewBindingAdapter</strong>之外，官方还提供了四十多种Adapter用来使数据绑定更加便捷，在这里我就不一一分析了，只说一下大体的形式。一般来说一个Adapter由两部分组成：</p>
+</code></pre><p>运行之后，先在终端运行<a href="http://blog.csdn.net/fenglibing/article/details/6411932" target="_blank" rel="external">jps</a>命令，结果如下：</p>
+<pre><code>37729 
+38982 Launcher
+38983 AppMain
+38986 Jps
+</code></pre><p>其中<strong>AppMain</strong>就是刚才开启的进程pid，现在运行<strong>jstack 38983</strong>，运行结果如下（部分）：</p>
+<pre><code>&quot;Block2&quot; #14 prio=5 os_prio=31 tid=0x00007fc65c835000 nid=0x5703 waiting for monitor entry [0x0000700002ba2000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+    at com.stephen.ThreadStateTest$Block.run(ThreadStateTest.java:58)
+    - waiting to lock &lt;0x00000007956f6ea8&gt; (a java.lang.Class for com.stephen.ThreadStateTest$Block)
+    at java.lang.Thread.run(Thread.java:745)
+
+&quot;Block1&quot; #13 prio=5 os_prio=31 tid=0x00007fc65d82a000 nid=0x5503 waiting on condition [0x0000700002a9f000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+    at java.lang.Thread.sleep(Native Method)
+    at com.stephen.SleepUtils.sleep(ThreadStateTest.java:10)
+    at com.stephen.ThreadStateTest$Block.run(ThreadStateTest.java:58)
+    - locked &lt;0x00000007956f6ea8&gt; (a java.lang.Class for com.stephen.ThreadStateTest$Block)
+    at java.lang.Thread.run(Thread.java:745)
+
+&quot;WaitingThread&quot; #12 prio=5 os_prio=31 tid=0x00007fc65d82f800 nid=0x5303 in Object.wait() [0x000070000299c000]
+   java.lang.Thread.State: WAITING (on object monitor)
+    at java.lang.Object.wait(Native Method)
+    - waiting on &lt;0x00000007956f37f0&gt; (a java.lang.Class for com.stephen.ThreadStateTest$Waiting)
+    at java.lang.Object.wait(Object.java:502)
+    at com.stephen.ThreadStateTest$Waiting.run(ThreadStateTest.java:44)
+    - locked &lt;0x00000007956f37f0&gt; (a java.lang.Class for com.stephen.ThreadStateTest$Waiting)
+    at java.lang.Thread.run(Thread.java:745)
+
+&quot;PauseThread&quot; #11 prio=5 os_prio=31 tid=0x00007fc65e01e000 nid=0x5103 runnable [0x0000700002899000]
+   java.lang.Thread.State: RUNNABLE
+    at com.stephen.ThreadStateTest$PauseThread.run(ThreadStateTest.java:33)
+    at java.lang.Thread.run(Thread.java:745)
+
+&quot;TimedWaitingThread&quot; #10 prio=5 os_prio=31 tid=0x00007fc65c80e000 nid=0x4f03 waiting on condition [0x0000700002796000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+    at java.lang.Thread.sleep(Native Method)
+    at com.stephen.SleepUtils.sleep(ThreadStateTest.java:10)
+    at com.stephen.ThreadStateTest$TimeWaitingThread.run(ThreadStateTest.java:23)
+    at java.lang.Thread.run(Thread.java:745)
+</code></pre><p>现在来逐一解释：</p>
 <ul>
-<li>顶部<strong>BindingMethods</strong>注解，用此注解来说明当发生数据绑定时调用哪个类的哪个方法。</li>
-<li>一系列用<strong>BindingAdapter</strong>注释的静态方法，用来供<strong>ViewDataBinding</strong>的子类调用。</li>
+<li><strong>Block2</strong>：由于<strong>Block1</strong>已经获得<strong>Block.class</strong>锁，所以此线程处于阻塞状态。</li>
+<li><strong>Block1</strong>：此线程不断的进行睡眠，且睡眠操作具有时间限制，因此处在超时等待操作状态。</li>
+<li><strong>WaitingThread</strong>：此线程在<strong>Waiting.class</strong>上等待，且没有时间限制，所以处在waiting状态。</li>
+<li><strong>PauseThread</strong>：此线程和<strong>TimedWaitingThread</strong>线程达到的效果相同，但是实现的手段不同，没有调用<strong>Thread.sleep(int millionSeconds)</strong>方法，处在<strong>Runnable</strong>状态。</li>
+<li><strong>TimedWaitingThread</strong>：此线程不断调用<strong>Thread.sleep(int millionSeconds)</strong>方法，处于超时等待状态。</li>
 </ul>
-<p>值得注意的是，xml中的数据绑定并不都是通过Adapter来实现的，下面举一个例子：</p>
-<p>将xml文件更改成：</p>
-<pre><code>&lt;layout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-xmlns:bind=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
-
-    ...
-
-    &lt;LinearLayout
-        xmlns:tools=&quot;http://schemas.android.com/tools&quot;
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;match_parent&quot;
-        tools:context=&quot;com.stephen.learning.databinding.TestActivity&quot;
-        android:orientation=&quot;vertical&quot;&gt;
-
-        ...
-
-        &lt;Button
-            android:layout_width=&quot;wrap_content&quot;
-            android:layout_height=&quot;wrap_content&quot;
-            android:text=&quot;@{testData.testData}&quot;
-            android:onClick=&quot;@{(v) -&gt; testData.onButtonClick()}&quot;/&gt;
-    &lt;/LinearLayout&gt;
-&lt;/layout&gt;
-</code></pre><p>这个时候rebuild project，<strong>BindingForTest</strong>类变成了这样：</p>
-<pre><code>public class BindingForTest extends android.databinding.ViewDataBinding implements android.databinding.generated.callback.OnClickListener.Listener {
-
-    ...
-
-    public BindingForTest(android.databinding.DataBindingComponent bindingComponent, View root) {
-        ...
-        // listeners
-        mCallback1 = new android.databinding.generated.callback.OnClickListener(this, 1);
-        invalidateAll();
-    }
-
-    @Override
-    protected void executeBindings() {
-        ...
-        if ((dirtyFlags &amp; 0x2L) != 0) {
-            // api target 1
-
-            this.mboundView2.setOnClickListener(mCallback1);
+<h1 id="线程的中断"><a href="#线程的中断" class="headerlink" title="线程的中断"></a>线程的中断</h1><h2 id="interrupt"><a href="#interrupt" class="headerlink" title="interrupt()"></a>interrupt()</h2><p>其他线程可以调用另一个线程的<strong>interrupt()</strong>方法来中断线程，可以调用线程的<strong>isInterrupted()</strong>来判断一个线程是否被中断，但是这个方法不总是返回true:</p>
+<ul>
+<li>当线程终止时，此方法会返回false。</li>
+<li>抛出<strong>InterruptedException</strong>的方法，在抛出异常之前，会将标识位设置为false，因此方法也总是返回false。</li>
+</ul>
+<p>现在用如下程序做出证明：</p>
+<pre><code>public class InterruptTest {
+    static class SleepThread implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                SleepUtils.sleep(3000);
+            }
         }
     }
-    // Listener Stub Implementations
-    // callback impls
-    public final void _internalCallbackOnClick(int sourceId , android.view.View callbackArg_0) {
-        // localize variables for thread safety
-        // testData != null
-        boolean testDataObjectnull = false;
-        // testData
-        com.stephen.learning.databinding.Model testData = mTestData;
 
-
-
-        testDataObjectnull = (testData) != (null);
-        if (testDataObjectnull) {
-
-
-            testData.onButtonClick();
+    static class NormalThread implements Runnable {
+        @Override
+        public void run() {
+            while (true);
         }
+    }
+
+    public static void main(String[] args) {
+        Thread sleepThread = new Thread(new SleepThread(), &quot;Sleep&quot;);
+        Thread normalThread = new Thread(new NormalThread(), &quot;Normal&quot;);
+
+        sleepThread.start();
+        normalThread.start();
+
+        SleepUtils.sleep(2000);
+
+        sleepThread.interrupt();
+        normalThread.interrupt();
+
+        System.out.println(&quot;Sleep thread interrupted is &quot; + sleepThread.isInterrupted());
+        System.out.println(&quot;Normal thread interrupted is &quot; + normalThread.isInterrupted());
     }
 }
-</code></pre><p>在构造函数中初始化了databinding包中的<strong>OnClickListener</strong>，并且实现了其中的<strong>Listener</strong>接口，<strong>OnClickListener</strong>类的定义如下：</p>
-<pre><code>public final class OnClickListener implements android.view.View.OnClickListener {
-    final Listener mListener;
-    final int mSourceId;
-    public OnClickListener(Listener listener, int sourceId) {
-        mListener = listener;
-        mSourceId = sourceId;
-    }
-    @Override
-    public void onClick(android.view.View callbackArg_0) {
-        mListener._internalCallbackOnClick(mSourceId , callbackArg_0);
-    }
-    public interface Listener {
-        void _internalCallbackOnClick(int sourceId , android.view.View callbackArg_0);
-    }
-}
-</code></pre><p>它实现了<strong>View</strong>当中的<strong>OnClickListener</strong>接口，其<strong>onClick</strong>方法则调用<strong>mListener</strong>当中的<strong>_internalCallbackOnClick</strong>方法（这个命名怎么这么像native方法）。<strong>BindingForTest</strong>的对此方法的定义如下：</p>
-<pre><code>public final void _internalCallbackOnClick(int sourceId , android.view.View callbackArg_0) {
-        // localize variables for thread safety
-        // testData != null
-        boolean testDataObjectnull = false;
-        // testData
-        com.stephen.learning.databinding.Model testData = mTestData;
-        testDataObjectnull = (testData) != (null);
-        if (testDataObjectnull) {
-            testData.onButtonClick();
+</code></pre><p>结果如下：</p>
+<pre><code>Sleep thread interrupted is false    
+Normal thread interrupted is true
+</code></pre><h2 id="设置boolean变量"><a href="#设置boolean变量" class="headerlink" title="设置boolean变量"></a>设置boolean变量</h2><p>还可以设置boolean变量来通知线程的结束，这种方式比上面的<strong>interrupt</strong>方法更为优雅：</p>
+<pre><code>public class BooleanFlagThread {
+    static class CounterRunnable implements Runnable {
+        long i = 0L;
+        private volatile boolean isCancelled = false;
+
+        public void cancel() {
+            isCancelled = true;
+        }
+
+        @Override
+        public void run() {
+            while (!isCancelled &amp;&amp; !Thread.currentThread().isInterrupted()) {
+                i++;
+            }
         }
     }
-</code></pre><p>这边开始调用testData的<strong>onButtonClick</strong>，与xml中的定义对应起来了。</p>
+
+    public static void main(String[] args) {
+        CounterRunnable cr = new CounterRunnable();
+        Thread countThread = new Thread(cr, &quot;Count&quot;);
+        countThread.start();
+
+        SleepUtils.sleep(2000);
+        cr.cancel();
+
+        System.out.println(&quot;&quot; + cr.i);
+    }
+}
+</code></pre><h1 id="线程之间的通信：notify-wait"><a href="#线程之间的通信：notify-wait" class="headerlink" title="线程之间的通信：notify(), wait()"></a>线程之间的通信：notify(), wait()</h1><p>线程除了用<strong>synchronized</strong>,<strong>volatile</strong>来进行通信之外，还可以用notify和wait方法，使用这两个方法的前提是某个线程获取了相应对象的锁，典型应用的示例代码如下：</p>
+<pre><code>public class NotifyWaitTest {
+    static Object lock = new Object();
+    static boolean flag = true;
+
+    static class Wait implements Runnable {
+        @Override
+        public void run() {
+            //获取对象的锁
+            synchronized (lock) {
+                while (flag) { // 2
+                    System.out.println(&quot;不满足相应的条件&quot;);
+                    try {
+                        //进入wait状态，同时释放对象的锁
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println(&quot;条件满足&quot;);
+            }
+        }
+    }
+
+    static class Notify implements Runnable {
+        @Override
+        public void run() {
+            //获取对象的锁
+            synchronized (lock) {
+                if (flag) {
+                    flag = false; // 1
+                    //通知改变
+                    lock.notify();
+                }
+
+                System.out.println(&quot;条件已改变&quot;);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Thread waitThread = new Thread(new Wait(), &quot;Wait&quot;);
+        Thread notifyThread = new Thread(new Notify(), &quot;Notify&quot;);
+        waitThread.start();
+        //保证wait先执行的方式
+        SleepUtils.sleep(2000);
+        notifyThread.start();
+    }
+}
+</code></pre><p>输出的结果如下：</p>
+<pre><code>不满足相应的条件
+条件已改变
+条件满足
+</code></pre><p>需要注意的是：</p>
+<ul>
+<li>在调用notify, wait方法之前，要先获得对象的锁。</li>
+<li>wait方法，会释放相应的锁。</li>
+<li>notify方法会将调用wait的线程从等待队列到同步队列，此时wait线程将从WAITING状态转到BLOCK状态。</li>
+<li>只有当notify的线程释放对象锁时，另一个wait线程才会返回继续工作。</li>
+<li>notify和wait具有happens-before关系。</li>
+</ul>
 
           
         
@@ -1396,7 +673,7 @@ xmlns:bind=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/02/14/Android-DataBinding（一）：基本使用/">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/03/13/Java内存模型-三/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Stephen Zhang">
@@ -1421,8 +698,8 @@ xmlns:bind=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
             
               
                 
-                <a class="post-title-link" href="/2017/02/14/Android-DataBinding（一）：基本使用/" itemprop="url">
-                  Android DataBinding（一）：基本使用
+                <a class="post-title-link" href="/2017/03/13/Java内存模型-三/" itemprop="url">
+                  Java内存模型(三)
                 </a>
               
             
@@ -1438,8 +715,693 @@ xmlns:bind=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-14T21:42:57+08:00">
-                2017-02-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-13T18:44:31+08:00">
+                2017-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>注：</strong>一下部分文字图片来自《Java并发编程的艺术》</p>
+<h1 id="双重检查锁解决方案"><a href="#双重检查锁解决方案" class="headerlink" title="双重检查锁解决方案"></a>双重检查锁解决方案</h1><p>Java程序有时需要用到单例模式，通常用延迟初始化的方式实现单例模式，但是只是简单的延迟初始化可能会有线程安全问题，例如：</p>
+<pre><code>public class Instance {
+    private static Instance instance;
+
+    public static Instance getInstance() {
+        if (instance == null) { //1
+            instance = new Instance();
+        }
+
+        return instance;
+    }
+}
+</code></pre><p>这段代码有很严重的问题，加入两个线程同时处于1操作并且判断instance为空的话，那么instance就会被初始化两次。</p>
+<h2 id="synchronized解决方案"><a href="#synchronized解决方案" class="headerlink" title="synchronized解决方案"></a>synchronized解决方案</h2><p>解决上述问题最简单的方法便是用<strong>synchronized</strong>关键字标注<strong>getInstance</strong>方法：</p>
+<pre><code>public synchronized static Instance getInstance() {
+    if (instance == null) {
+        instance = new Instance();
+    }
+
+    return instance;
+}
+</code></pre><p>此方法解决了多线程冲突的问题，但是如果线程太多且<strong>instance</strong>初始化过程太耗时的话，就会转成重量级锁，性能问题随之而来。</p>
+<h2 id="双重检查锁定-Double-Checked-Lock"><a href="#双重检查锁定-Double-Checked-Lock" class="headerlink" title="双重检查锁定(Double Checked Lock)"></a>双重检查锁定(Double Checked Lock)</h2><p>为了解决性能的开销，采取了下述办法来解决：</p>
+<pre><code>public class Instance {
+    private static Instance instance;
+
+    public static Instance getInstance() {
+        if (instance == null) { //1
+            synchronized (Instance.class) { //2
+                if (instance == null) { //3
+                    instance = new Instance();
+                }
+            }
+        }
+
+        return instance;
+    }
+}
+</code></pre><p>采用上述办法不能完美地解决问题，出现的问题是返回的引用可能指向一个未被完全正确初始化的对象，下面来分析一下。</p>
+<p>假设初始有两个线程A,B同时调用<strong>getInstance</strong>方法，判断instance为空之后开始竞争<strong>Instance</strong>锁，设B线程首先获得了锁，并在成功初始化<strong>instance</strong>对象之后释放锁，此时线程A再获取锁，根据happens-before关系，此时线程A对<strong>instance</strong>对象的改变是可以看到的，因此整个过程只初始化了一次，截止到现在是没有问题的。</p>
+<h3 id="对象的初始化过程"><a href="#对象的初始化过程" class="headerlink" title="对象的初始化过程"></a>对象的初始化过程</h3><p>上述办法的问题来自于对象初始化过程的重排序，<strong>instance</strong>初始化可以分成以下三个过程：</p>
+<ul>
+<li>分配对象的存储空间。</li>
+<li>进行初始化。</li>
+<li>将对象的地址赋值给引用。</li>
+</ul>
+<p>问题来自于第二步和第三步的重排序。加入现在有两个线程A,B同时执行，B 先获得了锁先执行，此时A执行到上面的1操作，但是B线程此刻已经把对象地址赋值给了引用，但是并没有正确的初始化（3和1不具备happens-before）关系，此刻A线程读到的<strong>instance</strong>引用是不为空的，但是对象并没有正确的初始化，便即刻将其暴露给外部，问题就出现了。</p>
+<h3 id="基于volatile的解决方案"><a href="#基于volatile的解决方案" class="headerlink" title="基于volatile的解决方案"></a>基于volatile的解决方案</h3><p>在<strong>instance</strong>对象前面加上<strong>volatile</strong>关键字可以禁止上述初始化过程的重排序：</p>
+<pre><code>public class Instance {
+    private volatile static Instance instance;
+
+    public static Instance getInstance() {
+        if (instance == null) {
+            synchronized (Instance.class) {
+                if (instance == null) {
+                    instance = new Instance();
+                }
+            }
+        }
+
+        return instance;
+    }
+}
+</code></pre><p><strong>volatile</strong>关键字保证了读取到引用不为空时对象已经被正确地初始化，问题解决。</p>
+<h3 id="基于类初始化的解决方案"><a href="#基于类初始化的解决方案" class="headerlink" title="基于类初始化的解决方案"></a>基于类初始化的解决方案</h3><pre><code>public class Instance {
+    private static class InstanceHolder {
+        private static Instance instance = new Instance();
+    }
+
+    public static Instance getInstance() {
+        return InstanceHolder.instance;
+    }
+}
+</code></pre><p>此种方法适合包含无参构造函数的类的单例模式，原理如下：</p>
+<p>假设有两个线程A,B当两个线程同时开始访问<strong>Instance</strong>类的时候，开始类的初始化，此时JVM将尝试获取<strong>Instance</strong>类上的锁，防止多个线程同时初始化。</p>
+<p>假定线程B获取了初始化的锁，当执行完<strong>instance = new Instance()</strong>语句时，释放锁，线程A执行时将会看到已经初始化的<strong>instance</strong>实例并将其返回，初始化过程的重排序对于线程A此时是不可见的。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/03/11/Java内存模型-二/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/11/Java内存模型-二/" itemprop="url">
+                  Java内存模型(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T11:08:01+08:00">
+                2017-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>注：</strong>一下部分文字图片来自《Java并发编程的艺术》</p>
+<h1 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h1><h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p><strong>volatile</strong>的典型特性之一是一个线程对<strong>volatile</strong>变量的写入对其他线程来说是立即可见的。假设有以下程序：</p>
+<pre><code>public class VolatileFeaturesExample {
+    private volatile int a;
+
+    public int getA() {
+        return a;
+    }
+
+    public void setA(int a) {
+        this.a = a;
+    }
+}
+</code></pre><p>与下面这段代码的执行效果是等效的：</p>
+<pre><code>public class VolatileFeaturesExample {
+    private int a;
+
+    public synchronized void setA(int a) {
+        this.a = a;
+    }
+
+    public synchronized int getA() {
+        return a;
+    }
+}
+</code></pre><p>根据happens-before规则，锁的解锁happens before于此锁被加锁之前，所以一个线程对<strong>a</strong>变量的写入对另一个线程是可见的。</p>
+<p>另外，锁的语义决定了<strong>volatile</strong>的读写具备原子性，也就是说即便对于<strong>long</strong>和<strong>double</strong>类型，只要有<strong>volatile</strong>关键字修饰，对其赋值也是原子操作。</p>
+<h2 id="限制重排序"><a href="#限制重排序" class="headerlink" title="限制重排序"></a>限制重排序</h2><p>为了实现volatile的内存语义， JMM针对volatile变量制定了一套特殊的重排序规则，规则如下表：<br><img src="http://ok34fi9ya.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-11%20%E4%B8%8B%E5%8D%884.22.57.png" alt=""></p>
+<p>从图中可以看出：</p>
+<ul>
+<li>若第二个操作是对volatile对象的写操作，那么无论第一个操作是什么，都不会发生重排序。</li>
+<li>若第一个操作是对volatile变量的读操作，那么无论第二个操作是什么，都不会发生重排序。</li>
+</ul>
+<p>上一篇博客曾经提到<strong>volatile</strong>的实现是通过增加内存屏障来实现的，针对<strong>volatile</strong>的内存屏障策略如下：</p>
+<ul>
+<li>在volatile变量写之前加入store屏障。</li>
+<li>在volatile变量写之后加入store-load屏障。</li>
+<li>在读操作的后面加上load屏障。</li>
+<li>在读操作的后面加上load-store屏障。</li>
+</ul>
+<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><h2 id="特性-1"><a href="#特性-1" class="headerlink" title="特性"></a>特性</h2><p>先看下面这段代码：</p>
+<pre><code>public class LockExample {
+    private int a;
+
+    public synchronized void increase() { // 1
+        a++; // 2
+    } // 3
+
+    public synchronized void get() { // 4
+        int i = a; // 5
+    } // 6
+}
+</code></pre><p>根据happens-before原则，1发生在2之前，2发生在3之前……最终得出的结论是2发生在5之前，也就是说，两个线程，线程1获得锁之后对所有共享变量的修改，对下一个线程获得锁的时候是可见的。</p>
+<h2 id="内存语义"><a href="#内存语义" class="headerlink" title="内存语义"></a>内存语义</h2><p>锁的内存语义如下：</p>
+<ul>
+<li>一个线程释放锁，会将本地内存中的变量推送到主内存当中。</li>
+<li>一个线程获得锁的时候，会将本地内存的变量设置为无效状态，强制从主内存中读取。</li>
+</ul>
+<p>可见，锁的内存语义和<strong>volatile</strong>的内存语义差不多，区别就是锁对于共享变量的刷新和重新读取是全局的，volatile是局部的。</p>
+<h2 id="内存语义的实现"><a href="#内存语义的实现" class="headerlink" title="内存语义的实现"></a>内存语义的实现</h2><p>下篇再更新，可以先看这篇文章：<a href="http://blog.csdn.net/yuhongye111/article/details/39053067" target="_blank" rel="external">ReentrantLock源码分析</a></p>
+<h1 id="final"><a href="#final" class="headerlink" title="final"></a>final</h1><h2 id="特性-2"><a href="#特性-2" class="headerlink" title="特性"></a>特性</h2><p>被final修饰的变量只要在构造器之内进行合理的初始化并且没有发生<a href="http://blog.csdn.net/flysqrlboy/article/details/10607295" target="_blank" rel="external">this引用逃逸</a>，那么此字段对其他线程来说就是可见的。</p>
+<h2 id="写重排序规则"><a href="#写重排序规则" class="headerlink" title="写重排序规则"></a>写重排序规则</h2><p>对final域进行写入的重排序规则为：在构造函数内对一个final域的写入，与随后把这个被构造对象的引用赋值给另一个引用，这两个指令不能发生重排序。</p>
+<p>如下代码：</p>
+<pre><code>public class FinalExample {
+    int i = 0;
+    final int j;
+    static FinalExample fe;
+
+    public FinalExample() {
+        i = 1;
+        j = 1;
+    }
+
+    public static void writer() {
+        fe = new FinalExample();
+    }
+
+    public static void reader() {
+        FinalExample obj = fe; //1
+        int a = obj.i; //2
+        int b = obj.j; //3
+    }
+}
+</code></pre><p>假设线程A执行writer函数，final的重排序规则保证了在对fe赋值之前j已经得到了合理的初始化，但是对于普通域而言，在fe被赋值时，i可能未被得到合理的初始化，原因是i = 1可能因为重排序的关系放在了构造函数之外。</p>
+<h2 id="读重排序规则"><a href="#读重排序规则" class="headerlink" title="读重排序规则"></a>读重排序规则</h2><p>在一个线程中，初次读对象引用和读取对象的final域，这两条指令不能发生重排序。还是上面的代码，若线程B执行reader函数，假设此时fe已经不是null，那么1和3操作就不能发生重排序，b的值便是j的值。但是对于普通域i来说情况就不一定了，因为此时i可能因为重排序的关系，初始化过程还没有进行。</p>
+<h2 id="final引用类型"><a href="#final引用类型" class="headerlink" title="final引用类型"></a>final引用类型</h2><p>对于引用类型，final重排序规则如下：</p>
+<p>在构造器内对final引用进行修改，与之后将此被构造对象赋值给其他引用，这两个操作不能发生重排序。例如：</p>
+<pre><code>public class FinalExample {
+    final int[] finalArrayReference;
+    static FinalExample fe;
+
+    public FinalExample() {
+        finalArrayReference = new int[10];
+        finalArrayReference[0] = 1;
+    }
+
+    public static void writer() {
+        fe = new FinalExample();
+    }
+}
+</code></pre><p>此时若有线程A执行writer函数，那么对于此时fe的finalArrayReference域不为空，其第一个位置的值也得到了初始化。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/03/10/Java内存模型-一/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/10/Java内存模型-一/" itemprop="url">
+                  Java内存模型(一)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-10T20:06:10+08:00">
+                2017-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>注：</strong>一下部分文字图片来自《Java并发编程的艺术》</p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>JMM(Java Memory Model),即Java内存模型，是Java实现并发的主要机制。多个线程通过JMM共享程序公有状态进而实现隐式通信。</p>
+<h1 id="抽象结构"><a href="#抽象结构" class="headerlink" title="抽象结构"></a>抽象结构</h1><p>程序的公有状态，共享变量等储存在主内存(Main Memory)当中。每个线程都有一个本地内存(Local Memory)来储存主内存中共享变量的副本，其结构如下图所示：<br><img src="http://cdn.infoqstatic.com/statics_s1_20170228-0434_4/resource/articles/java-memory-model-1/zh/resources/11.png" alt=""><br>（本图作者为Java资深软件工程师：<a href="http://ifeve.com/author/25622818/" target="_blank" rel="external">程晓明</a>）</p>
+<p>此时两个线程A,B的通信流程为：</p>
+<ul>
+<li>线程A更新本地内存中共享变量的副本，并将其写入主内存。</li>
+<li>线程B从主内存中读取更新过的共享变量。</li>
+</ul>
+<h1 id="重排序"><a href="#重排序" class="headerlink" title="重排序"></a>重排序</h1><p>重排序是指为了提高程序运行的性能，充分利用并行，来对指令进行重新排序，主要分为编译器优化重排序和指令级并行重排序。关于重排序的更多理解，参见：<a href="http://blog.hesey.net/2011/07/reordering.html" target="_blank" rel="external">理解重排序</a></p>
+<h2 id="数据依赖性"><a href="#数据依赖性" class="headerlink" title="数据依赖性"></a>数据依赖性</h2><p>数据依赖性分为三种情况：</p>
+<ul>
+<li>写后读，对一个变量写之后再进行读取。</li>
+<li>读后写，对一个变量读取之后再进行写入。</li>
+<li>写后写，对一个变量写之后再进行写入。</li>
+</ul>
+<p>以上三种情况若两个指令发生了重排序，则产生的结果与预期不一致，称以上三个指令对两指令之间存在数据依赖性，存在数据依赖性的两个指令不会发生重排序。</p>
+<h2 id="as-if-serial"><a href="#as-if-serial" class="headerlink" title="as-if-serial"></a>as-if-serial</h2><p><strong>as-if-serial</strong>的含义是指，对于一个单线程而言，无论怎么重排序，其结果与顺序执行的结果一致。为了遵循这个原则，在单线程环境中，如果两个指令指令之间存在数据依赖性，那么这两个指令便不会发生重排序。</p>
+<h2 id="对多线程的影响"><a href="#对多线程的影响" class="headerlink" title="对多线程的影响"></a>对多线程的影响</h2><p>假设有以下程序：</p>
+<pre><code>public class RecorderExample {
+    private boolean flag = false;
+    private int i = 0;
+
+    public void write() {
+        i = 1;       //1
+        flag = true; //2
+    }
+
+    public void read() {
+        if (flag) {
+            int a = i * i; 
+        }
+    }
+
+    public static void main(String[] args) {
+        RecorderExample re = new RecorderExample();
+        new Thread(re::write).start();
+        new Thread(re::read).start();
+    }
+}
+</code></pre><p>在第一个线程里面，1、2指令由于没有数据依赖，所以可以进行重排序，若两个进行了重排序，<strong>flag</strong>设置成true之后，切换到第二个线程进行条件判断，判断完成后对a进行赋值，此时变量<strong>i</strong>并没有进行设置，所以会发生异常的结果，也就是说，<strong>重排序会破坏多线程的语义</strong>。</p>
+<h1 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h1><p>它指的是一组用来实现对内存操作的顺序限制的处理器指令，会根据需求禁止特定类型的重排序。先假定这样一个事实：内存数据被推送到缓冲区，就会有消息协议来保证缓存和内存的数据一致性，这种尽快保证数据可见性的技术称为内存屏障。</p>
+<p>内存屏障有三种类型：</p>
+<ul>
+<li>Store屏障：在该屏障之前的Store指令都会被执行，即写操作都会刷新到主内存当中去。</li>
+<li>Load屏障，在该屏障之后的load指令在该屏障之后执行，保证了处理器缓存加载成功后进行读操作。</li>
+<li>Full Barrier:即结合了上述两种屏障功能的屏障。</li>
+</ul>
+<p>一个比较典型的例子是Java当中的<strong>volatile</strong>关键字，对<strong>volatile</strong>变量写指令的后面会加上store屏障，对<strong>volatile</strong>变量读命令的前面会加上load屏障。</p>
+<p>关于内存屏障的更多内容，参见<a href="http://www.infoq.com/cn/articles/memory_barriers_jvm_concurrency" target="_blank" rel="external">内存屏障与JVM并发</a></p>
+<h1 id="happens-before"><a href="#happens-before" class="headerlink" title="happens-before"></a>happens-before</h1><p>如果一个操作的结果对另一个操作是可见的，那么这两个操作必须遵循<strong>happens-before</strong>关系。在这里两个操作可以在同一个线程里面，也可以在不同的线程里面，常见的规则如下：</p>
+<ul>
+<li>单个线程中的操作，happens-before于其后续操作。</li>
+</ul>
+<p>这句话很好理解，假定单个线程中的两条指令不存在数据依赖性，那这两条指令则不满足<strong>happens-before</strong>的先决条件；若存在数据的依赖性，则一条指令必定发生在另一条之前。</p>
+<ul>
+<li>对一个锁的解锁，happens-before于对这个锁的加锁。</li>
+<li>对一个<strong>volatile</strong>写操作happens-before于对这个变量的读操作。</li>
+</ul>
+<h1 id="顺序一致性模型"><a href="#顺序一致性模型" class="headerlink" title="顺序一致性模型"></a>顺序一致性模型</h1><p>是一个理想化的理论模型，主要有两大特征：</p>
+<ul>
+<li>单个线程的操作必须按照程序的顺序来执行。</li>
+<li>每个线程都只有一个单一的执行序列（不管是否同步），且每个操作必须立刻对所有线程可见。</li>
+</ul>
+<h2 id="JVM的实现"><a href="#JVM的实现" class="headerlink" title="JVM的实现"></a>JVM的实现</h2><h3 id="同步执行"><a href="#同步执行" class="headerlink" title="同步执行"></a>同步执行</h3><p>还是刚才的RecorderExample,现在修改如下：</p>
+<pre><code>public class RecorderExample {
+    private boolean flag = false;
+    private int i = 0;
+
+    public synchronized void write() {
+        i = 1; //1
+        flag = true; //2
+    }
+
+    public synchronized void read() {
+        if (flag) {
+            int a = i * i;
+        }
+    }
+
+    public static void main(String[] args) {
+        RecorderExample re = new RecorderExample();
+        new Thread(re::write).start();
+        new Thread(re::read).start();
+    }
+}
+</code></pre><p>加上<strong>synchronized</strong>关键字之后，<strong>write</strong> happens-before <strong>read</strong>，但是在第一个线程当中，1和2操作是有可能被重排序的，但是对结果没有任何的影响，可以看成是和顺序一致性模型达到了相同的效果。</p>
+<h3 id="非同步执行"><a href="#非同步执行" class="headerlink" title="非同步执行"></a>非同步执行</h3><p>非同步的执行结果无法预知，也没有什么实际意义。JVM对非同步执行只提供一种安全性，即在读一个变量的时候，要么是某个其他线程已经设置好的值，要么是零值，这里无需再做分析。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/02/26/Android自定义字体解决方案/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Stephen Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Stephen的小本本">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/26/Android自定义字体解决方案/" itemprop="url">
+                  Android自定义字体解决方案
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T16:04:26+08:00">
+                2017-02-26
               </time>
             
 
@@ -1497,155 +1459,10 @@ xmlns:bind=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
 
       
         
-          <p>本篇记录DataBinding的基本使用，总的来说这个玩意能不用就不用，因为问题简直太多了而且报错简直奇葩。<br>
+          <p>还是多用原生的吧，自定义字体后apk体积狂飙<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/02/14/Android-DataBinding（一）：基本使用/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://www.stephenzhang.me/2017/02/01/iOS-UIView/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Stephen Zhang">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/uploads/avatar.png">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Stephen的小本本">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Stephen的小本本" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/01/iOS-UIView/" itemprop="url">
-                  iOS UIView
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-01T20:37:56+08:00">
-                2017-02-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>闲的没事学学iOS，万一将来转行了呢2333<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/02/01/iOS-UIView/#more" rel="contents">
+            <a class="btn" href="/2017/02/26/Android自定义字体解决方案/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1681,7 +1498,7 @@ xmlns:bind=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1724,7 +1541,7 @@ xmlns:bind=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-count">63</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
