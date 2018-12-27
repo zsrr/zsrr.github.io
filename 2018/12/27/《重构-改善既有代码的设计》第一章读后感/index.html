@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Stephen的小本本">
 <meta property="og:description" content="愿明天看到今天的自己，还是蠢的
 此为《重构 改善既有代码的设计》的读书笔记，第一章。">
-<meta property="og:updated_time" content="2018-12-27T13:40:52.674Z">
+<meta property="og:updated_time" content="2018-12-27T13:43:50.392Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《重构 改善既有代码的设计》第一章读后感">
 <meta name="twitter:description" content="愿明天看到今天的自己，还是蠢的
@@ -358,7 +358,7 @@
 <p>此为<a href="https://item.jd.com/11728740.html" target="_blank" rel="external">《重构 改善既有代码的设计》</a>的读书笔记，第一章。</p>
 <a id="more"></a>
 <h1 id="函数功能上的拆分"><a href="#函数功能上的拆分" class="headerlink" title="函数功能上的拆分"></a>函数功能上的拆分</h1><p>对于一个大而臃肿的函数，需要尽可能的减少临时变量。之前我认为临时变量不会让一个函数变得臃肿，但是顺着作者的思路去解决问题，最后得出的结论确实是临时变量的减少能让一个函数更加简洁。对于一个不变的临时变量可以作为另外一个函数的参数，对于在函数中用作计算值的临时变量可以用另外一个函数的返回值替代。按照以前我的看法，拆分一个大的函数只需要逻辑分层就可以了，作者的思路确实很令人受益。</p>
-<h1 id="函数归谁所有"><a href="#函数归谁所有" class="headerlink" title="函数归谁所有"></a>函数归谁所有</h1><p>设计类时要理清楚这个类所承担的职责。反思自己以前写代码为了方便，要封装一个函数时，直接就在当前的类里加一个 private func，细细想来</p>
+<h1 id="函数归谁所有"><a href="#函数归谁所有" class="headerlink" title="函数归谁所有"></a>函数归谁所有</h1><p>设计类时要理清楚这个类所承担的职责。反思自己以前写代码为了方便，要封装一个函数时，直接就在当前的类里加一个 private func，细细想来这样做确实欠妥。</p>
 <h1 id="State模式"><a href="#State模式" class="headerlink" title="State模式"></a>State模式</h1><p>状态模式是这一章比较精彩的部分了。为了消灭难以维护的 switch case，作者先是想扩展 Movie 这个类，不过笔锋一转说这是不可取的，因为 PriceCode 在功能上是可变的(充分理解需求的能力)。所以作者最后新建了一个 Price 类，用其子类来封装 getCharge 和 getFrequentRenderPoints 方法，取代了原来臃肿的 switch case 语句。</p>
 <p>由此我自己得出的另外一个结论是：增加某些代码或者扩展某些类，比修改原来的代码要好，要尽量把影响范围缩到最小。</p>
 <h1 id="质疑的部分"><a href="#质疑的部分" class="headerlink" title="质疑的部分"></a>质疑的部分</h1><p>尽信书不如无书，以下是我比较存疑的部分。</p>
